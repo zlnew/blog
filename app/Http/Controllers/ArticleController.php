@@ -36,7 +36,7 @@ class ArticleController extends Controller
             'user_id' => $request->user_id,
             'title' => $validated->title,
             'content' => $validated->content,
-            'image' => Storage::link($imagePath),
+            'image' => $imagePath,
             'tags' => $validated->tags,
             'keywords' => $validated->keywords,
             'slug' => Str::slug($validated->title)
