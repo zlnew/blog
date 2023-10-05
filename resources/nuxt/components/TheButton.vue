@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { setAccent, setBlock, setCaps } from '~/utils/button'
+import { setColorClasses, setBlockClasses, setCapsClasses } from '~/utils/button'
 
 export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset'
@@ -39,17 +39,9 @@ const coreClasses = [
   'tracking-wide font-medium'
 ]
 
-const variantClasses = computed(() => {
-  const accent = setAccent(props.accent)
-
-  switch (props.variant) {
-    case 'primary': return accent?.primary
-    case 'secondary': return accent?.secondary
-    case 'tertiary': return accent?.tertiary
-  }
-})
-const blockClasses = computed(() => setBlock(props.block))
-const capsClasses = computed(() => setCaps(props.noCaps))
+const colorClasses = computed(() => setColorClasses(props.accent)[props.variant])
+const blockClasses = computed(() => setBlockClasses(props.block))
+const capsClasses = computed(() => setCapsClasses(props.noCaps))
 </script>
 
 <template>
@@ -61,7 +53,7 @@ const capsClasses = computed(() => setCaps(props.noCaps))
     :disabled="disabled"
     :class="[
       coreClasses,
-      variantClasses,
+      colorClasses,
       blockClasses,
       capsClasses
     ]"

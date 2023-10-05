@@ -1,6 +1,6 @@
 import { type ButtonProps } from '~/components/TheButton.vue'
 
-function setAccent (accent: ButtonProps['accent']) {
+function setColorClasses (accent: ButtonProps['accent']) {
   switch (accent) {
     case 'default':
       return {
@@ -107,19 +107,40 @@ function setAccent (accent: ButtonProps['accent']) {
           'focus:outline-success-light'
         ]
       }
+    default:
+      return {
+        primary: [
+          'bg-accent text-light',
+          'border border-accent',
+          'hover:bg-accent-light',
+          'focus:outline-accent-light'
+        ],
+        secondary: [
+          'bg-light text-accent',
+          'border border-accent',
+          'hover:bg-white',
+          'focus:outline-accent-light'
+        ],
+        tertiary: [
+          'bg-transparent text-accent',
+          'border border-transparent',
+          'hover:underline',
+          'focus:outline-accent-light'
+        ]
+      }
   }
 }
 
-function setBlock (block: boolean) {
+function setBlockClasses (block: boolean) {
   return block ? 'w-full' : undefined
 }
 
-function setCaps (noCaps: boolean) {
+function setCapsClasses (noCaps: boolean) {
   return noCaps ? undefined : 'uppercase'
 }
 
 export {
-  setAccent,
-  setBlock,
-  setCaps
+  setColorClasses,
+  setBlockClasses,
+  setCapsClasses
 }
