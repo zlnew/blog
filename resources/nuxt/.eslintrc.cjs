@@ -12,5 +12,7 @@ module.exports = {
     '@nuxtjs/eslint-config-typescript'
   ],
   plugins: [],
-  rules: {}
+  rules: {
+    'no-console': 'off'
+  }
 }

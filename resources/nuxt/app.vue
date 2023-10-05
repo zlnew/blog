@@ -1,5 +1,13 @@
+<script setup lang="ts">
+useSeoMeta({
+  titleTemplate: "%s - Aprizqy'sBlog",
+  description: 'A nuxtjs powered blog.',
+  author: 'Maulana Aprizqy Sumaryanto'
+})
+</script>
+
 <template>
-  <div>
-    <NuxtWelcome />
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
