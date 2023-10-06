@@ -1,3 +1,9 @@
+<script setup lang="ts">
+definePageMeta({
+  middleware: 'writer'
+})
+</script>
+
 <template>
   <div>
     <h2>This is Dashboard Page</h2>

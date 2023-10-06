@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { setColorClasses, setBlockClasses, setCapsClasses } from '~/utils/button'
-
 export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset'
   to?: string | null
@@ -11,6 +9,7 @@ export interface ButtonProps {
   accent?: 'default' | 'info' | 'warning' | 'danger' | 'success'
   noCaps?: boolean
   block?: boolean
+  loading?: boolean
 }
 
 const props = withDefaults(
@@ -30,18 +29,15 @@ const component = computed(() => {
     return resolveComponent('NuxtLink')
   }
 
-  return props.href ? 'a' : 'button'
+  return setButtonComponent(props.href)
 })
 
-const coreClasses = [
-  'transition text-center',
-  'text-xs rounded-sm',
-  'tracking-wide font-medium'
-]
-
-const colorClasses = computed(() => setColorClasses(props.accent)[props.variant])
-const blockClasses = computed(() => setBlockClasses(props.block))
-const capsClasses = computed(() => setCapsClasses(props.noCaps))
+const classes = computed(() => setButtonClasses({
+  variant: props.variant,
+  accent: props.accent,
+  block: props.block,
+  noCaps: props.noCaps
+}))
 </script>
 
 <template>
@@ -50,19 +46,19 @@ const capsClasses = computed(() => setCapsClasses(props.noCaps))
     :to="to"
     :href="href"
     :type="type"
-    :disabled="disabled"
-    :class="[
-      coreClasses,
-      colorClasses,
-      blockClasses,
-      capsClasses
-    ]"
+    :disabled="disabled || loading"
+    :class="classes"
   >
     <slot name="prepend" />
-    <template v-if="label">
-      {{ label }}
+    <template v-if="loading">
+      loading...
     </template>
-    <slot v-else name="default" />
+    <template v-else>
+      <template v-if="label">
+        {{ label }}
+      </template>
+      <slot v-else name="default" />
+    </template>
     <slot name="append" />
   </component>
 </template>

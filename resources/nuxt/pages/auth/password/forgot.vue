@@ -1,22 +1,22 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  middleware: 'viewer'
 })
 
 useSeoMeta({
   title: 'Forgot password?'
 })
 
-const router = useRouter()
+const message = ref()
 
-const { authenticate, loginPayload: form } = useAuthStore()
-const { validationErrors: errors } = storeToRefs(useAuthStore())
+const { actions, form } = useAuthStore()
 
-async function handleLogin () {
-  const { status } = await authenticate()
+async function handleForgotPassword () {
+  const { status, data } = await actions.forgotPassword()
 
   if (status.value === 'success') {
-    router.push('/dashboard')
+    message.value = data.value?.response.status
   }
 }
 </script>
@@ -27,17 +27,21 @@ async function handleLogin () {
       Forgot Password?
     </h1>
 
-    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleLogin">
+    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleForgotPassword">
       <FormInput
-        v-model="form.email"
+        v-model="form.payload.forgotPassword.email"
         focused
         type="email"
         label="Email"
         placeholder="Enter your email address"
-        :errors="errors?.email"
+        :errors="form.validation.forgotPassword.errors.email"
       />
 
-      <p class="text-sm text-accent-light">
+      <p v-if="message" class="font-medium text-sm text-accent-light">
+        {{ message }}
+      </p>
+
+      <p v-else class="text-sm text-accent-light">
         Please <strong>verify your email address</strong>,
         we will mail you the link to reset your password
       </p>
@@ -46,6 +50,7 @@ async function handleLogin () {
         block
         type="submit"
         label="Verify"
+        :loading="form.processing"
       />
 
       <TheButton

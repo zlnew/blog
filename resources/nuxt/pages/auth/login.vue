@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  middleware: 'viewer'
 })
 
 useSeoMeta({
@@ -9,11 +10,10 @@ useSeoMeta({
 
 const router = useRouter()
 
-const { authenticate, loginPayload: form } = useAuthStore()
-const { validationErrors: errors } = storeToRefs(useAuthStore())
+const { actions, form } = useAuthStore()
 
 async function handleLogin () {
-  const { status } = await authenticate()
+  const { status } = await actions.authenticate()
 
   if (status.value === 'success') {
     router.push('/dashboard')
@@ -29,20 +29,20 @@ async function handleLogin () {
 
     <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleLogin">
       <FormInput
-        v-model="form.email"
+        v-model="form.payload.login.email"
         focused
         type="email"
         label="Email"
         placeholder="Enter your email address"
-        :errors="errors?.email"
+        :errors="form.validation.login.errors.email"
       />
 
       <FormInput
-        v-model="form.password"
+        v-model="form.payload.login.password"
         type="password"
         label="Password"
         placeholder="Enter your password"
-        :errors="errors?.password"
+        :errors="form.validation.login.errors.password"
       />
 
       <TheButton
@@ -56,6 +56,7 @@ async function handleLogin () {
         block
         type="submit"
         label="Login"
+        :loading="form.processing"
       />
 
       <TheButton
