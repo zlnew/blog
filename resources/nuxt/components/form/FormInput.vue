@@ -39,7 +39,7 @@ const value = computed({
 </script>
 
 <template>
-  <div class="flex flex-col space-y-1">
+  <div class="flex flex-col">
     <label
       :for="id"
       class="text-sm font-medium tracking-wide text-accent-light"
@@ -56,6 +56,7 @@ const value = computed({
       :placeholder="placeholder"
       :class="[
         'p-2 rounded-sm',
+        'tracking-tight',
         'bg-light',
         'border border-accent',
         'focus:outline-accent-light'

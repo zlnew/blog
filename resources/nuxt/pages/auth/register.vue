@@ -4,19 +4,19 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Login to your account'
+  title: 'Create a new account'
 })
 
 const router = useRouter()
 
-const { authenticate, loginPayload: form } = useAuthStore()
+const { register, registerPayload: form } = useAuthStore()
 const { validationErrors: errors } = storeToRefs(useAuthStore())
 
-async function handleLogin () {
-  const { status } = await authenticate()
+async function handleRegister () {
+  const { status } = await register()
 
   if (status.value === 'success') {
-    router.push('/dashboard')
+    router.push('/auth/login')
   }
 }
 </script>
@@ -24,13 +24,20 @@ async function handleLogin () {
 <template>
   <div class="space-y-4">
     <h1 class="text-2xl font-bold">
-      Login to your account
+      Create a new account
     </h1>
 
-    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleLogin">
+    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleRegister">
+      <FormInput
+        v-model="form.name"
+        focused
+        label="Full Name"
+        placeholder="Enter your full name"
+        :errors="errors?.name"
+      />
+
       <FormInput
         v-model="form.email"
-        focused
         type="email"
         label="Email"
         placeholder="Enter your email address"
@@ -45,24 +52,25 @@ async function handleLogin () {
         :errors="errors?.password"
       />
 
-      <TheButton
-        no-caps
-        to="/auth/password/forgot"
-        label="Forgot password?"
-        variant="tertiary"
+      <FormInput
+        v-model="form.password_confirmation"
+        type="password"
+        label="Confirm Password"
+        placeholder="Confirm the password"
+        :errors="errors?.password_confirmation"
       />
 
       <TheButton
         block
         type="submit"
-        label="Login"
+        label="Register"
       />
 
       <TheButton
         block
         no-caps
-        to="/auth/register"
-        label="Don't have an account?"
+        to="/auth/login"
+        label="Already have an account?"
         variant="tertiary"
       />
     </form>

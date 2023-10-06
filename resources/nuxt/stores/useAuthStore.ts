@@ -11,8 +11,8 @@ export const useAuthStore = defineStore('auth', () => {
     password_confirmation: string
   }
 
-  const accessToken = useCookie('access__token')
-  const user = useCookie('__user')
+  const accessToken = useCookie('auth__token')
+  const user = useCookie('auth__user')
 
   const loginPayload = reactive<LoginPayload>({
     email: '',
@@ -79,8 +79,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function leave () {
-    const { status } = await useFetch(
+  async function leaveSession () {
+    const { status, data } = await useFetch(
       '/api/auth/logout',
       {
         method: 'POST',
@@ -94,8 +94,11 @@ export const useAuthStore = defineStore('auth', () => {
     if (status.value === 'success') {
       accessToken.value = null
       user.value = null
+    }
 
-      window.location.reload()
+    return {
+      status,
+      data
     }
   }
 
@@ -107,6 +110,6 @@ export const useAuthStore = defineStore('auth', () => {
     validationErrors,
     register,
     authenticate,
-    leave
+    leaveSession
   }
 })

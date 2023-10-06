@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Login to your account'
+  title: 'Forgot password?'
 })
 
 const router = useRouter()
@@ -24,7 +24,7 @@ async function handleLogin () {
 <template>
   <div class="space-y-4">
     <h1 class="text-2xl font-bold">
-      Login to your account
+      Forgot Password?
     </h1>
 
     <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleLogin">
@@ -37,32 +37,22 @@ async function handleLogin () {
         :errors="errors?.email"
       />
 
-      <FormInput
-        v-model="form.password"
-        type="password"
-        label="Password"
-        placeholder="Enter your password"
-        :errors="errors?.password"
-      />
-
-      <TheButton
-        no-caps
-        to="/auth/password/forgot"
-        label="Forgot password?"
-        variant="tertiary"
-      />
+      <p class="text-sm text-accent-light">
+        Please <strong>verify your email address</strong>,
+        we will mail you the link to reset your password
+      </p>
 
       <TheButton
         block
         type="submit"
-        label="Login"
+        label="Verify"
       />
 
       <TheButton
         block
         no-caps
-        to="/auth/register"
-        label="Don't have an account?"
+        to="/auth/login"
+        label="Back to login"
         variant="tertiary"
       />
     </form>

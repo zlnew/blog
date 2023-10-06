@@ -5,12 +5,14 @@ function setColorClasses (accent: ButtonProps['accent']) {
     case 'default':
       return {
         primary: [
+          'p-2',
           'bg-accent text-light',
           'border border-accent',
           'hover:bg-accent-light',
           'focus:outline-accent-light'
         ],
         secondary: [
+          'p-2',
           'bg-light text-accent',
           'border border-accent',
           'hover:bg-white',
@@ -26,12 +28,14 @@ function setColorClasses (accent: ButtonProps['accent']) {
     case 'info':
       return {
         primary: [
+          'p-2',
           'bg-info text-light',
           'border border-info',
           'hover:bg-info-light',
           'focus:outline-info-light'
         ],
         secondary: [
+          'p-2',
           'bg-light text-info',
           'border border-info',
           'hover:bg-white',
@@ -47,12 +51,14 @@ function setColorClasses (accent: ButtonProps['accent']) {
     case 'danger':
       return {
         primary: [
+          'p-2',
           'bg-danger text-light',
           'border border-danger',
           'hover:bg-danger-light',
           'focus:outline-danger-light'
         ],
         secondary: [
+          'p-2',
           'bg-light text-danger',
           'border border-danger',
           'hover:bg-white',
@@ -68,12 +74,14 @@ function setColorClasses (accent: ButtonProps['accent']) {
     case 'warning':
       return {
         primary: [
+          'p-2',
           'bg-warning text-accent',
           'border border-warning',
           'hover:bg-warning-light',
           'focus:outline-warning-light'
         ],
         secondary: [
+          'p-2',
           'bg-light text-warning',
           'border border-warning',
           'hover:bg-white',
@@ -89,12 +97,14 @@ function setColorClasses (accent: ButtonProps['accent']) {
     case 'success':
       return {
         primary: [
+          'p-2',
           'bg-success text-light',
           'border border-success',
           'hover:bg-success-light',
           'focus:outline-success-light'
         ],
         secondary: [
+          'p-2',
           'bg-light text-success',
           'border border-success',
           'hover:bg-white',
@@ -110,12 +120,14 @@ function setColorClasses (accent: ButtonProps['accent']) {
     default:
       return {
         primary: [
+          'p-2',
           'bg-accent text-light',
           'border border-accent',
           'hover:bg-accent-light',
           'focus:outline-accent-light'
         ],
         secondary: [
+          'p-2',
           'bg-light text-accent',
           'border border-accent',
           'hover:bg-white',

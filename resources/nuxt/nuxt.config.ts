@@ -10,11 +10,17 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
   modules: [
+    '@nuxtjs/google-fonts',
     '@nuxtjs/eslint-module',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@vueuse/nuxt'
   ],
+  googleFonts: {
+    families: {
+      Lato: true
+    }
+  },
   eslint: {
     lintOnStart: false
   },

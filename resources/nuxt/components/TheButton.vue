@@ -16,10 +16,10 @@ export interface ButtonProps {
 const props = withDefaults(
   defineProps<ButtonProps>(), {
     type: 'button',
-    to: null,
-    href: null,
-    label: null,
-    disabled: null,
+    to: undefined,
+    href: undefined,
+    label: undefined,
+    disabled: undefined,
     variant: 'primary',
     accent: 'default'
   }
@@ -35,7 +35,7 @@ const component = computed(() => {
 
 const coreClasses = [
   'transition text-center',
-  'p-2 text-xs rounded-sm',
+  'text-xs rounded-sm',
   'tracking-wide font-medium'
 ]
 
