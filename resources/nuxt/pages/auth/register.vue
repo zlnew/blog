@@ -27,7 +27,7 @@ async function handleRegister () {
       Create a new account
     </h1>
 
-    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleRegister">
+    <form class="md:max-w-md md:w-screen space-y-4" @submit.prevent="handleRegister">
       <FormInput
         v-model="form.payload.register.name"
         focused

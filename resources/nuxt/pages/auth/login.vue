@@ -27,7 +27,7 @@ async function handleLogin () {
       Login to your account
     </h1>
 
-    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleLogin">
+    <form class="md:max-w-md md:w-screen space-y-4" @submit.prevent="handleLogin">
       <FormInput
         v-model="form.payload.login.email"
         focused

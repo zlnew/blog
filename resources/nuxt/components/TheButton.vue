@@ -49,16 +49,17 @@ const classes = computed(() => setButtonClasses({
     :disabled="disabled || loading"
     :class="classes"
   >
-    <slot name="prepend" />
-    <template v-if="loading">
-      loading...
-    </template>
-    <template v-else>
-      <template v-if="label">
-        {{ label }}
+    <div class="flex space-x-1 justify-center items-center">
+      <Icon v-if="loading" name="eos-icons:loading" size="24" />
+      <template v-else>
+        <slot name="prepend" />
+        <div>
+          <slot name="default">
+            {{ label }}
+          </slot>
+        </div>
+        <slot name="append" />
       </template>
-      <slot v-else name="default" />
-    </template>
-    <slot name="append" />
+    </div>
   </component>
 </template>

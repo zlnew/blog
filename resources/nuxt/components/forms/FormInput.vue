@@ -55,11 +55,13 @@ const value = computed({
       :disabled="disabled"
       :placeholder="placeholder"
       :class="[
-        'p-2 rounded-sm',
+        'p-4 rounded-sm',
         'tracking-tight',
         'bg-light',
-        'border border-accent',
-        'focus:outline-accent-light'
+        'border',
+        errors.length
+          ? 'border-danger focus:outline-danger'
+          : 'border-accent-light focus:outline-accent-light'
       ]"
     >
 

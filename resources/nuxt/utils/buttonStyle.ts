@@ -2,7 +2,7 @@ import { type ButtonProps } from '~/components/TheButton.vue'
 
 const buttonCoreClasses = [
   'transition text-center',
-  'text-xs rounded-sm',
+  'rounded-sm',
   'tracking-wide font-medium',
   'disabled:cursor-not-allowed',
   'disabled:opacity-80'
@@ -51,35 +51,35 @@ const buttonVariantClasses = {
       'p-2',
       'bg-light text-accent',
       'border border-accent',
-      'hover:bg-white',
+      'hover:bg-accent hover:text-light',
       'focus:outline-accent-light'
     ],
     info: [
       'p-2',
       'bg-light text-info',
       'border border-info',
-      'hover:bg-white',
+      'hover:bg-info hover:text-light',
       'focus:outline-info-light'
     ],
     warning: [
       'p-2',
       'bg-light text-warning',
       'border border-warning',
-      'hover:bg-white',
+      'hover:bg-warning hover:text-accent',
       'focus:outline-warning-light'
     ],
     danger: [
       'p-2',
       'bg-light text-danger',
       'border border-danger',
-      'hover:bg-white',
+      'hover:bg-danger hover:text-accent',
       'focus:outline-danger-light'
     ],
     success: [
       'p-2',
       'bg-light text-success',
       'border border-success',
-      'hover:bg-white',
+      'hover:bg-success hover:text-light',
       'focus:outline-success-light'
     ]
   },

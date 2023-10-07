@@ -33,7 +33,7 @@ onMounted(() => {
       Reset Password
     </h1>
 
-    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleResetPassword">
+    <form class="md:max-w-md md:w-screen space-y-4" @submit.prevent="handleResetPassword">
       <FormInput
         v-model="form.payload.resetPassword.email"
         type="email"

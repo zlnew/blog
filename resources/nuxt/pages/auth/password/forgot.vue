@@ -27,7 +27,7 @@ async function handleForgotPassword () {
       Forgot Password?
     </h1>
 
-    <form class="max-w-xs w-screen space-y-4" @submit.prevent="handleForgotPassword">
+    <form class="md:max-w-md md:w-screen space-y-4" @submit.prevent="handleForgotPassword">
       <FormInput
         v-model="form.payload.forgotPassword.email"
         focused

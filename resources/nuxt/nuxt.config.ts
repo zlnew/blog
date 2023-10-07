@@ -9,12 +9,25 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['stores']
   },
+  components: [
+    {
+      path: '~/components/articles',
+      pathPrefix: false
+    },
+    {
+      path: '~/components/forms',
+      pathPrefix: false
+    },
+    '~/components'
+  ],
   modules: [
     '@nuxtjs/google-fonts',
     '@nuxtjs/eslint-module',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxt/image',
+    'nuxt-icon'
   ],
   googleFonts: {
     families: {
