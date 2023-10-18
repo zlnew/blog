@@ -5,29 +5,6 @@ const router = useRouter()
 
 const showMoreLoading = ref(false)
 
-const tags = [
-  {
-    name: 'All',
-    total: 58
-  },
-  {
-    name: 'Programming',
-    total: 21
-  },
-  {
-    name: 'Javascript',
-    total: 4
-  },
-  {
-    name: 'UI/UX',
-    total: 8
-  },
-  {
-    name: 'How to',
-    total: 12
-  }
-]
-
 const articles = ref([
   {
     image: 'https://source.unsplash.com/random/1920x1200?food',
@@ -134,18 +111,6 @@ const metaTitle = computed(() => {
   return [...title].map((char, index) =>
     index === 0 ? char.toUpperCase() : char).join('')
 })
-
-const searchQuery = computed(() => {
-  return `Displaying
-    ${route.query.order}
-    ${route.query.tag !== 'all'
-      ? route.query.tag
-      : ''}
-    articles
-    ${route.query.search
-      ? 'related to'
-      : ''}`
-})
 </script>
 
 <template>
@@ -157,25 +122,15 @@ const searchQuery = computed(() => {
     </Head>
 
     <h2 id="results" class="page-heading capitalize">
-      {{ `${route.query.order} ${route.query.tag !== 'all' ? route.query.tag : ''} Articles` }}
+      {{ `${route.query.order} ${route.query?.tag ? route.query.tag : ''} Articles` }}
     </h2>
 
     <div class="space-y-4 xl:space-y-0 xl:grid xl:grid-cols-7 xl:gap-20">
       <div class="col-span-2 hidden xl:block">
-        <BrowseFilter :tags="tags" />
+        <BrowseFilter />
       </div>
 
       <div class="space-y-14 col-span-5">
-        <p class="xl:text-lg">
-          {{ searchQuery }}
-          <strong>
-            {{
-              route.query.search
-                && `"${route.query.search}"`
-            }}
-          </strong>
-        </p>
-
         <div class="grid xl:grid-cols-1 gap-8">
           <LazySmallArticle
             v-for="(article, index) in articles"

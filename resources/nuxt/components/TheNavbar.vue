@@ -2,7 +2,9 @@
   <nav id="nav" class="xl:sticky xl:top-0 bg-light z-[100] py-8 border-b container flex items-center justify-between space-x-4">
     <TheLogo />
 
-    <SearchBar />
+    <div class="hidden xl:block">
+      <ArticleSearchBar />
+    </div>
 
     <ul class="flex justify-center items-center space-x-2">
       <li>
@@ -23,5 +25,5 @@
     </ul>
   </nav>
 
-  <StickySearchBar />
+  <StickyBrowseBar />
 </template>

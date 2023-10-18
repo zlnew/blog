@@ -123,22 +123,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="hidden xl:block">
-    <div class="flex space-x-8">
-      <FormInput
-        ref="action"
-        v-model="search"
-        clearable
-        variant="filled"
-        left-icon="material-symbols:search"
-        placeholder="Search articles"
-        @update:model-value="filterSearchResults"
-        @focusin.prevent="showDropdown"
-        @keyup.enter.prevent="handleSearch"
-        @keyup.esc.prevent="hideDropdown"
-        @keydown.down.prevent="navigateNext"
-      />
-    </div>
+  <div>
+    <FormInput
+      ref="action"
+      v-model="search"
+      clearable
+      variant="filled"
+      left-icon="material-symbols:search"
+      placeholder="Search articles"
+      @update:model-value="filterSearchResults"
+      @focusin.prevent="showDropdown"
+      @keyup.enter.prevent="handleSearch"
+      @keyup.esc.prevent="hideDropdown"
+      @keydown.down.prevent="navigateNext"
+    />
 
     <DropdownArea
       :visible="dropdownVisibility"
