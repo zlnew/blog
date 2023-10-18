@@ -1,13 +1,13 @@
 <template>
   <div>
-    <TheNavbar />
+    <LazyTheNavbar />
 
-    <main class="my-24 container">
+    <main class="my-14 md:my-24 container">
       <slot />
     </main>
 
-    <TheFooter />
+    <LazyTheFooter />
 
-    <ScrollToTop />
+    <LazyScrollToTop />
   </div>
 </template>

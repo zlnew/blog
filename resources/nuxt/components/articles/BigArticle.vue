@@ -1,39 +1,93 @@
 <script setup lang="ts">
+interface Props {
+  image: string
+  title: string
+  postedAt: string
+  readEstimation: string
+  content: string
+  bookmarked?: boolean
+}
+
+const props = defineProps<Props>()
+
 const imageIsLoading = ref(true)
 
 function handleImagePlaceholder () {
   imageIsLoading.value = false
 }
+
+const isBookmarked = ref(props.bookmarked)
+
+const bookmarkIcon = computed(() => {
+  return isBookmarked.value
+    ? 'material-symbols:bookmark-added'
+    : 'material-symbols:bookmark-add-outline'
+})
+
+function handleBookmark () {
+  isBookmarked.value = !isBookmarked.value
+}
 </script>
 
 <template>
   <ClientOnly>
-    <div class="space-y-8 md:space-y-14">
+    <div class="space-y-10">
       <NuxtLink to="/">
-        <div v-if="imageIsLoading" class="rounded-sm bg-accent-light w-full aspect-video" />
-
-        <NuxtImg
-          v-show="!imageIsLoading"
-          src="https://source.unsplash.com/random?code"
-          alt="Large article image"
-          class="transition w-full aspect-video rounded-sm hover:drop-shadow-lg"
-          @load="handleImagePlaceholder"
+        <div
+          v-if="imageIsLoading"
+          class="list-article-image-placeholder"
         />
+
+        <NuxtLink v-show="!imageIsLoading" to="/lorem">
+          <NuxtImg
+            :src="image"
+            :alt="title"
+            class="list-article-image"
+            @load="handleImagePlaceholder"
+          />
+        </NuxtLink>
       </NuxtLink>
 
-      <div class="grid space-y-8 md:grid-cols-2 md:space-y-0 md:space-x-14">
+      <div class="space-y-8">
         <div class="space-y-4">
-          <NuxtLink to="/" class="hover:underline">
-            <h3 class="font-medium text-2xl md:text-4xl">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, fugit.
+          <NuxtLink to="/lorem" class="link accent">
+            <h3 class="big-list-article-title">
+              {{ title }}
             </h3>
           </NuxtLink>
-          <p>12 December, 2023</p>
+
+          <p class="big-list-article-short-description">
+            {{ content }}
+          </p>
         </div>
 
-        <p class="md:text-lg">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias molestias dignissimos illo? Iure, voluptatem facere eaque architecto quia ea nostrum ab cupiditate velit assumenda adipisci, doloremque dolore sit consequatur modi!
-        </p>
+        <div class="flex justify-between items-end">
+          <div class="big-list-article-info">
+            <span>{{ readEstimation }}</span>
+            <span>·</span>
+            <span>{{ postedAt }}</span>
+          </div>
+
+          <div class="relative inline-block">
+            <TheButton
+              variant="tertiary"
+              @click="handleBookmark"
+            >
+              <div class="text-accent-light/80">
+                <Icon
+                  :name="bookmarkIcon"
+                  size="25"
+                />
+              </div>
+            </TheButton>
+
+            <ToolTip
+              :text="isBookmarked
+                ? 'Saved to your reading list'
+                : 'Add to reading list'"
+            />
+          </div>
+        </div>
       </div>
     </div>
 

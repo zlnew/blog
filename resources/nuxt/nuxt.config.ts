@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  devServer: {
+    host: '192.168.11.121'
+  },
   runtimeConfig: {
     public: {
       apiBase: 'http://localhost:8000/api'
@@ -27,7 +30,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxt/image',
-    'nuxt-icon'
+    'nuxt-icon',
+    'nuxt-disqus'
   ],
   googleFonts: {
     families: {
@@ -43,5 +47,8 @@ export default defineNuxtConfig({
   },
   pinia: {
     autoImports: ['defineStore', 'storeToRefs', 'acceptHMRUpdate']
+  },
+  disqus: {
+    shortname: 'aprizqy-blog'
   }
 })

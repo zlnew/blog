@@ -12,6 +12,8 @@ export interface ButtonProps {
   loading?: boolean
 }
 
+const button = ref<HTMLButtonElement | HTMLAnchorElement>()
+
 const props = withDefaults(
   defineProps<ButtonProps>(), {
     type: 'button',
@@ -38,18 +40,23 @@ const classes = computed(() => setButtonClasses({
   block: props.block,
   noCaps: props.noCaps
 }))
+
+defineExpose({
+  button
+})
 </script>
 
 <template>
   <component
     :is="component"
+    ref="button"
     :to="to"
     :href="href"
     :type="type"
     :disabled="disabled || loading"
     :class="classes"
   >
-    <div class="flex space-x-1 justify-center items-center">
+    <div class="flex space-x-2 justify-center items-center">
       <Icon v-if="loading" name="eos-icons:loading" size="24" />
       <template v-else>
         <slot name="prepend" />

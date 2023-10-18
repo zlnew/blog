@@ -21,6 +21,7 @@
     "@vueuse/nuxt": "^10.4.1",
     "eslint": "^8.50.0",
     "nuxt": "^3.7.4",
+    "nuxt-disqus": "^1.0.1",
     "nuxt-icon": "^0.5.0",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
