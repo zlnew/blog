@@ -1,12 +1,20 @@
+<script setup lang="ts">
+const { auth } = useAuthStore()
+</script>
+
 <template>
-  <nav id="nav" class="xl:sticky xl:top-0 bg-light z-[100] py-8 border-b container flex items-center justify-between space-x-4">
+  <StickyBrowseBar />
+
+  <nav id="nav" class="xl:sticky xl:top-0 backdrop-blur-md bg-light/90 z-[100] py-8 border-b container flex items-center justify-between space-x-4">
     <TheLogo />
 
     <div class="hidden xl:block">
       <ArticleSearchBar />
     </div>
 
-    <ul class="flex justify-center items-center space-x-2">
+    <DropdownProfile v-if="auth.user" />
+
+    <ul v-else class="flex justify-center items-center space-x-2">
       <li>
         <TheButton
           no-caps
@@ -24,6 +32,4 @@
       </li>
     </ul>
   </nav>
-
-  <StickyBrowseBar />
 </template>

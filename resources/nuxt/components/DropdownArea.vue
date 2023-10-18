@@ -35,7 +35,7 @@ onBeforeUnmount(() => {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="visible" class="relative">
+    <div v-show="visible" class="relative">
       <div
         class="absolute inset-0 top-2"
         :class="{
