@@ -30,7 +30,7 @@ const absoluteClasses = computed(() => {
       absoluteClasses
     ]"
   >
-    <h1 class="text-5xl font-bold">
+    <h1 class="text-4xl font-bold">
       <NuxtLink to="/">
         A<u>B</u>
       </NuxtLink>

@@ -1,114 +1,39 @@
 <script setup lang="ts">
-const action = ref<{ button: HTMLButtonElement }>()
-const dropdownVisibility = ref(false)
-
-const href = ref('')
-
-const { copy, copied } = useClipboard({
-  source: href.value,
-  legacy: true
-})
-
-function toggleDropdown () {
-  dropdownVisibility.value = !dropdownVisibility.value
-}
-
-function hideDropdown () {
-  dropdownVisibility.value = false
-}
-
-function handleParentClick (e: Event) {
-  const target = e.target as HTMLElement
-  (target.firstChild as HTMLElement).click()
-}
-
-onMounted(() => {
-  href.value = window.location.href
-})
+const items = [
+  [{
+    label: 'Copy URL',
+    icon: 'i-heroicons-clipboard-document-list'
+  }],
+  [{
+    label: 'Facebook',
+    icon: 'i-heroicons-arrow-top-right-on-square'
+  }],
+  [{
+    label: 'X/Twitter',
+    icon: 'i-heroicons-arrow-top-right-on-square'
+  }],
+  [{
+    label: 'LinkedIn',
+    icon: 'i-heroicons-arrow-top-right-on-square'
+  }]
+]
 </script>
 
 <template>
-  <div class="relative inline-block">
-    <div>
-      <TheButton
-        ref="action"
-        no-caps
-        label="Share"
-        variant="tertiary"
-        @click.prevent="toggleDropdown"
-      >
-        <template #prepend>
-          <Icon name="material-symbols:share" />
-        </template>
-      </TheButton>
-      <slot name="tooltip" />
-    </div>
-
-    <DropdownArea
-      :visible="dropdownVisibility"
-      :toggler-ref="action?.button"
-      direction="rtl"
-      width-class="w-36"
-      @outside-click="hideDropdown"
-    >
-      <ul>
-        <li
-          :class="[
-            'p-2 transition cursor-pointer',
-            'hover:font-medium hover:bg-accent-light/10'
-          ]"
-          @click="copy(href)"
-        >
-          <NuxtLink>
-            {{ copied ? 'url copied' : 'Copy url' }}&nbsp;&nbsp;<Icon name="ic:link" size="15" />
-          </NuxtLink>
-        </li>
-        <hr>
-        <li
-          :class="[
-            'p-2 transition cursor-pointer',
-            'hover:font-medium hover:bg-accent-light/10'
-          ]"
-          @click="handleParentClick"
-        >
-          <NuxtLink
-            target="_blank"
-            :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURI(href)}`"
-          >
-            Facebook&nbsp;&nbsp;<Icon name="ic:baseline-facebook" size="15" />
-          </NuxtLink>
-        </li>
-        <hr>
-        <li
-          :class="[
-            'p-2 transition cursor-pointer',
-            'hover:font-medium hover:bg-accent-light/10'
-          ]"
-          @click="handleParentClick"
-        >
-          <NuxtLink
-            target="_blank"
-            :href="`https://twitter.com/share?url=${encodeURI(href)}`"
-          >
-            X/Twitter&nbsp;&nbsp;<Icon name="ri:twitter-x-fill" size="15" />
-          </NuxtLink>
-        </li>
-        <hr>
-        <li
-          :class="[
-            'p-2 transition cursor-pointer',
-            'hover:font-medium hover:bg-accent-light/10'
-          ]"
-          @click="handleParentClick"
-        >
-          <NuxtLink
-            target="_blank"
-            :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURI(href)}`"
-          >
-            LinkedIn&nbsp;&nbsp;<Icon name="mdi:linkedin" size="15" />
-          </NuxtLink>
-        </li>
-      </ul>
-    </DropdownArea>
-  </div>
+  <UDropdown
+    :items="items"
+    :ui="{ item: { disabled: 'cursor-text select-text' } }"
+    :popper="{ placement: 'bottom-end' }"
+  >
+    <UButton
+      icon="i-heroicons-share"
+      label="Share"
+      color="black"
+      variant="ghost"
+    />
+    <template #item="{ item }">
+      <span class="truncate">{{ item.label }}</span>
+      <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-accent dark:text-gray-500 ms-auto" />
+    </template>
+  </UDropdown>
 </template>

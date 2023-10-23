@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+
 definePageMeta({
   layout: 'auth',
   middleware: 'viewer'
@@ -8,64 +10,102 @@ useSeoMeta({
   title: 'Login to your account'
 })
 
-const router = useRouter()
-
 const { actions, form } = useAuthStore()
 
-async function handleLogin () {
-  const { status } = await actions.authenticate()
+const uform = ref<HTMLFormElement>()
+
+async function handleLogin (event: FormSubmitEvent<any>) {
+  uform.value?.clear()
+
+  const { status } = await actions.authenticate(event.data)
+
+  if (status.value === 'error') {
+    uform.value?.setErrors(form.validation.errors)
+  }
 
   if (status.value === 'success') {
-    router.push('/dashboard')
+    window.location.replace('/dashboard')
   }
 }
 </script>
 
 <template>
-  <div class="space-y-4">
-    <h1 class="text-2xl font-bold">
+  <div class="space-y-8">
+    <h1 class="text-4xl font-black tracking-tighter">
       Login to your account
     </h1>
 
-    <form class="md:max-w-md md:w-screen space-y-4" @submit.prevent="handleLogin">
-      <FormInput
-        v-model="form.payload.login.email"
-        focused
-        type="email"
-        label="Email"
-        placeholder="Enter your email address"
-        :errors="form.validation.login.errors.email"
-      />
+    <div class="md:max-w-md md:w-screen">
+      <UForm
+        ref="uform"
+        :state="form.payload.login"
+        @submit.prevent="handleLogin"
+      >
+        <div class="space-y-4">
+          <UFormGroup label="Email" name="email">
+            <UInput
+              v-model="form.payload.login.email"
+              placeholder="Enter your email address"
+              size="xl"
+              :ui="{
+                rounded: 'rounded-sm'
+              }"
+              :disabled="form.processing"
+            />
+          </UFormGroup>
 
-      <FormInput
-        v-model="form.payload.login.password"
-        type="password"
-        label="Password"
-        placeholder="Enter your password"
-        :errors="form.validation.login.errors.password"
-      />
+          <UFormGroup label="Password" name="password">
+            <UInput
+              v-model="form.payload.login.password"
+              type="password"
+              placeholder="Enter your password"
+              size="xl"
+              :ui="{
+                rounded: 'rounded-sm'
+              }"
+              :disabled="form.processing"
+            />
+          </UFormGroup>
 
-      <TheButton
-        no-caps
-        to="/auth/password/forgot"
-        label="Forgot password?"
-        variant="tertiary"
-      />
+          <UButton
+            :padded="false"
+            to="/auth/password/forgot"
+            label="Forgot your password?"
+            color="black"
+            size="lg"
+            variant="link"
+            class="rounded-sm"
+          />
 
-      <TheButton
-        block
-        type="submit"
-        label="Login"
-        :loading="form.processing"
-      />
+          <UButton
+            block
+            type="submit"
+            label="Login"
+            :color="
+              $colorMode.value === 'dark'
+                ? 'gray'
+                : 'black'
+            "
+            size="lg"
+            class="rounded-sm"
+            :loading="form.processing"
+          />
 
-      <TheButton
-        block
-        no-caps
-        to="/auth/register"
-        label="Don't have an account?"
-        variant="tertiary"
-      />
-    </form>
+          <UButton
+            block
+            :padded="false"
+            to="/auth/register"
+            label="Don't have an account yet?"
+            :color="
+              $colorMode.value === 'dark'
+                ? 'gray'
+                : 'black'
+            "
+            size="lg"
+            variant="link"
+          />
+        </div>
+      </UForm>
+    </div>
   </div>
 </template>

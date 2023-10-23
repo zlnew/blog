@@ -39,17 +39,14 @@ const latestArticles = [
       <h5 class="page-heading">
         How To: Going Full-Stack with Laravel and Nuxt.js
       </h5>
-      <div class="flex justify-between items-center space-x-2 lg:text-base text-accent-light/80">
+      <div class="flex justify-between items-center space-x-2 lg:text-base text-accent-light/80 dark:text-light">
         <div class="space-x-2">
           <span class="font-medium">10 min read</span>
           <span class="font-bold">·</span>
           <span>12 Dec, 2023</span>
         </div>
-        <ShareButton>
-          <template #tooltip>
-            <ToolTip text="Share this article" />
-          </template>
-        </ShareButton>
+
+        <ShareButton />
       </div>
     </div>
 
@@ -59,7 +56,7 @@ const latestArticles = [
         alt="Alt Image"
         class="w-full aspect-cover"
       >
-      <figcaption class="text-center text-accent-light/80 text-sm md:text-base">
+      <figcaption class="text-center text-accent-light/80 dark:text-light/80 text-sm md:text-base">
         Source: <a href="httfigcaption s://unsplash.com" class="link accent">Unsplash</a>
       </figcaption>
     </div>
@@ -115,25 +112,25 @@ const latestArticles = [
 
     <div class="flex items-center space-x-2">
       <strong>Tags:</strong>
-      <NuxtLink
+      <UButton
         to="/browse?order=newest&tag=how-to"
-        class="p-2 bg-accent-light/5 rounded-sm"
-      >
-        How To
-      </NuxtLink>
-      <NuxtLink
-        to="/browse?order=newest&tag=programming"
-        class="p-2 bg-accent-light/5 rounded-sm"
-      >
-        Programming
-      </NuxtLink>
+        label="How To"
+        color="gray"
+        class="rounded-sm"
+      />
+      <UButton
+        o="/browse?order=newest&tag=programming"
+        label="Programming"
+        color="gray"
+        class="rounded-sm"
+      />
     </div>
 
-    <hr>
+    <hr class="hr">
 
     <LazyArticleResponse />
 
-    <hr>
+    <hr class="hr">
 
     <div class="space-y-14">
       <h5 class="page-heading">

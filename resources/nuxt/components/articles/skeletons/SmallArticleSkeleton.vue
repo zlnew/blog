@@ -27,5 +27,5 @@
     </div>
   </div>
 
-  <hr>
+  <hr class="hr">
 </template>

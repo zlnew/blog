@@ -20,8 +20,8 @@ const isBookmarked = ref(props.bookmarked)
 
 const bookmarkIcon = computed(() => {
   return isBookmarked.value
-    ? 'material-symbols:bookmark-added'
-    : 'material-symbols:bookmark-add-outline'
+    ? 'i-heroicons-bookmark-solid'
+    : 'i-heroicons-bookmark'
 })
 
 function handleBookmark () {
@@ -46,32 +46,26 @@ function handleBookmark () {
               </p>
             </div>
 
-            <div class="flex items-end justify-between">
+            <div class="flex items-center justify-between">
               <div class="small-list-article-info">
                 <span>{{ readEstimation }}</span>
                 <span>·</span>
                 <span>{{ postedAt }}</span>
               </div>
 
-              <div class="relative inline-block">
-                <TheButton
-                  variant="tertiary"
+              <UTooltip
+                :text="isBookmarked
+                  ? 'Added to your reading list'
+                  : 'Add to reading list'
+                "
+              >
+                <UButton
+                  :icon="bookmarkIcon"
+                  color="amber"
+                  variant="ghost"
                   @click="handleBookmark"
-                >
-                  <div class="text-accent-light/80">
-                    <Icon
-                      :name="bookmarkIcon"
-                      size="25"
-                    />
-                  </div>
-                </TheButton>
-
-                <ToolTip
-                  :text="isBookmarked
-                    ? 'Saved to your reading list'
-                    : 'Add to reading list'"
                 />
-              </div>
+              </UTooltip>
             </div>
           </div>
         </div>
@@ -92,7 +86,7 @@ function handleBookmark () {
           </NuxtLink>
         </div>
       </div>
-      <hr>
+      <hr class="hr">
     </div>
 
     <template #fallback>

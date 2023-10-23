@@ -1,9 +1,7 @@
 export const useAuthStore = defineStore('auth', () => {
   const accessToken = useCookie('auth__token')
   const user = useCookie('auth__user')
-
   const processing = ref(false)
-
   const payload = reactive({
     login: {
       email: '',
@@ -25,53 +23,28 @@ export const useAuthStore = defineStore('auth', () => {
       password_confirmation: ''
     }
   })
-
-  const validation = ref({
-    login: {
-      message: '',
-      errors: {
-        email: [],
-        password: []
-      }
-    },
-    register: {
-      message: '',
-      errors: {
-        name: [],
-        email: [],
-        password: []
-      }
-    },
-    forgotPassword: {
-      message: '',
-      errors: {
-        email: []
-      }
-    },
-    resetPassword: {
-      message: '',
-      errors: {
-        email: [],
-        password: []
-      }
-    }
+  const validation = ref<{
+    message: string,
+    errors: {
+      path: string,
+      message: string
+    }[]
+  }>({
+    message: '',
+    errors: []
   })
 
-  async function register () {
+  async function register (formData: any) {
     processing.value = true
 
     const { status, data, pending } = await useFetch(
       '/api/auth/register',
       {
         method: 'POST',
-        body: payload.register,
-        watch: false,
+        body: formData,
         onResponse ({ response }) {
           if (response.status === 422) {
-            validation.value.register = {
-              message: response._data.data.message,
-              errors: response._data.data.errors
-            }
+            setValidationError(response._data.data)
           }
         }
       }
@@ -89,29 +62,21 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function forgotPassword () {
+  async function forgotPassword (formData: any) {
     processing.value = true
 
     const { status, data, pending } = await useFetch(
       '/api/auth/password/forgot',
       {
         method: 'POST',
-        body: payload.forgotPassword,
-        watch: false,
+        body: formData,
         onResponse ({ response }) {
           if (response.status === 422) {
-            validation.value.forgotPassword = {
-              message: response._data.data.message,
-              errors: response._data.data.errors
-            }
+            setValidationError(response._data.data)
           }
         }
       }
     )
-
-    if (status.value === 'success') {
-      validation.value.forgotPassword.errors.email = []
-    }
 
     processing.value = pending.value
 
@@ -121,21 +86,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function resetPassword () {
+  async function resetPassword (formData: any) {
     processing.value = true
 
     const { status, data, pending } = await useFetch(
       '/api/auth/password/reset',
       {
         method: 'POST',
-        body: payload.resetPassword,
+        body: formData,
         watch: false,
         onResponse ({ response }) {
           if (response.status === 422) {
-            validation.value.resetPassword = {
-              message: response._data.data.message,
-              errors: response._data.data.errors
-            }
+            setValidationError(response._data.data)
           }
         }
       }
@@ -149,21 +111,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function authenticate () {
+  async function authenticate (formData: any) {
     processing.value = true
 
     const { status, data, pending } = await useFetch(
       '/api/auth/login',
       {
         method: 'POST',
-        body: payload.login,
+        body: formData,
         watch: false,
         onResponse ({ response }) {
           if (response.status === 422) {
-            validation.value.login = {
-              message: response._data.data.message,
-              errors: response._data.data.errors
-            }
+            setValidationError(response._data.data)
           }
         }
       }
@@ -171,7 +130,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (status.value === 'success') {
       accessToken.value = data.value?.response.data.access_token
-      user.value = data.value?.response.data.user
+      user.value = JSON.stringify(data.value?.response.data.user)
     }
 
     processing.value = pending.value
@@ -206,6 +165,22 @@ export const useAuthStore = defineStore('auth', () => {
     return {
       status,
       data
+    }
+  }
+
+  function setValidationError ({
+    message,
+    errors
+  }: {
+    message: string
+    errors: any
+  }) {
+    validation.value = {
+      message,
+      errors: Object.keys(errors).map(key => ({
+        path: key,
+        message: errors[key][0]
+      }))
     }
   }
 

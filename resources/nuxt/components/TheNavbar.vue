@@ -3,33 +3,29 @@ const { auth } = useAuthStore()
 </script>
 
 <template>
-  <StickyBrowseBar />
-
-  <nav id="nav" class="xl:sticky xl:top-0 backdrop-blur-md bg-light/90 z-[100] py-8 border-b container flex items-center justify-between space-x-4">
-    <TheLogo />
-
-    <div class="hidden xl:block">
-      <ArticleSearchBar />
+  <nav
+    id="nav"
+    class="
+      container sticky top-0 z-50 py-4 space-x-4
+      grid grid-cols-3 justify-center items-center
+      backdrop-blur-md
+      border-b dark:border-b-accent-light
+      bg-light/90 dark:bg-accent
+    "
+  >
+    <div class="col-span-1">
+      <ABLogo />
     </div>
 
-    <DropdownProfile v-if="auth.user" />
+    <div class="col-span-1 hidden xl:block text-center">
+      <!--  -->
+    </div>
 
-    <ul v-else class="flex justify-center items-center space-x-2">
-      <li>
-        <TheButton
-          no-caps
-          to="/auth/register"
-          label="Sign Up"
-        />
-      </li>
-      <li>
-        <TheButton
-          no-caps
-          to="/auth/login"
-          label="Sign In"
-          variant="secondary"
-        />
-      </li>
-    </ul>
+    <div class="col-span-2 xl:col-span-1 flex items-center justify-end space-x-2">
+      <SearchButton />
+      <ColorModeButton />
+      <ProfileDropdown v-if="auth.user" />
+      <SignButton v-else />
+    </div>
   </nav>
 </template>

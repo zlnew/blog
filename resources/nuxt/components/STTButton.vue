@@ -24,14 +24,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="buttonIsVisible" class="fixed bottom-5 right-5">
-    <TheButton
-      no-caps
-      label="Scroll to Top"
-      @click.prevent="handleScrollToTop"
-    >
-      <template #prepend>
-        <Icon name="ep:top" />
-      </template>
-    </TheButton>
+    <UButton
+      icon="i-heroicons-arrow-small-up"
+      color="gray"
+      size="lg"
+      class="rounded-sm"
+      @click="handleScrollToTop"
+    />
   </div>
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const route = useRoute()
-
 const router = useRouter()
 
 const showMoreLoading = ref(false)
@@ -127,8 +126,16 @@ const metaTitle = computed(() => {
 
     <div class="space-y-4 xl:space-y-0 xl:grid xl:grid-cols-7 xl:gap-20">
       <div class="col-span-2 hidden xl:block">
-        <BrowseFilter />
+        <div class="sticky top-24">
+          <FilterAccordion />
+        </div>
       </div>
+
+      <div class="xl:hidden">
+        <FilterDropdown />
+      </div>
+
+      <hr class="xl:hidden hr pb-4 xl:pb-0">
 
       <div class="space-y-14 col-span-5">
         <div class="grid xl:grid-cols-1 gap-8">
@@ -144,10 +151,10 @@ const metaTitle = computed(() => {
         </div>
 
         <div class="text-center">
-          <TheButton
-            no-caps
+          <UButton
             label="Show more"
-            variant="tertiary"
+            color="black"
+            variant="link"
             :loading="showMoreLoading"
             @click="handleShowMore"
           />

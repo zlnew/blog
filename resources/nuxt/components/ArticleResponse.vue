@@ -4,8 +4,8 @@ const commentsVisible = ref(false)
 
 const commentsIcon = computed(() => {
   return commentsVisible.value
-    ? 'material-symbols:comment'
-    : 'material-symbols:comment-outline'
+    ? 'i-heroicons-chat-bubble-bottom-center-text-solid'
+    : 'i-heroicons-chat-bubble-bottom-center-text'
 })
 
 const commentsButtonLabel = computed(() => {
@@ -31,19 +31,17 @@ function handleCommentsVisibility () {
 
 <template>
   <div class="flex justify-center items-center space-x-4">
-    <TheButton
-      no-caps
-      variant="tertiary"
+    <UButton
+      :icon="commentsIcon"
+      color="black"
+      variant="ghost"
       @click="handleCommentsVisibility"
     >
       {{ commentsButtonLabel }} <DisqusCount identifier="/blog/1" />
-      <template #prepend>
-        <Icon :name="commentsIcon" />
-      </template>
-    </TheButton>
+    </UButton>
   </div>
 
-  <hr v-if="commentsVisible">
+  <hr v-if="commentsVisible" class="hr">
 
   <div v-if="commentsVisible" ref="commentsSection" class="space-y-14">
     <LazyDisqusComments identifier="/blog/1" />

@@ -52,16 +52,15 @@ const latestArticles = [
     </div>
 
     <div class="text-center">
-      <TheButton
-        no-caps
+      <UButton
         to="/browse"
         label="Browse more articles"
-        variant="tertiary"
-      >
-        <template #append>
-          <Icon name="ep:right" />
-        </template>
-      </TheButton>
+        icon="i-heroicons-arrow-small-right"
+        color="black"
+        size="lg"
+        variant="link"
+        trailing
+      />
     </div>
   </section>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+
 definePageMeta({
   layout: 'auth',
   middleware: 'viewer'
@@ -13,8 +15,16 @@ const router = useRouter()
 
 const { actions, form } = useAuthStore()
 
-async function handleResetPassword () {
-  const { status } = await actions.resetPassword()
+const uform = ref<HTMLFormElement>()
+
+async function handleResetPassword (event: FormSubmitEvent<any>) {
+  uform.value?.clear()
+
+  const { status } = await actions.resetPassword(event.data)
+
+  if (status.value === 'error') {
+    uform.value?.setErrors(form.validation.errors)
+  }
 
   if (status.value === 'success') {
     router.push('/auth/login')
@@ -28,42 +38,71 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="space-y-4">
-    <h1 class="text-2xl font-bold">
+  <div class="space-y-8">
+    <h1 class="text-4xl font-black tracking-tighter">
       Reset Password
     </h1>
 
-    <form class="md:max-w-md md:w-screen space-y-4" @submit.prevent="handleResetPassword">
-      <FormInput
-        v-model="form.payload.resetPassword.email"
-        type="email"
-        label="Email"
-        placeholder="Enter your email address"
-        :errors="form.validation.resetPassword.errors.email"
-      />
+    <div class="md:max-w-md md:w-screen">
+      <UForm
+        ref="uform"
+        :state="form.payload.resetPassword"
+        @submit.prevent="handleResetPassword"
+      >
+        <div class="space-y-4">
+          <UFormGroup label="Email Address" name="email">
+            <UInput
+              v-model="form.payload.resetPassword.email"
+              placeholder="Email address"
+              size="xl"
+              :ui="{
+                rounded: 'rounded-sm'
+              }"
+              :disabled="form.processing"
+            />
+          </UFormGroup>
 
-      <FormInput
-        v-model="form.payload.resetPassword.password"
-        focused
-        type="password"
-        label="Password"
-        placeholder="Enter new password"
-        :errors="form.validation.resetPassword.errors.password"
-      />
+          <UFormGroup label="Password" name="password">
+            <UInput
+              v-model="form.payload.resetPassword.password"
+              type="password"
+              placeholder="Password"
+              size="xl"
+              :ui="{
+                rounded: 'rounded-sm'
+              }"
+              :disabled="form.processing"
+            />
+          </UFormGroup>
 
-      <FormInput
-        v-model="form.payload.resetPassword.password_confirmation"
-        type="password"
-        label="Confirm New Password"
-        placeholder="Confirm the new password"
-      />
+          <UFormGroup label="Confirm Password" name="password_confirmation">
+            <UInput
+              v-model="form.payload.resetPassword.password_confirmation"
+              type="password"
+              placeholder="Confirm the password"
+              size="xl"
+              :ui="{
+                rounded: 'rounded-sm'
+              }"
+              :disabled="form.processing"
+            />
+          </UFormGroup>
 
-      <TheButton
-        block
-        type="submit"
-        label="Reset Password"
-        :loading="form.processing"
-      />
-    </form>
+          <UButton
+            block
+            type="submit"
+            label="Reset Password"
+            :color="
+              $colorMode.value === 'dark'
+                ? 'gray'
+                : 'black'
+            "
+            size="lg"
+            class="rounded-sm"
+            :loading="form.processing"
+          />
+        </div>
+      </UForm>
+    </div>
   </div>
 </template>

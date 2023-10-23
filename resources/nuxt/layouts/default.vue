@@ -8,6 +8,6 @@
 
     <LazyTheFooter />
 
-    <LazyScrollToTop />
+    <LazySTTButton />
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TheLogo absolute />
+    <ABLogo absolute />
 
     <main class="container flex flex-col justify-center items-center min-h-screen">
       <slot />
