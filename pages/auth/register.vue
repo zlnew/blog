@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { FormError, FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { type InferType, object, string, ref as yRef } from 'yup'
+import { type OAuthProvider } from '~/stores/useAuthStore'
 
 definePageMeta({
   layout: 'auth',
@@ -13,70 +15,49 @@ useSeoMeta({
 const { actions } = useAuthStore()
 const { processing } = storeToRefs(useAuthStore())
 
-const uform = ref<HTMLFormElement>()
+const form = ref<HTMLFormElement>()
 const isSignInSuccess = ref(false)
 
-const form = reactive({
+const schema = object({
+  email: string().email('Invalid email').required('Required'),
+  password: string()
+    .min(8, 'Must be at least 8 characters')
+    .required('Required'),
+  password_confirmation: string()
+    .oneOf([yRef('password'), ''], 'Passwords must match')
+})
+
+const initialState = {
   email: '',
   password: '',
   password_confirmation: ''
-})
-
-const validate = (state: any): FormError[] => {
-  const errors = []
-
-  if (!state.email) {
-    errors.push({
-      path: 'email',
-      message: 'Required'
-    })
-  }
-
-  if (!state.password) {
-    errors.push({
-      path: 'password',
-      message: 'Required'
-    })
-  }
-
-  if (!state.password_confirmation) {
-    errors.push({
-      path: 'password_confirmation',
-      message: 'Required'
-    })
-  }
-
-  if (state.password_confirmation !== state.password) {
-    errors.push({
-      path: 'password_confirmation',
-      message: "Password don't match"
-    })
-  }
-
-  return errors
 }
 
-async function handleSignUp (event: FormSubmitEvent<any>) {
-  uform.value?.clear()
+const state = reactive({ ...initialState })
+
+type Schema = InferType<typeof schema>
+
+const signUpHandler = async (event: FormSubmitEvent<Schema>) => {
+  form.value?.clear()
 
   const { error } = await actions.signUp(event.data)
 
   if (error?.message) {
-    uform.value?.setErrors([{
+    form.value?.setErrors([{
       path: 'email',
       message: error?.message
     }])
   } else {
-    form.email = ''
-    form.password = ''
-    form.password_confirmation = ''
+    resetState()
     isSignInSuccess.value = true
   }
 }
 
-async function handleSignInWithOAuth (provider: 'google' | 'github') {
-  await actions.signInWithOAuth(provider)
+const signInWithOAuthHandler = (provider: OAuthProvider) => {
+  actions.signInWithOAuth(provider)
 }
+
+const resetState = () => Object.assign(state, initialState)
 </script>
 
 <template>
@@ -97,15 +78,15 @@ async function handleSignInWithOAuth (provider: 'google' | 'github') {
       />
 
       <UForm
-        ref="uform"
-        :validate="validate"
-        :state="form"
-        @submit.prevent="handleSignUp"
+        ref="form"
+        :schema="schema"
+        :state="state"
+        @submit="signUpHandler"
       >
         <div class="space-y-4">
           <UFormGroup label="Email Address" name="email">
             <UInput
-              v-model="form.email"
+              v-model="state.email"
               placeholder="Email address"
               size="xl"
               :disabled="processing"
@@ -115,7 +96,7 @@ async function handleSignInWithOAuth (provider: 'google' | 'github') {
 
           <UFormGroup label="Password" name="password">
             <UInput
-              v-model="form.password"
+              v-model="state.password"
               type="password"
               placeholder="Password"
               size="xl"
@@ -126,7 +107,7 @@ async function handleSignInWithOAuth (provider: 'google' | 'github') {
 
           <UFormGroup label="Confirm Password" name="password_confirmation">
             <UInput
-              v-model="form.password_confirmation"
+              v-model="state.password_confirmation"
               type="password"
               placeholder="Confirm password"
               size="xl"
@@ -139,15 +120,13 @@ async function handleSignInWithOAuth (provider: 'google' | 'github') {
             block
             type="submit"
             label="Sign Up"
-            :color="
-              $colorMode.value === 'dark'
-                ? 'gray'
-                : 'black'
-            "
+            color="black"
             size="lg"
             class="rounded-sm"
             :loading="processing"
           />
+
+          <UDivider label="OR" />
 
           <div class="grid md:grid-cols-2 gap-4">
             <UButton
@@ -158,7 +137,7 @@ async function handleSignInWithOAuth (provider: 'google' | 'github') {
               color="white"
               size="lg"
               class="rounded-sm"
-              @click.prevent="handleSignInWithOAuth('google')"
+              @click="signInWithOAuthHandler('google')"
             />
 
             <UButton
@@ -169,7 +148,7 @@ async function handleSignInWithOAuth (provider: 'google' | 'github') {
               color="white"
               size="lg"
               class="rounded-sm"
-              @click.prevent="handleSignInWithOAuth('github')"
+              @click="signInWithOAuthHandler('github')"
             />
           </div>
 

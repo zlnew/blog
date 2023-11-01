@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { FormError, FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { type InferType, object, string } from 'yup'
 
 definePageMeta({
   layout: 'auth',
@@ -13,41 +14,38 @@ useSeoMeta({
 const { actions } = useAuthStore()
 const { processing } = storeToRefs(useAuthStore())
 
-const uform = ref<HTMLFormElement>()
+const form = ref<HTMLFormElement>()
 const isLinkSent = ref(false)
 
-const form = reactive({
-  email: ''
+const schema = object({
+  email: string().email('Invalid email').required('Required')
 })
 
-const validate = (state: any): FormError[] => {
-  const errors = []
-
-  if (!state.email) {
-    errors.push({
-      path: 'email',
-      message: 'Required'
-    })
-  }
-
-  return errors
+const initialState = {
+  email: ''
 }
 
-async function handleForgotPassword (event: FormSubmitEvent<any>) {
-  uform.value?.clear()
+const state = reactive({ ...initialState })
+
+type Schema = InferType<typeof schema>
+
+const forgotPasswordHandler = async (event: FormSubmitEvent<Schema>) => {
+  form.value?.clear()
 
   const { error } = await actions.forgotPassword(event.data.email)
 
   if (error?.message) {
-    uform.value?.setErrors([{
+    form.value?.setErrors([{
       path: 'email',
       message: error?.message
     }])
   } else {
-    form.email = ''
+    resetState()
     isLinkSent.value = true
   }
 }
+
+const resetState = () => Object.assign(state, initialState)
 </script>
 
 <template>
@@ -68,15 +66,15 @@ async function handleForgotPassword (event: FormSubmitEvent<any>) {
       />
 
       <UForm
-        ref="uform"
-        :validate="validate"
-        :state="form"
-        @submit.prevent="handleForgotPassword"
+        ref="form"
+        :schema="schema"
+        :state="state"
+        @submit="forgotPasswordHandler"
       >
         <div class="space-y-4">
           <UFormGroup label="Email" name="email">
             <UInput
-              v-model="form.email"
+              v-model="state.email"
               placeholder="Enter your email address"
               size="xl"
               :disabled="processing"
@@ -88,11 +86,7 @@ async function handleForgotPassword (event: FormSubmitEvent<any>) {
             block
             type="submit"
             label="Get link to reset password"
-            :color="
-              $colorMode.value === 'dark'
-                ? 'gray'
-                : 'black'
-            "
+            color="black"
             size="lg"
             class="rounded-sm"
             :loading="processing"

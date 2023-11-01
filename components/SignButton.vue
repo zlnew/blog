@@ -9,7 +9,7 @@
         class="rounded-sm"
       />
     </li>
-    <li class="hidden xl:block">
+    <li class="hidden md:block">
       <UButton
         to="/auth/login"
         label="Sign In"

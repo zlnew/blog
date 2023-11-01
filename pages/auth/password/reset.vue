@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { FormError, FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { type InferType, object, string, ref as yRef } from 'yup'
 
 definePageMeta({
   layout: 'auth',
@@ -13,47 +14,30 @@ useSeoMeta({
 const { actions } = useAuthStore()
 const { processing } = storeToRefs(useAuthStore())
 
-const uform = ref<HTMLFormElement>()
+const form = ref<HTMLFormElement>()
 
-const form = reactive({
+const schema = object({
+  new_password: string()
+    .min(8, 'Must be at least 8 characters')
+    .required('Required'),
+  new_password_confirmation: string()
+    .oneOf([yRef('new_password'), ''], 'New passwords must match')
+})
+
+const state = reactive({
   new_password: '',
   new_password_confirmation: ''
 })
 
-const validate = (state: any): FormError[] => {
-  const errors = []
+type Schema = InferType<typeof schema>
 
-  if (!state.new_password) {
-    errors.push({
-      path: 'new_password',
-      message: 'Required'
-    })
-  }
-
-  if (!state.new_password_confirmation) {
-    errors.push({
-      path: 'new_password_confirmation',
-      message: 'Required'
-    })
-  }
-
-  if (state.new_password_confirmation !== state.new_password) {
-    errors.push({
-      path: 'new_password_confirmation',
-      message: "Password don't match"
-    })
-  }
-
-  return errors
-}
-
-async function handleResetPassword (event: FormSubmitEvent<any>) {
-  uform.value?.clear()
+const resetPasswordHandler = async (event: FormSubmitEvent<Schema>) => {
+  form.value?.clear()
 
   const { data, error } = await actions.resetPassword(event.data.new_password)
 
   if (error?.message) {
-    uform.value?.setErrors([{
+    form.value?.setErrors([{
       path: 'new_password',
       message: error?.message
     }])
@@ -71,15 +55,15 @@ async function handleResetPassword (event: FormSubmitEvent<any>) {
 
     <div class="max-w-xs md:max-w-md w-screen">
       <UForm
-        ref="uform"
-        :validate="validate"
-        :state="form"
-        @submit.prevent="handleResetPassword"
+        ref="form"
+        :schema="schema"
+        :state="state"
+        @submit="resetPasswordHandler"
       >
         <div class="space-y-4">
           <UFormGroup label="New Password" name="new_password">
             <UInput
-              v-model="form.new_password"
+              v-model="state.new_password"
               type="password"
               placeholder="New Password"
               size="xl"
@@ -90,7 +74,7 @@ async function handleResetPassword (event: FormSubmitEvent<any>) {
 
           <UFormGroup label="Confirm New Password" name="new_password_confirmation">
             <UInput
-              v-model="form.new_password_confirmation"
+              v-model="state.new_password_confirmation"
               type="password"
               placeholder="Confirm the new password"
               size="xl"
@@ -103,11 +87,7 @@ async function handleResetPassword (event: FormSubmitEvent<any>) {
             block
             type="submit"
             label="Reset Password"
-            :color="
-              $colorMode.value === 'dark'
-                ? 'gray'
-                : 'black'
-            "
+            color="black"
             size="lg"
             class="rounded-sm"
             :loading="processing"

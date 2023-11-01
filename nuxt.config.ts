@@ -1,9 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true
+  },
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:8000/api'
+      APP_URL: 'http://localhost:3000'
     }
   },
   imports: {

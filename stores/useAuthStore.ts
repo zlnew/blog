@@ -1,4 +1,9 @@
+export type OAuthProvider = 'google' | 'github'
+
 export const useAuthStore = defineStore('auth', () => {
+  const config = useRuntimeConfig()
+  const APP_URL = config.public.APP_URL
+
   const supabase = useSupabaseClient()
   const processing = ref(false)
 
@@ -71,7 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
     processing.value = true
 
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:3000/auth/password/reset'
+      redirectTo: `${APP_URL}/auth/password/reset`
     })
 
     processing.value = false
