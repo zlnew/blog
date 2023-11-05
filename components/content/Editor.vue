@@ -1,9 +1,11 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { Placeholder } from '@tiptap/extension-placeholder'
-import { useEditor, EditorContent } from '@tiptap/vue-3'
+import { Image } from '@tiptap/extension-image'
 import { StarterKit } from '@tiptap/starter-kit'
+import { useEditor, EditorContent } from '@tiptap/vue-3'
 
-defineProps<{
+const props = defineProps<{
   modelValue: string
 }>()
 
@@ -17,6 +19,7 @@ const editor = useEditor({
   },
   extensions: [
     StarterKit,
+    Image,
     Placeholder.configure({
       placeholder: 'Write here ...'
     })
@@ -24,6 +27,18 @@ const editor = useEditor({
   onUpdate: () => {
     emit('update:modelValue', editor.value?.getHTML())
   }
+})
+
+const isImageUploaderOpen = ref(false)
+
+function insertImage (url: string) {
+  editor.value?.chain().focus().setImage({
+    src: url
+  }).run()
+}
+
+watch(() => props.modelValue, (newValue) => {
+  newValue && editor.value?.commands.setContent(newValue, false)
 })
 </script>
 
@@ -213,6 +228,24 @@ const editor = useEditor({
         />
       </UTooltip>
 
+      <UTooltip text="Insert image">
+        <UButton
+          icon="i-material-symbols-imagesmode-outline"
+          color="black"
+          variant="outline"
+          class="rounded-sm"
+          @click="isImageUploaderOpen = true"
+        />
+
+        <!-- <input
+          ref="imageUploader"
+          type="file"
+          name="image"
+          class="hidden"
+          @change="imageChangedHandler"
+        > -->
+      </UTooltip>
+
       <UTooltip text="Undo">
         <UButton
           icon="i-material-symbols-undo"
@@ -238,6 +271,11 @@ const editor = useEditor({
 
     <EditorContent :editor="editor" spellcheck="false" />
   </div>
+
+  <LazyContentImageUploaderModal
+    v-model="isImageUploaderOpen"
+    @update:url="insertImage"
+  />
 </template>
 
 <style>

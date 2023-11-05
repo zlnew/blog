@@ -1,36 +1,42 @@
+<!-- eslint-disable camelcase -->
 <script setup lang="ts">
 useSeoMeta({
   title: 'Latest articles'
 })
 
-const latestArticles = [
-  {
-    image: 'https://source.unsplash.com/random/1920x1200?food',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '12 Dec, 2023',
-    read_estimation: '5 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  },
-  {
-    image: 'https://source.unsplash.com/random/1920x1200?tech',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '5 Dec, 2023',
-    read_estimation: '2 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  }, {
-    image: 'https://source.unsplash.com/random/1920x1200?code',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '27 Nov, 2023',
-    read_estimation: '5 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  }, {
-    image: 'https://source.unsplash.com/random/1920x1200?html',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '15 Nov, 2023',
-    read_estimation: '2 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
+const toast = useToast()
+const { actions: article } = useArticleEditorStore()
+
+async function getLatestArticles () {
+  const { data, error } = await article.getByLimit(4)
+
+  if (error) {
+    toast.add({
+      title: 'Error when getting latest articles',
+      color: 'red'
+    })
   }
-]
+
+  return data?.map((item) => {
+    const originalCreatedAt = new Date(item.created_at)
+
+    const published_at = originalCreatedAt.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit'
+    })
+
+    return {
+      ...item,
+      read_estimation: `${item.read_estimation} min read`,
+      published_at
+    }
+  })
+}
+
+const { data: latestArticles } = await useAsyncData(
+  'lastestArticles', () => getLatestArticles()
+)
 </script>
 
 <template>
@@ -40,15 +46,7 @@ const latestArticles = [
     </h2>
 
     <div class="grid md:grid-cols-2 gap-14">
-      <LazyBigArticle
-        v-for="(article, index) in latestArticles"
-        :key="index"
-        :image="article.image"
-        :title="article.title"
-        :posted-at="article.created_at"
-        :read-estimation="article.read_estimation"
-        :content="article.content"
-      />
+      <BigArticle :items="latestArticles" />
     </div>
 
     <div class="text-center">

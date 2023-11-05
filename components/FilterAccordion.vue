@@ -47,7 +47,7 @@ const items = [{
 
 function onOrderingChange (value: string) {
   router.push({
-    path: '/browse',
+    path: '/article/browse',
     query: {
       ...route.query,
       order: value
@@ -57,7 +57,7 @@ function onOrderingChange (value: string) {
 
 function onTagsChange (value: string) {
   router.push({
-    path: '/browse',
+    path: '/article/browse',
     query: {
       ...route.query,
       tag: value

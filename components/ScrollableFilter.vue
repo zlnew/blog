@@ -41,7 +41,7 @@ const tags = [
 function browseByOrder (value: string) {
   selectedOrder.value = value
   router.push({
-    path: '/browse',
+    path: '/article/browse',
     query: {
       ...route.query,
       order: value
@@ -52,7 +52,7 @@ function browseByOrder (value: string) {
 function browseByTag (value: string) {
   selectedTag.value = value
   router.push({
-    path: '/browse',
+    path: '/article/browse',
     query: {
       ...route.query,
       tag: value

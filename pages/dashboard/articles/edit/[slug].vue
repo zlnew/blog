@@ -7,7 +7,7 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Create a new article'
+  title: 'Edit article'
 })
 
 const toast = useToast()
@@ -20,7 +20,7 @@ const form = ref<HTMLFormElement>()
 const schema = object({
   title: string().min(1).max(128).required('Required'),
   content: string().required('Required'),
-  cover_file: mixed().required('Required'),
+  cover_file: mixed().nullable(),
   cover_caption: string().required('Required'),
   read_estimation: number().min(1).max(20).required('Required'),
   tags: array().min(1).required('Required')
@@ -53,7 +53,7 @@ const coverChangeHandler = (event: Event) => {
   }
 }
 
-const submitHandler = async (event: FormSubmitEvent<Schema>) => {
+const updateHandler = async (event: FormSubmitEvent<Schema>) => {
   form.value?.clear()
 
   const formData = await preparedFormData(event.data)
@@ -62,28 +62,39 @@ const submitHandler = async (event: FormSubmitEvent<Schema>) => {
     try {
       const {
         data,
-        error: insertError
-      } = await article.store(formData)
+        error: updateError
+      } = await article.update({
+        formData: formData as never,
+        where: {
+          column: 'slug',
+          value: route.params.slug as string
+        }
+      })
 
       if (data) {
-        toast.add({ title: 'Article published successfully' })
+        toast.add({
+          title: 'Article updated successfully',
+          color: 'green'
+        })
         navigateTo('/dashboard')
       }
 
-      if (insertError) { throw insertError }
+      if (updateError) { throw updateError }
     } catch (err: any) {
       toast.add({
         title: 'Error while submitting form',
         description: err.message,
-        color: 'danger'
+        color: 'red'
       })
     }
   }
 }
 
 const preparedFormData = async (form: any) => {
-  if (form.cover_file !== undefined) {
-    try {
+  try {
+    const coverData = { publicUrl: '' }
+
+    if (form.cover_file !== undefined) {
       const {
         data: coverStorage,
         error: storageError
@@ -92,30 +103,57 @@ const preparedFormData = async (form: any) => {
         name: slugify(form.title)
       })
 
-      if (coverStorage !== null) {
-        const {
-          data: coverData
-        } = article.getPublicURL(coverStorage.path)
-
-        return {
-          title: form.title,
-          content: JSON.stringify(form.content),
-          cover_public_url: coverData.publicUrl,
-          cover_caption: form.cover_caption,
-          read_estimation: form.read_estimation,
-          tags: JSON.stringify(form.tags),
-          slug: slugify(form.title)
-        }
-      }
-
       if (storageError) { throw storageError }
-    } catch (err: any) {
-      toast.add({
-        title: 'Error while submitting form',
-        description: err.message,
-        color: 'danger'
-      })
+
+      if (coverStorage !== null) {
+        const { data } = article.getPublicURL(coverStorage.path)
+        coverData.publicUrl = data.publicUrl
+      }
     }
+
+    return {
+      title: form.title,
+      content: JSON.stringify(form.content),
+      cover_public_url: coverData.publicUrl.length
+        ? coverData.publicUrl
+        : form.cover_public_url,
+      cover_caption: form.cover_caption,
+      read_estimation: form.read_estimation,
+      tags: JSON.stringify(form.tags),
+      slug: slugify(form.title)
+    }
+  } catch (err: any) {
+    toast.add({
+      title: 'Error while submitting form',
+      description: err.message,
+      color: 'red'
+    })
+  }
+}
+
+const route = useRoute()
+
+async function getArticle () {
+  const slug = route.params.slug as string
+
+  try {
+    const { data, error } = await article.where({
+      column: 'slug',
+      value: slug
+    })
+
+    if (data) {
+      Object.assign(state, data)
+      coverPreview.value = data.cover_public_url
+    }
+
+    if (error) { throw error }
+  } catch (error: any) {
+    toast.add({
+      title: 'Error while fetching article',
+      description: error.message,
+      color: 'red'
+    })
   }
 }
 
@@ -126,6 +164,7 @@ const articleTags = async () => {
 
 onMounted(async () => {
   tags.value = await articleTags() || []
+  await getArticle()
 })
 </script>
 
@@ -147,7 +186,7 @@ onMounted(async () => {
       ref="form"
       :schema="schema"
       :state="state"
-      @submit="submitHandler"
+      @submit="updateHandler"
     >
       <div class="space-y-14">
         <div class="space-y-8">
@@ -238,7 +277,7 @@ onMounted(async () => {
 
           <UButton
             type="submit"
-            label="Publish"
+            label="Update"
             color="black"
             :loading="processing"
             class="rounded-sm"

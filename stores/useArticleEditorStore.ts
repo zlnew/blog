@@ -1,123 +1,272 @@
-interface FormPayload {
-  title: string
-  content: string
-  image: string | Blob
-  image_caption: string
-  read_estimation: string | number
-  tags: []
-}
-
-interface FormValidation {
-  message: string
-  errors: {
-    path: string
-    message: string
-  }[]
-}
+import { Article } from '~/types/article'
 
 export const useArticleEditorStore = defineStore('articleEditor', () => {
-  const { auth: { accessToken } } = useAuthStore()
+  const supabase = useSupabaseClient()
+  const processing = ref(false)
+  const uploading = ref(false)
 
-  const form = reactive({
-    payload: <FormPayload>{
-      title: '',
-      content: '',
-      image: '',
-      image_caption: '',
-      read_estimation: '',
-      tags: []
-    },
-    validation: <FormValidation>{
-      message: '',
-      errors: []
-    },
-    processing: false
-  })
+  async function get () {
+    processing.value = true
 
-  async function store (payload: any) {
-    form.processing = true
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
 
-    const { status, data } = await useFetch('/api/articles/store', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: payload,
-      watch: false,
-      onResponse ({ response }) {
-        if (response.status === 422) {
-          form.validation.errors = setValidationErrors(response._data.data.errors)
-        }
-      }
-    })
-
-    form.processing = false
+    processing.value = false
 
     return {
-      status,
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content),
+          tags: JSON.parse(item.tags)
+        }
+      }) as Article[] | null,
+      total: data?.length,
+      error
+    }
+  }
+
+  async function getByLimit (limit: number) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .limit(limit)
+
+    processing.value = false
+
+    return {
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content),
+          tags: JSON.parse(item.tags)
+        }
+      }) as Article[] | null,
+      error
+    }
+  }
+
+  async function getTags () {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('tags')
+
+    processing.value = false
+
+    return {
+      data: [...new Set([].concat(
+        ...(data?.map(item => JSON.parse(item.tags)) ?? [])
+      ))] as string[] | null,
+      error
+    }
+  }
+
+  async function browse ({
+    filters,
+    range
+  }: {
+    filters?: {
+      order?: string,
+      tag?: string
+    }
+    range: {
+      offset: number,
+      limit: number
+    }
+  }) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .range(range.offset, range.limit)
+      .order('created_at', {
+        ascending: filters?.order === 'oldest'
+      })
+
+    processing.value = false
+
+    return {
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content),
+          tags: JSON.parse(item.tags)
+        }
+      }) as Article[] | null,
+      error
+    }
+  }
+
+  async function where ({
+    column,
+    value
+  }: {
+    column: 'article_id' | 'slug'
+    value: number | string
+  }) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq(column, value)
+      .limit(1)
+
+    processing.value = false
+
+    return {
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content),
+          tags: JSON.parse(item.tags)
+        }
+      }).at(0) as Article | null,
+      error
+    }
+  }
+
+  async function store (formData: any) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .insert(formData)
+      .select()
+
+    processing.value = false
+
+    return {
+      data,
+      error
+    }
+  }
+
+  async function update ({
+    formData,
+    where
+  }: {
+    formData: never
+    where: {
+      column: 'article_id' | 'slug',
+      value: number | string
+    }
+  }) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .update(formData)
+      .eq(where.column, where.value)
+      .select('*')
+
+    processing.value = false
+
+    return {
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content),
+          tags: JSON.parse(item.tags)
+        }
+      }).at(0) as Article | null,
+      error
+    }
+  }
+
+  async function destroy (articleId: number) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .delete()
+      .eq('article_id', articleId)
+
+    processing.value = false
+
+    return {
+      data,
+      error
+    }
+  }
+
+  function getPublicURL (path: string) {
+    const { data } = supabase.storage
+      .from('article_assets')
+      .getPublicUrl(path)
+
+    return {
       data
     }
   }
 
-  async function update (payload: any, id: string) {
-    form.processing = true
+  async function uploadCover ({
+    file,
+    name
+  }: {
+    file: File,
+    name: string
+  }) {
+    processing.value = true
 
-    const { status, data } = await useFetch('/api/articles/update', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      },
-      params: {
-        id
-      },
-      body: payload,
-      watch: false,
-      onResponse ({ response }) {
-        if (response.status === 422) {
-          form.validation.errors = setValidationErrors(response._data.data.errors)
-        }
-      }
-    })
+    const fileName = `${Date.now()}_${name}`
 
-    form.processing = false
+    const { data, error } = await supabase.storage
+      .from('article_assets')
+      .upload(`covers/${fileName}`, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    processing.value = false
 
     return {
-      status,
-      data
+      data,
+      error
     }
   }
 
-  async function destroy (id: string) {
-    form.processing = true
+  async function uploadImage (file: File) {
+    uploading.value = true
 
-    const { status, data } = await useFetch('/api/articles/destroy', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      },
-      params: {
-        id
-      },
-      watch: false
-    })
+    const fileName = `${Date.now()}_${file.name}`
 
-    form.processing = false
+    const { data, error } = await supabase.storage
+      .from('article_assets')
+      .upload(`images/${fileName}`, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    uploading.value = false
 
     return {
-      status,
-      data
+      data,
+      error
     }
   }
 
   return {
-    form,
+    processing,
+    uploading,
     actions: {
+      get,
+      browse,
+      getByLimit,
+      getTags,
+      where,
       store,
       update,
-      destroy
+      destroy,
+      getPublicURL,
+      uploadCover,
+      uploadImage
     }
   }
 })

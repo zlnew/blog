@@ -1,92 +1,58 @@
 <script setup lang="ts">
+import { Article } from '~/types/article'
+
 interface Props {
-  image: string
-  title: string
-  postedAt: string
-  readEstimation: string
-  content: string
-  bookmarked?: boolean
+  items: Article[] | null | undefined
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
-const imageIsLoading = ref(true)
-
-function handleImagePlaceholder () {
-  imageIsLoading.value = false
-}
-
-const isBookmarked = ref(props.bookmarked)
-
-const bookmarkIcon = computed(() => {
-  return isBookmarked.value
-    ? 'i-heroicons-bookmark-solid'
-    : 'i-heroicons-bookmark'
-})
-
-function handleBookmark () {
-  isBookmarked.value = !isBookmarked.value
-}
+const isCoverLoading = ref(true)
 </script>
 
 <template>
-  <ClientOnly>
+  <ClientOnly v-for="(item, index) in items" :key="item.article_id">
     <div class="space-y-8">
       <div class="grid grid-cols-8 gap-4 lg:gap-20">
         <div class="col-span-6">
           <div class="space-y-8">
             <div class="space-y-2">
-              <NuxtLink to="/article/lorem" class="link accent">
+              <NuxtLink :to="`/article/${item.slug}`" class="link accent">
                 <h4 class="small-list-article-title">
-                  {{ title }}
+                  {{ item.title }}
                 </h4>
               </NuxtLink>
-              <p class="small-list-article-short-description">
-                {{ content }}
-              </p>
+              <div class="prose dark:prose-invert line-clamp-3" v-html="item.content" />
             </div>
 
             <div class="flex items-center justify-between">
               <div class="small-list-article-info">
-                <span>{{ readEstimation }}</span>
+                <span>{{ item.read_estimation }}</span>
                 <span>·</span>
-                <span>{{ postedAt }}</span>
+                <span>{{ item.published_at }}</span>
               </div>
-
-              <UTooltip
-                :text="isBookmarked
-                  ? 'Added to your reading list'
-                  : 'Add to reading list'
-                "
-              >
-                <UButton
-                  :icon="bookmarkIcon"
-                  color="amber"
-                  variant="ghost"
-                  @click="handleBookmark"
-                />
-              </UTooltip>
             </div>
           </div>
         </div>
 
         <div class="col-span-2">
           <div
-            v-if="imageIsLoading"
+            v-if="isCoverLoading"
             class="list-article-image-placeholder"
           />
 
-          <NuxtLink v-show="!imageIsLoading" to="/article/lorem">
+          <NuxtLink v-show="!isCoverLoading" :to="`/article/${item.slug}`">
             <NuxtImg
-              :src="image"
-              :alt="title"
+              :src="item.cover_public_url"
+              :alt="item.cover_caption"
               class="list-article-image"
-              @load="handleImagePlaceholder"
+              @load="isCoverLoading = false"
             />
           </NuxtLink>
         </div>
       </div>
-      <hr class="hr">
+
+      <hr v-if="index !== (items ? items.length - 1 : 0)" class="hr">
     </div>
 
     <template #fallback>

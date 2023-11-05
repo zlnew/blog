@@ -1,90 +1,140 @@
+<!-- eslint-disable camelcase -->
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
+const toast = useToast()
+const { actions: article } = useArticleEditorStore()
 
+const STEP = 10
+const TOTAL = ref(0)
+const OFFSET = ref(0)
+const LIMIT = ref(STEP - 1)
 const showMoreLoading = ref(false)
 
-const articles = ref([
-  {
-    image: 'https://source.unsplash.com/random/1920x1200?food',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '12 Dec, 2023',
-    read_estimate: '5 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  },
-  {
-    image: 'https://source.unsplash.com/random/1920x1200?tech',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '5 Dec, 2023',
-    read_estimate: '2 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  }, {
-    image: 'https://source.unsplash.com/random/1920x1200?code',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '27 Nov, 2023',
-    read_estimate: '5 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  }, {
-    image: 'https://source.unsplash.com/random/1920x1200?html',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '15 Nov, 2023',
-    read_estimate: '2 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  }, {
-    image: 'https://source.unsplash.com/random/1920x1200?vue',
-    title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-    created_at: '25 Nov, 2023',
-    read_estimate: '10 min read',
-    content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-  }
-])
+const showMoreVisibility = computed(() => {
+  if (LIMIT.value >= TOTAL.value - 1) { return false }
+  return true
+})
 
-function handleShowMore () {
-  showMoreLoading.value = true
-
-  const newArticles = [
-    {
-      image: 'https://source.unsplash.com/random/1920x1200',
-      title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-      created_at: '12 December, 2023',
-      read_estimate: '5 minutes read',
-      content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
+async function getArticles ({
+  offset,
+  limit
+}: {
+  offset: number
+  limit: number
+}) {
+  const { data, error } = await article.browse({
+    filters: {
+      order: route.query.order as string,
+      tag: route.query.tag as string
     },
-    {
-      image: 'https://source.unsplash.com/random/1920x1200?music',
-      title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-      created_at: '5 December, 2023',
-      read_estimate: '2 minutes read',
-      content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-    }, {
-      image: 'https://source.unsplash.com/random/1920x1200?kpop',
-      title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-      created_at: '27 November, 2023',
-      read_estimate: '5 minutes read',
-      content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-    }, {
-      image: 'https://source.unsplash.com/random/1920x1200?rock',
-      title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-      created_at: '15 November, 2023',
-      read_estimate: '2 minutes read',
-      content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
-    }, {
-      image: 'https://source.unsplash.com/random/1920x1200?pop',
-      title: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, iure.',
-      created_at: '25 September, 2023',
-      read_estimate: '10 minutes read',
-      content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita repudiandae magni tempora veritatis maxime, dolores sed quidem deserunt nisi tenetur cupiditate et, quos inventore enim at fugit, mollitia ipsam animi!'
+    range: {
+      offset,
+      limit
     }
-  ]
+  })
 
-  setTimeout(() => {
-    articles.value.push(...newArticles)
+  if (error) {
+    toast.add({
+      title: 'Error when getting articles',
+      color: 'red'
+    })
+  }
 
-    showMoreLoading.value = false
-  }, 1000)
+  return data?.map((item) => {
+    const originalCreatedAt = new Date(item.created_at)
+
+    const published_at = originalCreatedAt.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit'
+    })
+
+    return {
+      ...item,
+      read_estimation: `${item.read_estimation} min read`,
+      published_at
+    }
+  })
 }
 
-onMounted(() => {
+async function getMoreArticles ({
+  offset,
+  limit
+}: {
+  offset: number
+  limit: number
+}) {
+  showMoreLoading.value = true
+
+  const { data, error } = await article.browse({
+    filters: {
+      order: route.query.order as string,
+      tag: route.query.tag as string
+    },
+    range: {
+      offset,
+      limit
+    }
+  })
+
+  if (error) {
+    toast.add({
+      title: 'Error when getting articles',
+      color: 'red'
+    })
+  }
+
+  const newData = data?.map((item) => {
+    const originalCreatedAt = new Date(item.created_at)
+
+    const published_at = originalCreatedAt.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit'
+    })
+
+    return {
+      ...item,
+      read_estimation: `${item.read_estimation} min read`,
+      published_at
+    }
+  })
+
+  newData && articles.value?.push({ ...newData[0] })
+
+  showMoreLoading.value = false
+
+  return newData
+}
+
+const showMoreHandler = () => {
+  OFFSET.value = OFFSET.value + STEP
+  LIMIT.value = OFFSET.value + STEP - 1
+}
+
+watch(() => (route.query), (newQ) => {
+  if (newQ) { refresh() }
+})
+
+const { data: articles, refresh } = await useAsyncData(
+  'articles', () => getArticles({
+    offset: OFFSET.value,
+    limit: LIMIT.value
+  })
+)
+
+await useLazyAsyncData(
+  'moreArticles', () => getMoreArticles({
+    offset: OFFSET.value,
+    limit: LIMIT.value
+  }), {
+    immediate: false,
+    watch: [OFFSET, LIMIT]
+  }
+)
+
+onMounted(async () => {
   if (route.query.tag === undefined && route.query.order === undefined) {
     router.replace({
       query: {
@@ -101,6 +151,12 @@ onMounted(() => {
     const top = resultsTop - navHeight - 10
 
     window.scroll(0, top)
+  })
+
+  await article.get().then(({ total }) => {
+    if (total) {
+      TOTAL.value = total
+    }
   })
 })
 
@@ -139,24 +195,16 @@ const metaTitle = computed(() => {
 
       <div class="space-y-14 col-span-5">
         <div class="grid xl:grid-cols-1 gap-8">
-          <LazySmallArticle
-            v-for="(article, index) in articles"
-            :key="index"
-            :image="article.image"
-            :title="article.title"
-            :posted-at="article.created_at"
-            :read-estimation="article.read_estimate"
-            :content="article.content"
-          />
+          <SmallArticle :items="articles" />
         </div>
 
-        <div class="text-center">
+        <div v-if="showMoreVisibility" class="text-center">
           <UButton
             label="Show more"
             color="black"
-            variant="link"
+            variant="ghost"
             :loading="showMoreLoading"
-            @click="handleShowMore"
+            @click="showMoreHandler"
           />
         </div>
       </div>
