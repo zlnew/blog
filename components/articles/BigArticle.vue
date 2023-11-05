@@ -38,7 +38,9 @@ const isCoverLoading = ref(true)
           <div class="big-list-article-info">
             <span>{{ item.read_estimation }}</span>
             <span>·</span>
-            <span>{{ item.published_at }}</span>
+            <time :datetime="item.created_at">
+              {{ item.published_at }}
+            </time>
           </div>
         </div>
       </div>

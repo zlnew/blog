@@ -14,6 +14,8 @@ module.exports = {
   plugins: [],
   rules: {
     'no-console': 'off',
+    camelcase: 'off',
+    'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'off'
   }
 }

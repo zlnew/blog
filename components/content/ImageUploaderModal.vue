@@ -25,8 +25,8 @@ const url = ref()
 const file = ref()
 
 const toast = useToast()
-const { uploading } = storeToRefs(useArticleEditorStore())
-const { actions: article } = useArticleEditorStore()
+const { uploading } = storeToRefs(useArticleStore())
+const { actions: article } = useArticleStore()
 
 const fileChangeHandler = (event: Event) => {
   if (event.target instanceof HTMLInputElement && event.target.files) {

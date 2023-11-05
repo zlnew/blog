@@ -1,13 +1,9 @@
-<!-- eslint-disable camelcase -->
 <script setup lang="ts">
-
-useSeoMeta({
-  title: 'How To: Going Full-Stack with Laravel and Nuxt.js'
-})
-
 const route = useRoute()
 const toast = useToast()
-const { actions } = useArticleEditorStore()
+const { actions } = useArticleStore()
+
+const isCoverLoading = ref(true)
 
 async function getArticle () {
   const { data, error } = await actions.where({
@@ -75,6 +71,8 @@ const { data: relatedArticles } = await useAsyncData(
 
 <template>
   <div class="space-y-14">
+    <ArticleMetadata :data="article" />
+
     <div class="space-y-8">
       <h5 class="page-heading">
         {{ article?.title }}
@@ -84,19 +82,25 @@ const { data: relatedArticles } = await useAsyncData(
         <div class="space-x-2">
           <span class="font-medium">{{ article?.read_estimation }}</span>
           <span class="font-bold">·</span>
-          <span>{{ article?.published_at }}</span>
+          <time :datetime="article?.created_at">
+            {{ article?.published_at }}
+          </time>
         </div>
 
-        <ShareButton />
+        <ArticleShareButton :url="`${$config.public.APP_URL}${$route.fullPath}`" />
       </div>
     </div>
 
     <div class="space-y-2">
-      <img
-        :src="article?.cover_public_url"
-        :alt="article?.cover_caption"
-        class="w-full aspect-cover rounded-sm"
-      >
+      <div v-if="isCoverLoading" class="list-article-image-placeholder" />
+      <NuxtLink v-show="!isCoverLoading" :href="article?.cover_public_url" target="_blank">
+        <NuxtImg
+          :src="article?.cover_public_url"
+          :alt="article?.cover_caption"
+          class="w-full aspect-cover rounded-sm"
+          @load="isCoverLoading = false"
+        />
+      </NuxtLink>
       <figcaption class="text-sm">
         {{ article?.cover_caption }}
       </figcaption>
@@ -118,7 +122,9 @@ const { data: relatedArticles } = await useAsyncData(
 
     <hr class="hr">
 
-    <LazyArticleResponse />
+    <LazyArticleResponse
+      :identifier="`${article?.slug}/${article?.article_id}`"
+    />
 
     <hr class="hr">
 

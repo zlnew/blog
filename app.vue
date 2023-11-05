@@ -1,7 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  titleTemplate: "%s - Aprizqy'sBlog",
-  description: 'A nuxtjs powered blog.',
+  titleTemplate: '%s - AB',
   author: 'Maulana Aprizqy Sumaryanto'
 })
 </script>

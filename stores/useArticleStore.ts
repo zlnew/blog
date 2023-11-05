@@ -1,6 +1,6 @@
 import { Article } from '~/types/article'
 
-export const useArticleEditorStore = defineStore('articleEditor', () => {
+export const useArticleStore = defineStore('article', () => {
   const supabase = useSupabaseClient()
   const processing = ref(false)
   const uploading = ref(false)

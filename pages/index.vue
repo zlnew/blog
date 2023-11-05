@@ -1,11 +1,10 @@
-<!-- eslint-disable camelcase -->
 <script setup lang="ts">
 useSeoMeta({
   title: 'Latest articles'
 })
 
 const toast = useToast()
-const { actions: article } = useArticleEditorStore()
+const { actions: article } = useArticleStore()
 
 async function getLatestArticles () {
   const { data, error } = await article.getByLimit(4)

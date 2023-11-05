@@ -11,8 +11,8 @@ useSeoMeta({
 })
 
 const toast = useToast()
-const { actions: article } = useArticleEditorStore()
-const { processing } = storeToRefs(useArticleEditorStore())
+const { actions: article } = useArticleStore()
+const { processing } = storeToRefs(useArticleStore())
 
 const tags = ref<string[]>([])
 const form = ref<HTMLFormElement>()

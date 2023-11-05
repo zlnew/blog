@@ -1,8 +1,16 @@
 <script setup lang="ts">
+const props = defineProps<{
+  url: string
+}>()
+
+const toast = useToast()
+const { copy } = useCopyToClipboard()
+
 const items = [
   [{
     label: 'Copy URL',
-    icon: 'i-heroicons-clipboard-document-list'
+    icon: 'i-heroicons-clipboard-document-list',
+    click: () => copyToClipboardHandler(props.url)
   }],
   [{
     label: 'Facebook',
@@ -17,6 +25,22 @@ const items = [
     icon: 'i-heroicons-arrow-top-right-on-square'
   }]
 ]
+
+const copyToClipboardHandler = (url: string) => {
+  try {
+    copy(url)
+
+    toast.add({
+      title: 'URL copied to clipboard',
+      color: 'green'
+    })
+  } catch (e) {
+    toast.add({
+      title: 'Failed to copy URL',
+      color: 'red'
+    })
+  }
+}
 </script>
 
 <template>

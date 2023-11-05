@@ -1,9 +1,8 @@
-<!-- eslint-disable camelcase -->
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
-const { actions: article } = useArticleEditorStore()
+const { actions: article } = useArticleStore()
 
 const STEP = 10
 const TOTAL = ref(0)

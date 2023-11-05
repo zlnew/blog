@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineProps<{
+  identifier: string
+}>()
+
 const commentsSection = ref<HTMLDivElement>()
 const commentsVisible = ref(false)
 
@@ -37,13 +41,13 @@ function handleCommentsVisibility () {
       variant="ghost"
       @click="handleCommentsVisibility"
     >
-      {{ commentsButtonLabel }} <DisqusCount identifier="/blog/1" />
+      {{ commentsButtonLabel }} <DisqusCount :identifier="identifier" />
     </UButton>
   </div>
 
   <hr v-if="commentsVisible" class="hr">
 
   <div v-if="commentsVisible" ref="commentsSection" class="space-y-14">
-    <LazyDisqusComments identifier="/blog/1" />
+    <LazyDisqusComments :identifier="identifier" />
   </div>
 </template>

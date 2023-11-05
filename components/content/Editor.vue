@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Image } from '@tiptap/extension-image'

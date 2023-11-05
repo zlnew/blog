@@ -19,9 +19,7 @@ const authenticated = computed(() => !!user.value)
       <ABLogo />
     </div>
 
-    <div class="col-span-1 hidden xl:block text-center">
-      <!--  -->
-    </div>
+    <div class="col-span-1 hidden xl:block text-center" />
 
     <div class="col-span-2 xl:col-span-1 flex items-center justify-end space-x-2">
       <SearchButton />
