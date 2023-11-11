@@ -119,7 +119,7 @@ const preparedFormData = async (form: any) => {
         : form.cover_public_url,
       cover_caption: form.cover_caption,
       read_estimation: form.read_estimation,
-      tags: JSON.stringify(form.tags),
+      tags: form.tags,
       slug: slugify(form.title)
     }
   } catch (err: any) {

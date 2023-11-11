@@ -2,7 +2,7 @@
   <div>
     <LazyTheNavbar />
 
-    <main class="my-14 md:my-24 container">
+    <main class="my-8 md:my-14 container">
       <slot />
     </main>
 

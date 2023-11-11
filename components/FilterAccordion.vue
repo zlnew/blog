@@ -1,69 +1,30 @@
 <script setup lang="ts">
-const router = useRouter()
-const route = useRoute()
+defineProps<{
+  tags: {
+    name: string
+    value: string
+    label: string
+  }[] | null | undefined
+}>()
 
-const selectedOrdering = ref('newest')
-const selectedTags = ref('all')
-
-const ordering = [{
-  name: 'newest',
-  value: 'newest',
-  label: 'Newest'
-}, {
-  name: 'oldest',
-  value: 'oldest',
-  label: 'Oldest'
-}, {
-  name: 'popular',
-  value: 'popular',
-  label: 'Popular'
-}]
-
-const tags = [{
-  name: 'all',
-  value: 'all',
-  label: 'All'
-}, {
-  name: 'programming',
-  value: 'programming',
-  label: 'Programming'
-}, {
-  name: 'tutorial',
-  value: 'tutorial',
-  label: 'Tutorial'
-}]
+const { ordering, actions: browse } = useBrowseArticleStore()
+const { selectedOrder } = storeToRefs(useBrowseArticleStore())
 
 const items = [{
   label: 'Order by',
-  icon: 'i-heroicons-arrow-path-rounded-square',
+  icon: 'i-mdi-order-bool-descending',
   defaultOpen: true,
   slot: 'orders'
 }, {
   label: 'Tags',
-  icon: 'i-heroicons-tag',
+  icon: 'i-mdi-pound',
   defaultOpen: true,
   slot: 'tags'
 }]
 
-function onOrderingChange (value: string) {
-  router.push({
-    path: '/article/browse',
-    query: {
-      ...route.query,
-      order: value
-    }
-  })
-}
+const browseByOrderHandler = (order: string) => browse.setOrdering(order)
 
-function onTagsChange (value: string) {
-  router.push({
-    path: '/article/browse',
-    query: {
-      ...route.query,
-      tag: value
-    }
-  })
-}
+const browseByTagsHandler = (tag: string) => browse.setTags(tag)
 </script>
 
 <template>
@@ -91,21 +52,23 @@ function onTagsChange (value: string) {
         <URadio
           v-for="order of ordering"
           :key="order.name"
-          v-model="selectedOrdering"
+          v-model="selectedOrder"
           v-bind="order"
-          @update:model-value="onOrderingChange"
+          :ui="{ color: 'text-accent dark:text-slate-500' }"
+          @update:model-value="browseByOrderHandler"
         />
       </div>
     </template>
 
     <template #tags>
       <div class="ml-4 space-y-2">
-        <URadio
+        <UCheckbox
           v-for="tag of tags"
           :key="tag.name"
-          v-model="selectedTags"
-          v-bind="tag"
-          @update:model-value="onTagsChange"
+          :label="tag.label"
+          :ui="{ color: 'text-accent dark:text-slate-500' }"
+          :model-value="$route.query.tags?.includes(tag.name)"
+          @update:model-value="browseByTagsHandler(tag.value)"
         />
       </div>
     </template>

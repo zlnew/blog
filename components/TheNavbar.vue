@@ -1,9 +1,3 @@
-<script setup lang="ts">
-const user = useSupabaseUser()
-
-const authenticated = computed(() => !!user.value)
-</script>
-
 <template>
   <nav
     id="nav"
@@ -15,17 +9,32 @@ const authenticated = computed(() => !!user.value)
       bg-light/90 dark:bg-accent
     "
   >
-    <div class="col-span-1">
+    <div class="col-span-1 flex items-center gap-4">
       <ABLogo />
+      <UButton
+        to="/browse"
+        icon="i-heroicons-magnifying-glass"
+        label="Browse"
+        color="gray"
+        size="lg"
+        variant="ghost"
+        class="rounded-sm"
+        :class="{
+          hidden: $route.name === 'browse'
+        }"
+      />
     </div>
 
-    <div class="col-span-1 hidden xl:block text-center" />
-
-    <div class="col-span-2 xl:col-span-1 flex items-center justify-end space-x-2">
-      <SearchButton />
+    <div class="col-span-2 flex items-center justify-end gap-2">
+      <UButton
+        to="/about-me"
+        label="About Me"
+        color="gray"
+        size="lg"
+        variant="link"
+        class="rounded-sm"
+      />
       <ColorModeButton />
-      <ProfileDropdown v-if="authenticated" />
-      <SignButton v-else />
     </div>
   </nav>
 </template>

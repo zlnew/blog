@@ -11,7 +11,14 @@ function slugify (str: string) {
     .replace(/^-+|-+$/g, '')
 }
 
+function capitalize (str: string) {
+  return str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  })
+}
+
 export {
   ignoreSpecialChar,
-  slugify
+  slugify,
+  capitalize
 }

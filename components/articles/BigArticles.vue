@@ -14,33 +14,33 @@ const isCoverLoading = ref(true)
   <ClientOnly v-for="item in items" :key="item.article_id">
     <div class="space-y-10">
       <div v-if="isCoverLoading" class="list-article-image-placeholder" />
-      <NuxtLink v-show="!isCoverLoading" :to="`/article/${item.slug}`">
+      <a v-show="!isCoverLoading" :href="`/${item.slug}`">
         <NuxtImg
           :src="item.cover_public_url"
           :alt="item.cover_caption"
           class="list-article-image"
           @load="isCoverLoading = false"
         />
-      </NuxtLink>
+      </a>
 
       <div class="space-y-8">
         <div class="space-y-4">
-          <NuxtLink :to="`/article/${item.slug}`" class="link accent">
+          <a :href="`/${item.slug}`" class="link accent">
             <h3 class="big-list-article-title">
               {{ item.title }}
             </h3>
-          </NuxtLink>
+          </a>
 
           <div class="prose dark:prose-invert line-clamp-3" v-html="item.content" />
         </div>
 
         <div class="flex justify-between items-center">
           <div class="big-list-article-info">
-            <span>{{ item.read_estimation }}</span>
+            <UBadge :label="item.read_estimation" color="gray" class="rounded-sm" />
             <span>·</span>
-            <time :datetime="item.created_at">
+            <span>
               {{ item.published_at }}
-            </time>
+            </span>
           </div>
         </div>
       </div>

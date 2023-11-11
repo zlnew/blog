@@ -1,11 +1,4 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: 'Latest articles',
-  description: 'Latest articles from Aprizqy Blog',
-  ogDescription: 'Latest articles from Aprizqy Blog',
-  twitterDescription: 'Latest articles from Aprizqy Blog'
-})
-
 const toast = useToast()
 const { actions: article } = useArticleStore()
 
@@ -42,25 +35,29 @@ const { data: latestArticles } = await useAsyncData(
 </script>
 
 <template>
-  <section class="space-y-14">
-    <h2 class="page-heading">
-      Latest Articles
-    </h2>
+  <div>
+    <h2>Latest articles:</h2>
 
-    <div class="grid md:grid-cols-2 gap-14">
-      <BigArticles :items="latestArticles" />
+    <div>
+      <div v-for="(item, index) in latestArticles" :key="item.article_id">
+        <div class="flex items-start gap-8">
+          <h1 class="opacity-60">
+            {{ index + 1 }}
+          </h1>
+          <div>
+            <a :href="`/${item.slug}`" class="no-underline hover:underline">
+              <h4 class="line-clamp-2">
+                {{ item.title }}
+              </h4>
+            </a>
+            <div class="flex items-center gap-2">
+              <small>{{ item.read_estimation }}</small>
+              <small>·</small>
+              <small>{{ item.published_at }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="text-center">
-      <UButton
-        to="/browse"
-        label="Browse more"
-        icon="i-heroicons-arrow-small-right"
-        color="black"
-        size="lg"
-        variant="link"
-        trailing
-      />
-    </div>
-  </section>
+  </div>
 </template>

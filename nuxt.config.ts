@@ -33,8 +33,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/supabase',
     '@pinia/nuxt',
-    '@nuxt/image',
-    'nuxt-disqus'
+    '@nuxt/image'
   ],
   pwa: {
     registerType: 'autoUpdate',
@@ -80,7 +79,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/auth/login',
       callback: '/auth/confirm',
-      exclude: ['/', '/article/*', '/auth/*']
+      exclude: ['/*']
     }
   },
   ui: {
@@ -111,8 +110,5 @@ export default defineNuxtConfig({
       'storeToRefs',
       'acceptHMRUpdate'
     ]
-  },
-  disqus: {
-    shortname: 'aprizqy-blog'
   }
 })

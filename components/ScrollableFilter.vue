@@ -1,76 +1,25 @@
 <script setup lang="ts">
-const route = useRoute()
-const router = useRouter()
+defineProps<{
+  tags: {
+    name: string
+    value: string
+    label: string
+  }[] | null | undefined
+}>()
 
-const selectedOrder = ref('newest')
-const selectedTag = ref('all')
+const { ordering, actions: browse } = useBrowseArticleStore()
+const { selectedOrder } = storeToRefs(useBrowseArticleStore())
 
-const ordering = [
-  {
-    name: 'newest',
-    value: 'newest',
-    label: 'Newest'
-  }, {
-    name: 'oldest',
-    value: 'oldest',
-    label: 'Oldest'
-  }, {
-    name: 'popular',
-    value: 'popular',
-    label: 'Popular'
-  }
-]
+const browseByOrderHandler = (order: string) => browse.setOrdering(order)
 
-const tags = [
-  {
-    name: 'all',
-    value: 'all',
-    label: 'All'
-  },
-  {
-    name: 'programming',
-    value: 'programming',
-    label: 'Programming'
-  }, {
-    name: 'tutorial',
-    value: 'tutorial',
-    label: 'Tutorial'
-  }
-]
-
-function browseByOrder (value: string) {
-  selectedOrder.value = value
-  router.push({
-    path: '/article/browse',
-    query: {
-      ...route.query,
-      order: value
-    }
-  })
-}
-
-function browseByTag (value: string) {
-  selectedTag.value = value
-  router.push({
-    path: '/article/browse',
-    query: {
-      ...route.query,
-      tag: value
-    }
-  })
-}
-
-onMounted(() => {
-  selectedOrder.value = (route.query.order as string) || 'newest'
-  selectedTag.value = (route.query.tag as string) || 'all'
-})
+const browseByTagsHandler = (tag: string) => browse.setTags(tag)
 </script>
 
 <template>
   <div id="v-scrollable-filter" class="flex items-center space-x-4 overflow-x-auto">
     <div class="flex items-center space-x-2">
       <UTooltip text="Filter by order">
-        <UIcon name="i-heroicons-bars-3-bottom-right" />
+        <UIcon name="i-mdi-order-bool-descending" />
       </UTooltip>
       <UButton
         v-for="order in ordering"
@@ -78,21 +27,22 @@ onMounted(() => {
         :label="order.label"
         :color="selectedOrder === order.value ? 'black' : 'gray'"
         class="rounded-sm"
-        @click.prevent="browseByOrder(order.value)"
+        @click.prevent="browseByOrderHandler(order.value)"
       />
     </div>
 
     <div class="flex items-center space-x-2">
       <UTooltip text="Filter by tag">
-        <UIcon name="i-heroicons-tag" />
+        <UIcon name="i-mdi-pound" />
       </UTooltip>
-      <UButton
-        v-for="tag in tags"
+
+      <UCheckbox
+        v-for="tag of tags"
         :key="tag.name"
         :label="tag.label"
-        :color="selectedTag === tag.value ? 'black' : 'gray'"
-        class="rounded-sm"
-        @click.prevent="browseByTag(tag.value)"
+        :ui="{ color: 'text-accent dark:text-slate-500' }"
+        :model-value="$route.query.tags?.includes(tag.name)"
+        @update:model-value="browseByTagsHandler(tag.value)"
       />
     </div>
   </div>

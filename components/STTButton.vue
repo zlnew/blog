@@ -1,35 +1,24 @@
 <script setup lang="ts">
-const buttonIsVisible = ref(false)
+const isSTTButtonVisible = ref(false)
 
-function handleOnScroll () {
-  if (window.scrollY >= window.innerHeight) {
-    buttonIsVisible.value = true
-  } else {
-    buttonIsVisible.value = false
-  }
+const onScrollHandler = () => {
+  isSTTButtonVisible.value = window.scrollY >= window.innerHeight
 }
 
-function handleScrollToTop () {
-  window.scrollTo(0, 0)
-}
+const scrollToTopHandler = () => window.scrollTo(0, 0)
 
-onMounted(() => {
-  document.addEventListener('scroll', handleOnScroll)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('scroll', handleOnScroll)
-})
+onMounted(() => document.addEventListener('scroll', onScrollHandler))
+onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
 </script>
 
 <template>
-  <div v-if="buttonIsVisible" class="fixed bottom-5 right-5">
+  <div v-if="isSTTButtonVisible" class="fixed bottom-5 right-5">
     <UButton
       icon="i-heroicons-arrow-small-up"
       color="gray"
       size="lg"
       class="rounded-sm"
-      @click="handleScrollToTop"
+      @click="scrollToTopHandler"
     />
   </div>
 </template>

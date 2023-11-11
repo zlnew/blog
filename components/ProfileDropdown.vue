@@ -24,7 +24,7 @@ const items = [
   }]
 ]
 
-const avatar = computed(() => `https://ui-avatars.com/api/?name=${user.value?.email}`)
+const avatar = computed(() => `https://api.dicebear.com/7.x/initials/svg?seed=${user.value?.email}`)
 
 async function handleSignOut () {
   await actions.signOut().then(() => window.location.reload())

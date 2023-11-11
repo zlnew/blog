@@ -11,6 +11,7 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
+      .returns<Article[]>()
 
     processing.value = false
 
@@ -18,11 +19,69 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: any) => {
         return {
           ...item,
-          content: JSON.parse(item.content),
-          tags: JSON.parse(item.tags)
+          content: JSON.parse(item.content)
         }
-      }) as Article[] | null,
+      }),
       total: data?.length,
+      error
+    }
+  }
+
+  async function getRelated ({
+    excludedId,
+    tags
+  }: {
+    excludedId: number
+    tags: string[]
+  }) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .neq('article_id', excludedId)
+      .containedBy('tags', tags)
+      .returns<Article[]>()
+
+    processing.value = false
+
+    return {
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content)
+        }
+      }),
+      error
+    }
+  }
+
+  async function getNext ({
+    currentId,
+    tags
+  }: {
+    currentId: number
+    tags: string[]
+  }) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .gt('article_id', currentId)
+      .containedBy('tags', tags)
+      .limit(1)
+      .returns<Article[]>()
+
+    processing.value = false
+
+    return {
+      data: data?.map((item: any) => {
+        return {
+          ...item,
+          content: JSON.parse(item.content)
+        }
+      }),
       error
     }
   }
@@ -33,7 +92,9 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
+      .order('created_at', { ascending: false })
       .limit(limit)
+      .returns<Article[]>()
 
     processing.value = false
 
@@ -41,10 +102,9 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: any) => {
         return {
           ...item,
-          content: JSON.parse(item.content),
-          tags: JSON.parse(item.tags)
+          content: JSON.parse(item.content)
         }
-      }) as Article[] | null,
+      }),
       error
     }
   }
@@ -60,34 +120,47 @@ export const useArticleStore = defineStore('article', () => {
 
     return {
       data: [...new Set([].concat(
-        ...(data?.map(item => JSON.parse(item.tags)) ?? [])
+        ...(data?.map(item => item.tags) ?? [])
       ))] as string[] | null,
       error
     }
   }
 
   async function browse ({
-    filters,
-    range
+    search,
+    filter,
+    limit = 9
   }: {
-    filters?: {
+    search?: string
+    filter?: {
       order?: string,
-      tag?: string
+      tags?: string[] | string
     }
-    range: {
-      offset: number,
-      limit: number
-    }
+    limit: number
   }) {
     processing.value = true
 
-    const { data, error } = await supabase
+    const query = supabase
       .from('articles')
       .select('*')
-      .range(range.offset, range.limit)
+      .range(0, limit)
       .order('created_at', {
-        ascending: filters?.order === 'oldest'
+        ascending: filter?.order === 'oldest'
       })
+
+    if (search?.length) {
+      query.ilike('title', `%${search}%`)
+    }
+
+    if (typeof filter?.tags === 'string') {
+      query.contains('tags', [filter.tags])
+    }
+
+    if (Array.isArray(filter?.tags)) {
+      query.contains('tags', filter?.tags as string[])
+    }
+
+    const { data, error } = await query.returns<Article[]>()
 
     processing.value = false
 
@@ -95,10 +168,9 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: any) => {
         return {
           ...item,
-          content: JSON.parse(item.content),
-          tags: JSON.parse(item.tags)
+          content: JSON.parse(item.content)
         }
-      }) as Article[] | null,
+      }),
       error
     }
   }
@@ -124,8 +196,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: any) => {
         return {
           ...item,
-          content: JSON.parse(item.content),
-          tags: JSON.parse(item.tags)
+          content: JSON.parse(item.content)
         }
       }).at(0) as Article | null,
       error
@@ -172,8 +243,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: any) => {
         return {
           ...item,
-          content: JSON.parse(item.content),
-          tags: JSON.parse(item.tags)
+          content: JSON.parse(item.content)
         }
       }).at(0) as Article | null,
       error
@@ -257,9 +327,11 @@ export const useArticleStore = defineStore('article', () => {
     uploading,
     actions: {
       get,
-      browse,
+      getRelated,
+      getNext,
       getByLimit,
       getTags,
+      browse,
       where,
       store,
       update,
