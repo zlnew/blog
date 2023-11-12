@@ -52,9 +52,9 @@ const { data: article } = await useAsyncData(
             <div class="flex items-center gap-2">
               <UBadge :label="article?.read_estimation" color="gray" class="rounded-sm" />
               <span>·</span>
-              <span>
+              <time :datetime="article?.created_at">
                 {{ article?.published_at }}
-              </span>
+              </time>
             </div>
 
             <ArticleShareButton :url="`${$config.public.APP_URL}${$route.fullPath}`" />
@@ -118,7 +118,6 @@ const { data: article } = await useAsyncData(
 
       <div class="col-span-1 prose prose-headings:tracking-tighter dark:prose-invert">
         <LatestArticles />
-        <hr>
         <RelatedArticles
           :excluded-id="article?.article_id"
           :tags="article?.tags"

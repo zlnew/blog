@@ -28,17 +28,11 @@ const toast = useToast()
 const { uploading } = storeToRefs(useArticleStore())
 const { actions: article } = useArticleStore()
 
-const fileChangeHandler = (event: Event) => {
-  if (event.target instanceof HTMLInputElement && event.target.files) {
-    file.value = event.target.files[0]
-  }
-}
-
-const urlSchema = object({
-  url: string().required('Required')
-})
+const urlSchema = object({ url: string().required('Required') })
+const fileSchema = object({ file: mixed().required('Required') })
 
 type UrlSchema = InferType<typeof urlSchema>
+type FileSchema = InferType<typeof fileSchema>
 
 const urlSubmitHandler = (event: FormSubmitEvent<UrlSchema>) => {
   const url = event.data.url
@@ -47,39 +41,34 @@ const urlSubmitHandler = (event: FormSubmitEvent<UrlSchema>) => {
   emit('update:modelValue', false)
 }
 
-const fileSchema = object({
-  file: mixed().required('Required')
-})
-
-type FileSchema = InferType<typeof fileSchema>
-
 const fileSubmitHandler = async (event: FormSubmitEvent<FileSchema>) => {
-  const file = event.data.file as File
+  const file = event.data.file
 
   try {
-    const {
-      data: image,
-      error: storageError
-    } = await article.uploadImage(file)
+    const { data: uploadedImage, error: uploadError } = await article.uploadImage(file)
 
-    if (image) {
-      const {
-        data: imageData
-      } = article.getPublicURL(image.path)
+    if (uploadError) { throw uploadError }
 
-      if (imageData.publicUrl) {
-        emit('update:url', imageData.publicUrl)
+    if (uploadedImage) {
+      const { data: image } = article.getPublicURL(uploadedImage.path)
+
+      if (image.publicUrl) {
+        emit('update:url', image.publicUrl)
         emit('update:modelValue', false)
       }
     }
-
-    if (storageError) { throw storageError }
   } catch (err: any) {
     toast.add({
       title: 'Error while uploading image',
       description: err.message,
-      color: 'danger'
+      color: 'red'
     })
+  }
+}
+
+const fileChangeHandler = (event: Event) => {
+  if (event.target instanceof HTMLInputElement && event.target.files) {
+    file.value = event.target.files[0]
   }
 }
 </script>

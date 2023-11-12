@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { object, string, type InferType } from 'yup'
 import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
-import { type OAuthProvider } from '~/stores/useAuthStore'
 
 definePageMeta({
   layout: 'auth',
@@ -36,18 +35,16 @@ const signInHandler = async (event: FormSubmitEvent<Schema>) => {
 
   const { data, error } = await actions.signIn(event.data)
 
-  if (error?.message) {
+  if (error) {
     form.value?.setErrors([{
       path: 'email',
       message: error?.message
     }])
-  } else {
-    data.user && window.location.reload()
   }
-}
 
-const signInWithOAuthHandler = (provider: OAuthProvider) => {
-  actions.signInWithOAuth(provider)
+  if (data) {
+    window.location.reload()
+  }
 }
 </script>
 
@@ -104,46 +101,6 @@ const signInWithOAuthHandler = (provider: OAuthProvider) => {
             size="lg"
             class="rounded-sm"
             :loading="processing"
-          />
-
-          <UDivider label="OR" />
-
-          <div class="grid md:grid-cols-2 gap-4">
-            <UButton
-              block
-              type="button"
-              icon="i-mdi-google"
-              label="Sign In with google"
-              color="white"
-              size="lg"
-              class="rounded-sm"
-              @click="signInWithOAuthHandler('google')"
-            />
-
-            <UButton
-              block
-              type="button"
-              icon="i-mdi-github"
-              label="Sign In with github"
-              color="white"
-              size="lg"
-              class="rounded-sm"
-              @click="signInWithOAuthHandler('github')"
-            />
-          </div>
-
-          <UButton
-            block
-            :padded="false"
-            to="/auth/register"
-            label="Don't have an account yet?"
-            :color="
-              $colorMode.value === 'dark'
-                ? 'gray'
-                : 'black'
-            "
-            size="lg"
-            variant="link"
           />
         </div>
       </UForm>

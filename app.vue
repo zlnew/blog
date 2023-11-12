@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  titleTemplate: '%s - AB',
+  titleTemplate: '%s - Aprizqy Blog',
   author: 'Maulana Aprizqy Sumaryanto'
 })
 </script>

@@ -27,14 +27,14 @@ const socials = [{
       About Me
     </h2>
 
-    <div class="space-y-14 lg:flex lg:gap-14 lg:space-y-0">
+    <div class="space-y-8 xl:flex xl:gap-14 xl:space-y-0">
       <NuxtImg
-        src="https://api.dicebear.com/7.x/pixel-art/svg"
+        src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
         class="max-h-24 lg:max-h-48"
       />
 
       <div class="prose dark:prose-invert">
-        <h3>Hi, I'm Maulana Aprizqy</h3>
+        <h3>Hi, I'm Maulana Aprizqy Sumaryanto</h3>
         <p>
           Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer.
         </p>

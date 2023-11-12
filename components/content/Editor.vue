@@ -13,7 +13,7 @@ const emit = defineEmits(['update:modelValue'])
 const editor = useEditor({
   editorProps: {
     attributes: {
-      class: 'prose focus:outline-none dark:prose-invert mx-auto px-2'
+      class: 'prose focus:outline-none dark:prose-invert mx-auto px-2 p-2 bg-white border dark:bg-transparent dark:border-accent-light'
     }
   },
   extensions: [
@@ -37,12 +37,20 @@ function insertImage (url: string) {
 }
 
 watch(() => props.modelValue, (newValue) => {
-  newValue && editor.value?.commands.setContent(newValue, false)
+  const isSame = editor.value?.getHTML() === newValue
+
+  if (isSame) {
+    return
+  }
+
+  if (newValue) {
+    editor.value?.commands.setContent(props.modelValue, false)
+  }
 })
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div class="space-y-4">
     <div
       v-if="editor"
       class="
@@ -235,14 +243,6 @@ watch(() => props.modelValue, (newValue) => {
           class="rounded-sm"
           @click="isImageUploaderOpen = true"
         />
-
-        <!-- <input
-          ref="imageUploader"
-          type="file"
-          name="image"
-          class="hidden"
-          @change="imageChangedHandler"
-        > -->
       </UTooltip>
 
       <UTooltip text="Undo">
@@ -268,7 +268,10 @@ watch(() => props.modelValue, (newValue) => {
       </UTooltip>
     </div>
 
-    <EditorContent :editor="editor" spellcheck="false" />
+    <EditorContent
+      :editor="editor"
+      spellcheck="false"
+    />
   </div>
 
   <LazyContentImageUploaderModal

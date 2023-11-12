@@ -4,29 +4,21 @@ const { actions } = useAuthStore()
 
 const items = [
   [{
-    label: user.value?.email || '',
-    slot: 'account'
+    label: 'Profile',
+    icon: 'i-heroicons-user'
   }], [{
-    label: 'Write',
-    to: '/dashboard',
-    icon: 'i-heroicons-pencil-square',
-    slot: 'dashboard'
-  }], [{
-    label: 'Reading list',
-    icon: 'i-heroicons-bookmark'
+    label: 'To Main Site',
+    icon: 'i-heroicons-globe-alt',
+    click: () => window.open('/', '_blank')
   }], [{
     label: 'Sign out',
     icon: 'i-heroicons-arrow-left-on-rectangle',
     slot: 'signout',
-    click: () => {
-      handleSignOut()
-    }
+    click: () => signOutHandler()
   }]
 ]
 
-const avatar = computed(() => `https://api.dicebear.com/7.x/initials/svg?seed=${user.value?.email}`)
-
-async function handleSignOut () {
+async function signOutHandler () {
   await actions.signOut().then(() => window.location.reload())
 }
 </script>
@@ -37,25 +29,11 @@ async function handleSignOut () {
     :ui="{ item: { disabled: 'cursor-text select-text' } }"
     :popper="{ placement: 'bottom-end' }"
   >
-    <UAvatar :src="avatar" />
-
-    <template #account="{ item }">
-      <div class="text-left">
-        <p>Signed in as</p>
-        <p class="truncate font-medium text-gray-900 dark:text-white">
-          {{ item.label }}
-        </p>
-      </div>
-    </template>
-
-    <template #dashboard="{ item }">
-      <span class="truncate">
-        <NuxtLink :to="item.to">
-          {{ item.label }}
-        </NuxtLink>
-      </span>
-      <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
-    </template>
+    <UButton
+      :label="user?.email"
+      color="gray"
+      variant="ghost"
+    />
 
     <template #item="{ item }">
       <span class="truncate">{{ item.label }}</span>

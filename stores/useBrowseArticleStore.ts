@@ -27,7 +27,7 @@ export const useBrowseArticleStore = defineStore('browseArticle', () => {
   }
 
   function setTags (value: string) {
-    if (selectedTags.value.includes(value)) {
+    if (route.query.tags?.includes(value)) {
       selectedTags.value.splice(selectedTags.value.indexOf(value), 1)
     } else {
       selectedTags.value.push(value)

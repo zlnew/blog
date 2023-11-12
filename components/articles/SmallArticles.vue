@@ -23,6 +23,22 @@ const isCoverLoading = ref(true)
                 </h4>
               </a>
               <div class="prose dark:prose-invert line-clamp-2" v-html="item.content" />
+
+              <div class="flex items-center gap-4">
+                <UButton
+                  v-for="tag in item.tags"
+                  :key="tag"
+                  :to="{
+                    path: '/browse',
+                    query: { tags: [tag] }
+                  }"
+                  :label="`#${tag}`"
+                  :padded="false"
+                  color="black"
+                  variant="link"
+                  class="rounded-sm"
+                />
+              </div>
             </div>
 
             <div class="flex items-center justify-between">

@@ -1,30 +1,9 @@
-export type OAuthProvider = 'google' | 'github'
-
 export const useAuthStore = defineStore('auth', () => {
   const config = useRuntimeConfig()
   const APP_URL = config.public.APP_URL
 
   const supabase = useSupabaseClient()
   const processing = ref(false)
-
-  async function signUp ({ email, password }: {
-    email: string
-    password: string
-  }) {
-    processing.value = true
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password
-    })
-
-    processing.value = false
-
-    return {
-      data,
-      error
-    }
-  }
 
   async function signIn ({ email, password }: {
     email: string
@@ -35,21 +14,6 @@ export const useAuthStore = defineStore('auth', () => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
-    })
-
-    processing.value = false
-
-    return {
-      data,
-      error
-    }
-  }
-
-  async function signInWithOAuth (provider: 'google' | 'github') {
-    processing.value = true
-
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider
     })
 
     processing.value = false
@@ -105,9 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     processing,
     actions: {
-      signUp,
       signIn,
-      signInWithOAuth,
       signOut,
       forgotPassword,
       resetPassword

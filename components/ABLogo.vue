@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   absolute?: boolean
+  writer?: boolean
 }>()
 
 const coreClasses = computed(() => {
@@ -31,8 +32,10 @@ const absoluteClasses = computed(() => {
     ]"
   >
     <h1 class="text-4xl font-bold">
-      <NuxtLink to="/">
-        A<u>B</u>
+      <NuxtLink
+        :to="writer ? '/writer' : '/'"
+      >
+        A<u>B</u> <small v-if="writer" class="text-sm">Writer</small>
       </NuxtLink>
     </h1>
   </div>

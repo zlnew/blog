@@ -43,26 +43,23 @@ const { data: relatedArticles } = await useAsyncData(
 </script>
 
 <template>
+  <hr v-if="relatedArticles?.length">
+
   <div v-if="relatedArticles?.length" class="sticky top-28">
     <h2>Related articles:</h2>
 
     <div>
-      <div v-for="(item, index) in relatedArticles" :key="item.article_id">
-        <div class="flex items-start gap-8">
-          <h1 class="opacity-60">
-            {{ index + 1 }}
-          </h1>
-          <div>
-            <a :href="`/${item.slug}`" class="no-underline hover:underline">
-              <h4 class="line-clamp-2">
-                {{ item.title }}
-              </h4>
-            </a>
-            <div class="flex items-center gap-2">
-              <small>{{ item.read_estimation }}</small>
-              <small>·</small>
-              <small>{{ item.published_at }}</small>
-            </div>
+      <div v-for="item in relatedArticles" :key="item.article_id">
+        <div>
+          <a :href="`/${item.slug}`" class="no-underline hover:underline">
+            <h4 class="line-clamp-2">
+              {{ item.title }}
+            </h4>
+          </a>
+          <div class="flex items-center gap-2">
+            <small>{{ item.read_estimation }}</small>
+            <small>·</small>
+            <small>{{ item.published_at }}</small>
           </div>
         </div>
       </div>

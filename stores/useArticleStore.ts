@@ -280,7 +280,7 @@ export const useArticleStore = defineStore('article', () => {
     file,
     name
   }: {
-    file: File,
+    file: any,
     name: string
   }) {
     processing.value = true
@@ -302,7 +302,7 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
-  async function uploadImage (file: File) {
+  async function uploadImage (file: any) {
     uploading.value = true
 
     const fileName = `${Date.now()}_${file.name}`

@@ -11,7 +11,7 @@ const { ordering, actions: browse } = useBrowseArticleStore()
 const { selectedOrder } = storeToRefs(useBrowseArticleStore())
 
 const items = [{
-  label: 'Order by',
+  label: 'Sort',
   icon: 'i-mdi-order-bool-descending',
   defaultOpen: true,
   slot: 'orders'

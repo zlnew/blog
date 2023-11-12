@@ -3,18 +3,19 @@ import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 import { type InferType, object, string, number, array, mixed } from 'yup'
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'auth',
+  layout: 'writer'
 })
 
 useSeoMeta({
-  title: 'Edit article'
+  title: 'Edit Article'
 })
 
+const route = useRoute()
 const toast = useToast()
 const { actions: article } = useArticleStore()
 const { processing } = storeToRefs(useArticleStore())
 
-const tags = ref<string[]>([])
 const form = ref<HTMLFormElement>()
 
 const schema = object({
@@ -29,10 +30,10 @@ const schema = object({
 const initialState = {
   title: '',
   content: '',
-  cover_file: undefined,
+  cover_file: null,
   cover_public_url: '',
   cover_caption: '',
-  read_estimation: undefined,
+  read_estimation: 0,
   tags: []
 }
 
@@ -45,11 +46,9 @@ const coverChangeHandler = (event: Event) => {
   if (event.target instanceof HTMLInputElement && event.target.files) {
     const reader = new FileReader()
     const file = event.target.files[0]
-
-    state.cover_file = file as any
-
     reader.onload = (e) => { coverPreview.value = e.target?.result }
     reader.readAsDataURL(file)
+    state.cover_file = file as any
   }
 }
 
@@ -58,31 +57,30 @@ const updateHandler = async (event: FormSubmitEvent<Schema>) => {
 
   const formData = await preparedFormData(event.data)
 
-  if (formData !== undefined) {
+  if (formData) {
     try {
-      const {
-        data,
-        error: updateError
-      } = await article.update({
-        formData: formData as never,
-        where: {
-          column: 'slug',
-          value: route.params.slug as string
-        }
-      })
+      const { data, error: updateError } = await article
+        .update({
+          formData: formData as never,
+          where: {
+            column: 'slug',
+            value: route.params.slug as string
+          }
+        })
+
+      if (updateError) { throw updateError }
 
       if (data) {
         toast.add({
           title: 'Article updated successfully',
           color: 'green'
         })
-        navigateTo('/dashboard')
-      }
 
-      if (updateError) { throw updateError }
+        navigateTo('/writer')
+      }
     } catch (err: any) {
       toast.add({
-        title: 'Error while submitting form',
+        title: 'Error while updating article',
         description: err.message,
         color: 'red'
       })
@@ -94,19 +92,17 @@ const preparedFormData = async (form: any) => {
   try {
     const coverData = { publicUrl: '' }
 
-    if (form.cover_file !== undefined) {
-      const {
-        data: coverStorage,
-        error: storageError
-      } = await article.uploadCover({
-        file: form.cover_file,
-        name: slugify(form.title)
-      })
+    if (form.cover_file) {
+      const { data: cover, error: uploadError } = await article
+        .uploadCover({
+          file: form.cover_file,
+          name: slugify(form.title)
+        })
 
-      if (storageError) { throw storageError }
+      if (uploadError) { throw uploadError }
 
-      if (coverStorage !== null) {
-        const { data } = article.getPublicURL(coverStorage.path)
+      if (cover !== null) {
+        const { data } = article.getPublicURL(cover.path)
         coverData.publicUrl = data.publicUrl
       }
     }
@@ -120,7 +116,8 @@ const preparedFormData = async (form: any) => {
       cover_caption: form.cover_caption,
       read_estimation: form.read_estimation,
       tags: form.tags,
-      slug: slugify(form.title)
+      slug: slugify(form.title),
+      updated_at: new Date()
     }
   } catch (err: any) {
     toast.add({
@@ -131,8 +128,6 @@ const preparedFormData = async (form: any) => {
   }
 }
 
-const route = useRoute()
-
 async function getArticle () {
   const slug = route.params.slug as string
 
@@ -142,12 +137,12 @@ async function getArticle () {
       value: slug
     })
 
+    if (error) { throw error }
+
     if (data) {
       Object.assign(state, data)
       coverPreview.value = data.cover_public_url
     }
-
-    if (error) { throw error }
   } catch (error: any) {
     toast.add({
       title: 'Error while fetching article',
@@ -157,22 +152,40 @@ async function getArticle () {
   }
 }
 
-const articleTags = async () => {
+async function getTags () {
   const { data } = await article.getTags()
   return data
 }
 
-onMounted(async () => {
-  tags.value = await articleTags() || []
-  await getArticle()
+const { data: tags } = await useAsyncData('tags', () => getTags())
+
+const tagsState = computed({
+  get: () => state.tags,
+  set: async (states) => {
+    const promises = states?.map((state) => {
+      if (tags.value?.includes(state)) {
+        return state
+      }
+
+      const tag = (state as any).label
+
+      tags.value?.push(tag)
+
+      return tag as never
+    })
+
+    state.tags = await Promise.all(promises || [])
+  }
 })
+
+onMounted(async () => await getArticle())
 </script>
 
 <template>
   <div class="space-y-8">
     <UTooltip text="Back to dashboard">
       <UButton
-        to="/dashboard"
+        to="/writer"
         icon="i-heroicons-arrow-left"
         label="Back"
         color="gray"
@@ -186,88 +199,64 @@ onMounted(async () => {
       ref="form"
       :schema="schema"
       :state="state"
+      class="prose dark:prose-invert"
       @submit="updateHandler"
     >
-      <div class="space-y-14">
-        <div class="space-y-8">
-          <UFormGroup name="title">
-            <UTextarea
-              v-model="state.title"
-              autoresize
-              variant="none"
-              placeholder="The title of the article"
-              spellcheck="false"
-              :rows="1"
-              :padded="false"
-              :ui="{
-                base: 'page-heading overflow-y-hidden'
-              }"
-            />
-          </UFormGroup>
-          <div class="lg:text-base text-accent-light/80 dark:text-light font-medium">
-            <UFormGroup name="read_estimation">
-              <UInput
-                v-model="state.read_estimation"
-                type="number"
-                placeholder="Read estimation: 1-20"
-                size="xl"
-                variant="none"
-                :padded="false"
-              />
-            </UFormGroup>
-          </div>
-        </div>
+      <div class="space-y-4">
+        <UFormGroup label="Title" name="title">
+          <UTextarea
+            v-model="state.title"
+            autoresize
+            placeholder="The title of the article"
+            spellcheck="false"
+            :rows="1"
+          />
+        </UFormGroup>
 
-        <div class="space-y-2">
-          <label for="cover_file" class="cursor-pointer">
-            <div v-if="!coverPreview" class="relative w-full aspect-cover border-4 border-dashed dark:border-accent-light rounded-sm hover:bg-white hover:dark:bg-accent-light/50">
-              <div class="absolute inset-0 flex justify-center items-center lg:text-2xl font-bold text-accent-light/50 dark:text-light">
-                Click to upload the article cover
-              </div>
-            </div>
+        <UFormGroup label="Read Estimation" name="read_estimation">
+          <UInput
+            v-model="state.read_estimation"
+            type="number"
+            placeholder="Read estimation: 1-20"
+          />
+        </UFormGroup>
 
-            <img
-              v-else
-              :src="coverPreview"
-              alt="Article cover"
-              class="w-full aspect-cover"
-            >
+        <UFormGroup label="Cover" name="cover_file">
+          <UInput
+            type="file"
+            @change="coverChangeHandler"
+          />
+        </UFormGroup>
 
-            <UFormGroup name="cover_file">
-              <input
-                id="cover_file"
-                type="file"
-                class="hidden"
-                @change="coverChangeHandler"
-              >
-            </UFormGroup>
-          </label>
+        <img
+          v-if="coverPreview"
+          :src="coverPreview"
+          alt="Article cover"
+          class="w-full aspect-cover"
+        >
 
-          <UFormGroup name="cover_caption">
-            <UInput
-              v-model="state.cover_caption"
-              placeholder="Cover caption"
-              spellcheck="false"
-              :padded="false"
-              variant="none"
-            />
-          </UFormGroup>
-        </div>
+        <UFormGroup label="Cover Caption" name="cover_caption">
+          <UInput
+            v-model="state.cover_caption"
+            placeholder="Cover caption"
+            spellcheck="false"
+          />
+        </UFormGroup>
 
-        <UFormGroup name="content">
+        <UFormGroup label="Content" name="content">
           <ContentEditor v-model="state.content" />
         </UFormGroup>
 
         <div class="flex justify-between items-end">
           <UFormGroup label="Tags" name="tags">
             <USelectMenu
-              v-model="state.tags"
-              :options="tags"
+              v-model="tagsState"
               multiple
+              creatable
+              searchable
               placeholder="Choose tags"
-              :ui="{
-                rounded: 'rounded-sm'
-              }"
+              :options="tags || []"
+              :ui="{ rounded: 'rounded-sm' }"
             >
               <template #leading>
                 <UIcon name="i-heroicons-tag" />

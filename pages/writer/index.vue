@@ -2,7 +2,8 @@
 import { Article } from '~/types/article'
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: 'auth',
+  layout: 'writer'
 })
 
 useSeoMeta({
@@ -35,13 +36,14 @@ const columns = [{
 }]
 
 const articles = ref<Article[]>([])
+const search = ref()
 
 const actionItems = (row: Article) => [
   [{
     label: 'Edit',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => navigateTo({
-      path: `/dashboard/articles/edit/${row.slug}`
+      path: `/writer/articles/edit/${row.slug}`
     })
   }], [{
     label: 'Delete',
@@ -101,66 +103,88 @@ async function getArticle () {
 }
 
 onMounted(async () => await getArticle())
+
+const filteredArticles = computed(() => {
+  if (!search.value) {
+    return articles.value
+  }
+
+  return articles.value.filter((item) => {
+    return Object.values(item).some((value) => {
+      return String(value).toLowerCase().includes(search.value.toLowerCase())
+    })
+  })
+})
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div class="space-y-8 min-h-screen">
     <h2 class="page-heading">
       Writer Dashboard
     </h2>
 
-    <UButton
-      to="/dashboard/articles/create"
-      label="Create a new article"
-      color="black"
-    />
-
     <ClientOnly>
-      <UTable
-        :columns="columns"
-        :rows="articles"
-        :sort="{
-          column: 'created_at',
-          direction: 'desc'
-        }"
-        :loading="processing"
-      >
-        <template #title-data="{ row }">
-          <div class="font-bold">
-            <NuxtLink
-              :to="`/article/${row.slug}`"
-              target="_blank"
-              class="link accent"
-            >
-              {{ row.title }}
-            </NuxtLink>
-          </div>
-        </template>
+      <div>
+        <div class="flex justify-between border-b pb-4 border-gray-200 dark:border-gray-700">
+          <UInput
+            v-model="search"
+            placeholder="Search article..."
+          />
 
-        <template #tags-data="{ row }">
-          <div class="space-x-2">
-            <UBadge
-              v-for="(tag, index) in row.tags"
-              :key="index"
-              color="gray"
-              variant="solid"
-              class="rounded-sm"
-            >
-              {{ tag }}
-            </UBadge>
-          </div>
-        </template>
+          <UButton
+            to="/writer/articles/create"
+            label="Create a new article"
+            color="black"
+            class="rounded-sm"
+          />
+        </div>
 
-        <template #actions-data="{ row }">
-          <UDropdown :items="actionItems(row)">
-            <UButton
-              color="gray"
-              variant="ghost"
-              icon="i-heroicons-ellipsis-horizontal-20-solid"
-            />
-          </UDropdown>
-        </template>
-      </UTable>
+        <UTable
+          :columns="columns"
+          :rows="filteredArticles"
+          :sort="{
+            column: 'created_at',
+            direction: 'desc'
+          }"
+          :loading="processing"
+        >
+          <template #title-data="{ row }">
+            <div class="font-bold">
+              <NuxtLink
+                :to="`/${row.slug}`"
+                target="_blank"
+                class="link accent"
+              >
+                {{ row.title }}
+              </NuxtLink>
+            </div>
+          </template>
+
+          <template #tags-data="{ row }">
+            <div class="space-x-2">
+              <UBadge
+                v-for="(tag, index) in row.tags"
+                :key="index"
+                color="gray"
+                variant="solid"
+                class="rounded-sm"
+              >
+                {{ tag }}
+              </UBadge>
+            </div>
+          </template>
+
+          <template #actions-data="{ row }">
+            <UDropdown :items="actionItems(row)">
+              <UButton
+                color="gray"
+                variant="ghost"
+                icon="i-heroicons-ellipsis-horizontal-20-solid"
+              />
+            </UDropdown>
+          </template>
+        </UTable>
+      </div>
     </ClientOnly>
   </div>
 </template>
