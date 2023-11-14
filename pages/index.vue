@@ -46,7 +46,7 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
       <Meta name="twitter:card" content="summary" />
       <Meta name="twitter:title" content="Aprizqy Blog - Code and Thoughts" />
       <Meta name="twitter:description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
-      <Meta name="twitter:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
     </Head>
 
     <PageHeading text="Latest Articles" />

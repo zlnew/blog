@@ -127,7 +127,7 @@ onMounted(async () => {
       <Meta name="twitter:card" content="summary" />
       <Meta name="twitter:title" content="Browse Articles - Aprizqy Blog" />
       <Meta name="twitter:description" content="Discover any articles on Aprizqy Blog." />
-      <Meta name="twitter:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
     </Head>
 
     <PageHeading id="page-heading" text="Browse Articles" />

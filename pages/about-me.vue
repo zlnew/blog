@@ -30,7 +30,7 @@ const socials = [{
       <Meta name="twitter:card" content="summary" />
       <Meta name="twitter:title" content="About Me - Aprizqy Blog" />
       <Meta name="twitter:description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
-      <Meta name="twitter:image" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
+      <Meta name="twitter:image:src" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
     </Head>
 
     <PageHeading text="About Me" />

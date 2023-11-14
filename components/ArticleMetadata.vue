@@ -19,7 +19,7 @@ defineProps<{
     <Meta name="twitter:card" content="summary_large_image" />
     <Meta name="twitter:title" :content="truncateString(data?.title || '', 50)" />
     <Meta name="twitter:description" :content="`${truncateString(data?.content?.replace(/<[^>]*>/g, '') || '', 150)} ...`" />
-    <Meta name="twitter:image" :content="data?.cover_public_url" />
+    <Meta name="twitter:image:src" :content="data?.cover_public_url" />
     <Meta name="article:author" content="Maulana Aprizqy Sumaryanto" />
     <Meta name="article:published_time" :content="data?.created_at" />
     <Meta name="article:modified_time" :content="data?.updated_at || ''" />
