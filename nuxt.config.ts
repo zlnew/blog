@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      APP_URL: 'http://localhost:3000'
+      APP_URL: process.env.APP_URL
     }
   },
   imports: {
