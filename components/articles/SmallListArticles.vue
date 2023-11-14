@@ -27,7 +27,7 @@ defineProps<Props>()
               <span>{{ item.published_at }}</span>
             </div>
 
-            <div class="text-slate-700 dark:text-slate-200 line-clamp-1" v-html="item.content" />
+            <div class="text-slate-700 dark:text-slate-200 line-clamp-2" v-html="item.content" />
 
             <div class="flex items-center gap-4">
               <UButton

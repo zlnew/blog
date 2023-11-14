@@ -51,10 +51,6 @@ const { data: articles, refresh: refreshArticles } = await useAsyncData('article
   }
 )
 
-const { data: tags } = await useAsyncData('tags',
-  () => getTags()
-)
-
 async function getArticles (limit: number) {
   loading.value = true
 
@@ -89,28 +85,6 @@ async function getArticles (limit: number) {
       published_at
     }
   })
-}
-
-async function getTags () {
-  const { data, error } = await article.getTags()
-
-  if (error) {
-    toast.add({
-      title: 'Error when getting articles',
-      description: error.message,
-      color: 'red'
-    })
-  }
-
-  if (data) {
-    return data.map((item) => {
-      return {
-        name: item.toLowerCase(),
-        value: item.toLowerCase(),
-        label: capitalize(item)
-      }
-    })
-  }
 }
 
 watch(() => (route.query), (newRouteQuery) => {
@@ -148,64 +122,59 @@ onMounted(async () => {
   <PageSection>
     <PageHeading id="page-heading" text="Browse Articles" />
 
-    <div class="space-y-4 xl:space-y-0 xl:grid xl:grid-cols-7 xl:gap-14">
-      <div class="col-span-2 hidden xl:block">
-        <div class="sticky top-24">
-          <FilterAccordion :tags="tags" />
+    <div class="space-y-4">
+      <div class="space-y-2">
+        <FilterMenu />
+
+        <div class="col-span-2">
+          <UInput
+            v-model="search"
+            placeholder="Search ..."
+            size="xl"
+            color="gray"
+            :ui="{ rounded: 'rounded-sm'}"
+            @keyup.enter.prevent="searchHandler"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-magnifying-glass" />
+            </template>
+          </UInput>
         </div>
       </div>
 
-      <ScrollableFilter :tags="tags" class="xl:hidden" />
+      <UDivider />
 
-      <hr class="xl:hidden dark:border-accent-light">
-
-      <div class="space-y-8 col-span-5">
-        <UInput
-          v-model="search"
-          placeholder="Type to search ..."
-          size="xl"
-          :ui="{ rounded: 'rounded-sm'}"
-          @keyup.enter.prevent="searchHandler"
-        >
-          <template #leading>
-            <UIcon name="i-heroicons-magnifying-glass" />
-          </template>
-
-          <template #trailing>
-            <UKbd>Enter</UKbd>
-          </template>
-        </UInput>
-
+      <div>
         <p v-if="$route.query.search">
           Search results for <strong>"{{ $route.query.search }}"</strong>
         </p>
+      </div>
 
-        <SmallListArticles
-          v-if="articles?.length"
-          :items="articles"
+      <SmallListArticles
+        v-if="articles?.length"
+        :items="articles"
+        :loading="loading"
+      />
+
+      <ArticlesNotFound v-else-if="!loading" />
+
+      <div v-if="loading" class="text-center">
+        <UButton
+          label="Loading ..."
+          size="xl"
+          color="gray"
+          variant="ghost"
           :loading="loading"
         />
+      </div>
 
-        <ArticlesNotFound v-else-if="!loading" />
-
-        <div v-if="loading" class="text-center">
-          <UButton
-            label="Loading ..."
-            size="xl"
-            color="gray"
-            variant="ghost"
-            :loading="loading"
-          />
-        </div>
-
-        <div v-if="loadMoreVisibility" class="text-center">
-          <UButton
-            label="Load more"
-            color="black"
-            variant="ghost"
-            @click="loadMoreHandler"
-          />
-        </div>
+      <div v-if="loadMoreVisibility" class="text-center">
+        <UButton
+          label="Load more"
+          color="black"
+          variant="ghost"
+          @click="loadMoreHandler"
+        />
       </div>
     </div>
   </PageSection>

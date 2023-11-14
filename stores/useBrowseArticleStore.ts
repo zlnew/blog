@@ -2,50 +2,27 @@ export const useBrowseArticleStore = defineStore('browseArticle', () => {
   const router = useRouter()
   const route = useRoute()
 
-  const selectedOrder = ref('newest')
-  const selectedTags = ref<string[]>([])
-
-  const ordering = [{
-    name: 'newest',
-    value: 'newest',
-    label: 'Newest'
-  }, {
-    name: 'oldest',
-    value: 'oldest',
-    label: 'Oldest'
-  }]
-
-  function setOrdering (value: string) {
-    selectedOrder.value = value
+  function setOrdering (order: string) {
     router.push({
       path: '/browse',
       query: {
         ...route.query,
-        order: value
+        order
       }
     })
   }
 
-  function setTags (value: string) {
-    if (route.query.tags?.includes(value)) {
-      selectedTags.value.splice(selectedTags.value.indexOf(value), 1)
-    } else {
-      selectedTags.value.push(value)
-    }
-
+  function setTags (tags: string[]) {
     router.push({
       path: '/browse',
       query: {
         ...route.query,
-        tags: selectedTags.value
+        tags
       }
     })
   }
 
   return {
-    ordering,
-    selectedOrder,
-    selectedTags,
     actions: {
       setOrdering,
       setTags
