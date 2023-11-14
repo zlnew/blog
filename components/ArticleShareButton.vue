@@ -113,8 +113,7 @@ const shareOnLinkedInHandler = () => {
 
     <UButton
       v-if="webShareApiSupported"
-      icon="i-mdi-share"
-      label="Share"
+      icon="i-mdi-share-variant"
       color="black"
       variant="ghost"
       @click="shareViaWebShareHandler"
@@ -128,8 +127,7 @@ const shareOnLinkedInHandler = () => {
       class="md:hidden"
     >
       <UButton
-        icon="i-mdi-share"
-        label="Share"
+        icon="i-mdi-share-variant"
         color="black"
         variant="ghost"
       />
