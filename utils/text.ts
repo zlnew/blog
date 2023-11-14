@@ -17,8 +17,17 @@ function capitalize (str: string) {
   })
 }
 
+function truncateString (str: string, maxLength: number) {
+  if (str.length <= maxLength) {
+    return str
+  } else {
+    return str.slice(0, maxLength)
+  }
+}
+
 export {
   ignoreSpecialChar,
   slugify,
-  capitalize
+  capitalize,
+  truncateString
 }

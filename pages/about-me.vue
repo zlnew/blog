@@ -24,13 +24,13 @@ const socials = [{
       <Meta name="description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
       <Meta name="og:type" content="profile" />
       <Meta name="og:title" content="About Me - Aprizqy Blog" />
-      <Meta name="og:image" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
       <Meta name="og:description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
+      <Meta name="og:image" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
       <Meta name="og:url" :content="`${$config.public.APP_URL}/about-me`" />
-      <Meta name="twitter:title" content="About Me - Aprizqy Blog" />
-      <Meta name="twitter:image" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
-      <Meta name="twitter:description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
       <Meta name="twitter:card" content="summary" />
+      <Meta name="twitter:title" content="About Me - Aprizqy Blog" />
+      <Meta name="twitter:description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
+      <Meta name="twitter:image" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
     </Head>
 
     <PageHeading text="About Me" />

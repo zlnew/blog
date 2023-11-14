@@ -37,16 +37,16 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
 <template>
   <PageSection>
     <Head>
-      <Meta name="description" content="Aprizqy Blog is sharing platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
       <Meta name="og:type" content="website" />
       <Meta name="og:title" content="Aprizqy Blog - Code and Thoughts" />
+      <Meta name="og:description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
       <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
-      <Meta name="og:description" content="Aprizqy Blog is sharing platform for my personal thoughts and experiences about code and web development." />
       <Meta name="og:url" :content="$config.public.APP_URL" />
-      <Meta name="twitter:title" content="Aprizqy Blog - Code and Thoughts" />
-      <Meta name="twitter:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
-      <Meta name="twitter:description" content="Aprizqy Blog is sharing platform for my personal thoughts and experiences about code and web development." />
       <Meta name="twitter:card" content="summary" />
+      <Meta name="twitter:title" content="Aprizqy Blog - Code and Thoughts" />
+      <Meta name="twitter:description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="twitter:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
     </Head>
 
     <PageHeading text="Latest Articles" />
