@@ -1,9 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Browse Articles',
-  description: 'Browse for more articles',
-  ogDescription: 'Browse for more articles',
-  twitterDescription: 'Browse for more articles'
+  title: 'Browse Articles'
 })
 
 interface QueryFilter {
@@ -120,6 +117,19 @@ onMounted(async () => {
 
 <template>
   <PageSection>
+    <Head>
+      <Meta name="description" content="Discover any of our articles based on your preferences." />
+      <Meta name="og:type" content="website" />
+      <Meta name="og:title" content="Browse Articles - Aprizqy Blog" />
+      <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="og:description" content="Discover any of our articles based on your preferences." />
+      <Meta name="og:url" :content="`${$config.public.APP_URL}/browse`" />
+      <Meta name="twitter:title" content="Browse Articles - Aprizqy Blog" />
+      <Meta name="twitter:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="twitter:description" content="Discover any of our articles based on your preferences." />
+      <Meta name="twitter:card" content="summary" />
+    </Head>
+
     <PageHeading id="page-heading" text="Browse Articles" />
 
     <div class="space-y-4">

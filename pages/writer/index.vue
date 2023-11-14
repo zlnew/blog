@@ -67,7 +67,8 @@ const deleteArticleHandler = async (articleId: number) => {
     } catch (error: any) {
       toast.add({
         title: 'Error when deleting article',
-        description: error.message
+        description: error.message,
+        color: 'red'
       })
     }
   }
@@ -79,30 +80,24 @@ async function getArticle () {
   if (error) {
     toast.add({
       title: 'Error when getting article',
-      description: error.message
+      description: error.message,
+      color: 'red'
     })
   }
 
   if (data) {
     articles.value = data.map((item) => {
-      const originalCreatedAt = new Date(item.created_at)
-
-      const published_at = originalCreatedAt.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit'
-      })
+      const read_estimation = `${item.read_estimation} min read`
+      const published_at = longMonth(item.created_at)
 
       return {
         ...item,
-        read_estimation: `${item.read_estimation} min read`,
+        read_estimation,
         published_at
       }
     })
   }
 }
-
-onMounted(async () => await getArticle())
 
 const filteredArticles = computed(() => {
   if (!search.value) {
@@ -115,13 +110,14 @@ const filteredArticles = computed(() => {
     })
   })
 })
+
+onMounted(async () => await getArticle())
+
 </script>
 
 <template>
-  <div class="space-y-8 min-h-screen">
-    <h2 class="page-heading">
-      Writer Dashboard
-    </h2>
+  <PageSection>
+    <PageHeading text="Writer Dashboard" />
 
     <ClientOnly>
       <div>
@@ -186,5 +182,5 @@ const filteredArticles = computed(() => {
         </UTable>
       </div>
     </ClientOnly>
-  </div>
+  </PageSection>
 </template>

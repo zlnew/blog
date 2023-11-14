@@ -20,11 +20,15 @@ const socials = [{
       <div class="space-y-8 xl:grid xl:grid-cols-3 xl:gap-8 xl:space-y-0">
         <div class="col-span-2 space-y-4">
           <h5 class="font-bold">
-            About the author:
+            Author
           </h5>
 
           <div class="flex items-center gap-3">
-            <UAvatar size="lg" src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
+            <UAvatar
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
+              alt="Maulana Aprizqy Sumaryanto's Avatar"
+              size="lg"
+            />
             <div>
               <NuxtLink to="/about-me" class="font-bold">
                 Maulana Aprizqy Sumaryanto
@@ -34,7 +38,7 @@ const socials = [{
             </div>
           </div>
 
-          <p class="text-sm max-w-xs">
+          <p class="text-sm text-slate-300 max-w-xs">
             Transforming ideas into amazing websites.
           </p>
 

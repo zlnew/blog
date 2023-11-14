@@ -113,7 +113,7 @@ const preparedFormData = async (form: any) => {
       cover_public_url: coverData.publicUrl.length
         ? coverData.publicUrl
         : form.cover_public_url,
-      cover_caption: form.cover_caption,
+      cover_caption: JSON.stringify(form.cover_caption),
       read_estimation: form.read_estimation,
       tags: form.tags,
       slug: slugify(form.title),
@@ -183,26 +183,26 @@ onMounted(async () => await getArticle())
 
 <template>
   <div class="space-y-8">
-    <UTooltip text="Back to dashboard">
-      <UButton
-        to="/writer"
-        icon="i-heroicons-arrow-left"
-        label="Back"
-        color="gray"
-        size="xl"
-        variant="link"
-        :padded="false"
-      />
-    </UTooltip>
+    <UButton
+      to="/writer"
+      icon="i-heroicons-arrow-left"
+      label="Back to dashboard"
+      color="gray"
+      size="xl"
+      variant="link"
+      :padded="false"
+    />
 
     <UForm
       ref="form"
       :schema="schema"
       :state="state"
-      class="prose dark:prose-invert"
+      class="mx-auto prose prose-headings:tracking-tighter prose-img:mb-0 prose-hr:dark:border-accent-light dark:prose-invert"
       @submit="updateHandler"
     >
       <div class="space-y-4">
+        <h1>Edit Article</h1>
+
         <UFormGroup label="Title" name="title">
           <UTextarea
             v-model="state.title"
@@ -210,6 +210,8 @@ onMounted(async () => await getArticle())
             placeholder="The title of the article"
             spellcheck="false"
             :rows="1"
+            size="xl"
+            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
@@ -218,12 +220,16 @@ onMounted(async () => await getArticle())
             v-model="state.read_estimation"
             type="number"
             placeholder="Read estimation: 1-20"
+            size="xl"
+            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
         <UFormGroup label="Cover" name="cover_file">
           <UInput
             type="file"
+            size="xl"
+            :ui="{ rounded: 'rounded-sm' }"
             @change="coverChangeHandler"
           />
         </UFormGroup>
@@ -231,15 +237,14 @@ onMounted(async () => await getArticle())
         <img
           v-if="coverPreview"
           :src="coverPreview"
-          alt="Article cover"
+          alt="Article cover preview"
           class="w-full aspect-cover"
         >
 
         <UFormGroup label="Cover Caption" name="cover_caption">
-          <UInput
+          <ContentEditor
             v-model="state.cover_caption"
-            placeholder="Cover caption"
-            spellcheck="false"
+            placeholder="Caption for the cover"
           />
         </UFormGroup>
 

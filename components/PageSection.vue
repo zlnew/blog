@@ -1,5 +1,5 @@
 <template>
-  <section class="space-y-8 md:space-y-14 mb-14">
+  <section class="space-y-8 mb-14">
     <slot />
   </section>
 </template>

@@ -98,6 +98,7 @@ const preparedFormData = async (form: Schema) => {
 
       return {
         ...form,
+        cover_caption: JSON.stringify(form.cover_caption),
         content: JSON.stringify(form.content),
         cover_public_url: cover.publicUrl,
         slug: slugify(form.title)
@@ -141,26 +142,26 @@ const tagsState = computed({
 
 <template>
   <div class="space-y-8">
-    <UTooltip text="Back to dashboard">
-      <UButton
-        to="/writer"
-        icon="i-heroicons-arrow-left"
-        label="Back"
-        color="gray"
-        size="xl"
-        variant="link"
-        :padded="false"
-      />
-    </UTooltip>
+    <UButton
+      to="/writer"
+      icon="i-heroicons-arrow-left"
+      label="Back to dashboard"
+      color="gray"
+      size="xl"
+      variant="link"
+      :padded="false"
+    />
 
     <UForm
       ref="form"
       :schema="schema"
       :state="state"
-      class="prose dark:prose-invert"
+      class="mx-auto prose prose-headings:tracking-tighter prose-img:mb-0 prose-hr:dark:border-accent-light dark:prose-invert"
       @submit="submitHandler"
     >
       <div class="space-y-4">
+        <h1>Create A New Article</h1>
+
         <UFormGroup label="Title" name="title">
           <UTextarea
             v-model="state.title"
@@ -168,6 +169,8 @@ const tagsState = computed({
             placeholder="The title of the article"
             spellcheck="false"
             :rows="1"
+            size="xl"
+            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
@@ -176,12 +179,16 @@ const tagsState = computed({
             v-model="state.read_estimation"
             type="number"
             placeholder="Read estimation: 1-20"
+            size="xl"
+            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
         <UFormGroup label="Cover" name="cover_file">
           <UInput
             type="file"
+            size="xl"
+            :ui="{ rounded: 'rounded-sm' }"
             @change="coverChangeHandler"
           />
         </UFormGroup>
@@ -189,20 +196,22 @@ const tagsState = computed({
         <img
           v-if="coverPreview"
           :src="coverPreview"
-          alt="Article cover"
+          alt="Article cover preview"
           class="w-full aspect-cover"
         >
 
         <UFormGroup label="Cover Caption" name="cover_caption">
-          <UInput
+          <ContentEditor
             v-model="state.cover_caption"
-            placeholder="Cover caption"
-            spellcheck="false"
+            placeholder="Caption for the cover"
           />
         </UFormGroup>
 
         <UFormGroup label="Content" name="content">
-          <ContentEditor v-model="state.content" />
+          <ContentEditor
+            v-model="state.content"
+            placeholder="Write article content here ..."
+          />
         </UFormGroup>
 
         <div class="flex justify-between items-end">

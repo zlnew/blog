@@ -15,7 +15,8 @@ defineProps<Props>()
         <a :href="`/${item.slug}`">
           <NuxtImg
             :src="item.cover_public_url"
-            :alt="item.cover_caption"
+            :alt="item.title"
+            loading="lazy"
             class="w-full aspect-cover rounded-sm"
           />
         </a>

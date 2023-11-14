@@ -55,10 +55,10 @@ const { data: article } = await useAsyncData('article',
 
       <NuxtImg
         :src="article?.cover_public_url"
-        :alt="article?.cover_caption"
+        :alt="article?.title"
         class="w-full aspect-cover rounded-sm"
       />
-      <figcaption>{{ article?.cover_caption }}</figcaption>
+      <figcaption v-html="article?.cover_caption" />
 
       <div v-html="article?.content" />
 

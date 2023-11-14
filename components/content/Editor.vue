@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Image } from '@tiptap/extension-image'
+import { Link } from '@tiptap/extension-link'
 import { StarterKit } from '@tiptap/starter-kit'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 
 const props = defineProps<{
   modelValue: string
+  placeholder?: string
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -13,14 +15,15 @@ const emit = defineEmits(['update:modelValue'])
 const editor = useEditor({
   editorProps: {
     attributes: {
-      class: 'prose focus:outline-none dark:prose-invert mx-auto px-2 p-2 bg-white border dark:bg-transparent dark:border-accent-light'
+      class: 'prose dark:prose-invert prose-headings:tracking-tighter prose-img:mb-0 prose-hr:dark:border-accent-light mx-auto px-2 p-2 bg-white border focus:outline-none dark:bg-transparent dark:border-accent-light'
     }
   },
   extensions: [
     StarterKit,
     Image,
+    Link,
     Placeholder.configure({
-      placeholder: 'Write here ...'
+      placeholder: props.placeholder
     })
   ],
   onUpdate: () => {
@@ -36,12 +39,35 @@ function insertImage (url: string) {
   }).run()
 }
 
+function setLink () {
+  const previousUrl = editor.value?.getAttributes('link').href
+  const url = window.prompt('URL', previousUrl)
+
+  if (url === null) {
+    return
+  }
+
+  if (url === '') {
+    editor.value?.chain()
+      .focus()
+      .extendMarkRange('link')
+      .unsetLink()
+      .run()
+
+    return
+  }
+
+  editor.value?.chain()
+    .focus()
+    .extendMarkRange('link')
+    .setLink({ href: url })
+    .run()
+}
+
 watch(() => props.modelValue, (newValue) => {
   const isSame = editor.value?.getHTML() === newValue
 
-  if (isSame) {
-    return
-  }
+  if (isSame) { return }
 
   if (newValue) {
     editor.value?.commands.setContent(props.modelValue, false)
@@ -57,7 +83,7 @@ watch(() => props.modelValue, (newValue) => {
         sticky top-[5.6rem] z-50 p-2 rounded-md
         bg-white dark:bg-accent-light
         border dark:border-accent-light
-        flex flex-wrap gap-2 prose prose-sm sm:prose dark:prose-invert mx-auto
+        flex flex-wrap gap-2
       "
     >
       <UTooltip text="Bold">
@@ -232,6 +258,27 @@ watch(() => props.modelValue, (newValue) => {
           variant="outline"
           class="rounded-sm"
           @click="editor.chain().focus().setHardBreak().run()"
+        />
+      </UTooltip>
+
+      <UTooltip text="Set link">
+        <UButton
+          icon="i-material-symbols-add-link"
+          color="black"
+          variant="outline"
+          class="rounded-sm"
+          @click="setLink"
+        />
+      </UTooltip>
+
+      <UTooltip text="Unset link">
+        <UButton
+          icon="i-material-symbols-link-off"
+          color="black"
+          variant="outline"
+          class="rounded-sm"
+          :disabled="!editor.isActive('link')"
+          @click="editor.chain().focus().unsetLink().run()"
         />
       </UTooltip>
 

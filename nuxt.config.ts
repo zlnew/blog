@@ -7,9 +7,9 @@ export default defineNuxtConfig({
       }
     }
   },
-  devServer: {
-    host: '192.168.11.121'
-  },
+  // devServer: {
+  //   host: '192.168.11.121'
+  // },
   devtools: {
     enabled: true
   },
@@ -44,29 +44,23 @@ export default defineNuxtConfig({
       name: 'Aprizqy Blog',
       short_name: 'ABlog',
       theme_color: '#030712',
-      icons: [
-        {
-          src: 'pwa-192x192.jpg',
-          sizes: '192x192',
-          type: 'image/jpg'
-        },
-        {
-          src: 'pwa-512x512.jpg',
-          sizes: '512x512',
-          type: 'image/jpg'
-        },
-        {
-          src: 'pwa-512x512.jpg',
-          sizes: '512x512',
-          type: 'image/jpg',
-          purpose: 'any maskable'
-        }
-      ]
+      icons: [{
+        src: 'pwa-192x192.png',
+        sizes: '192x192',
+        type: 'image/png'
+      }, {
+        src: 'pwa-512x512.png',
+        sizes: '512x512',
+        type: 'image/png'
+      }, {
+        src: 'pwa-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any maskable'
+      }]
     },
     client: {
       installPrompt: true,
-      // you don't need to include this: only for testing purposes
-      // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
       periodicSyncForUpdates: 20
     },
     devOptions: {

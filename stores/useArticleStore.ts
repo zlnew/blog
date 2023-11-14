@@ -19,6 +19,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }),
@@ -49,6 +50,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }),
@@ -72,6 +74,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }),
@@ -95,6 +98,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }),
@@ -161,6 +165,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }),
@@ -189,6 +194,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: Article) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }).at(0) as Article | null,
@@ -236,6 +242,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: Article) => {
         return {
           ...item,
+          cover_caption: JSON.parse(item.cover_caption),
           content: JSON.parse(item.content)
         }
       }).at(0) as Article | null,
