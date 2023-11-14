@@ -50,7 +50,13 @@ const { data: article } = await useAsyncData('article',
             {{ article?.published_at }}
           </time>
         </div>
-        <ArticleShareButton :url="`${$config.public.APP_URL}${$route.fullPath}`" />
+        <ArticleShareButton
+          :url="`${$config.public.APP_URL}${$route.fullPath}`"
+          :web-share="{
+            title: article?.title || '',
+            text: `${article?.content?.replace(/<[^>]*>/g, '').split(/\s+/).slice(0, 50).join(' ')} ...` || ''
+          }"
+        />
       </div>
 
       <NuxtImg

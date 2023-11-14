@@ -37,11 +37,11 @@ const { data: latestArticles } = await useAsyncData(
 
     <div class="space-y-4">
       <div v-for="item in latestArticles" :key="item.article_id" class="space-y-2">
-        <a :href="`/${item.slug}`" class="no-underline hover:underline">
+        <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
           <h5 class="font-bold tracking-tighter line-clamp-2">
             {{ item.title }}
           </h5>
-        </a>
+        </NuxtLink>
         <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
           <small>{{ item.read_estimation }}</small>
           <small>·</small>

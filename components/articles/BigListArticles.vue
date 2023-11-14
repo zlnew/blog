@@ -12,21 +12,21 @@ defineProps<Props>()
   <div class="grid md:grid-cols-2 md:gap-8 gap-4">
     <ClientOnly v-for="(item, index) in items" :key="item.article_id">
       <div class="space-y-4">
-        <a :href="`/${item.slug}`">
+        <NuxtLink :to="`/${item.slug}`">
           <NuxtImg
             :src="item.cover_public_url"
             :alt="item.title"
             loading="lazy"
             class="w-full aspect-cover rounded-sm"
           />
-        </a>
+        </NuxtLink>
 
         <div class="space-y-4">
-          <a :href="`/${item.slug}`" class="no-uderline hover:underline">
+          <NuxtLink :to="`/${item.slug}`" class="no-uderline hover:underline">
             <h5 class="font-black text-2xl sm:text-xl lg:text-xl xl:text-2xl tracking-tighter line-clamp-2">
               {{ item.title }}
             </h5>
-          </a>
+          </NuxtLink>
 
           <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
             <span>{{ item.read_estimation }}</span>

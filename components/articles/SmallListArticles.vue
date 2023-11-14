@@ -15,11 +15,11 @@ defineProps<Props>()
       <div class="grid grid-cols-8 gap-4 lg:gap-8">
         <div class="col-span-6">
           <div class="space-y-4">
-            <a :href="`/${item.slug}`" class="no-underline hover:underline">
+            <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
               <h5 class="font-black tracking-tighter text-xl md:text-2xl line-clamp-2">
                 {{ item.title }}
               </h5>
-            </a>
+            </NuxtLink>
 
             <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
               <span>{{ item.read_estimation }}</span>
@@ -45,14 +45,14 @@ defineProps<Props>()
         </div>
 
         <div class="col-span-2">
-          <a :href="`/${item.slug}`">
+          <NuxtLink :to="`/${item.slug}`">
             <NuxtImg
               :src="item.cover_public_url"
               :alt="item.title"
               loading="lazy"
               class="w-full aspect-cover rounded-sm"
             />
-          </a>
+          </NuxtLink>
         </div>
       </div>
 

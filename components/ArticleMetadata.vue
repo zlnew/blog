@@ -20,7 +20,7 @@ defineProps<{
     <Meta name="twitter:title" :content="data?.title?.split(/\s+/).slice(0, 50).join(' ')" />
     <Meta name="twitter:description" :content="`${data?.content?.replace(/<[^>]*>/g, '').split(/\s+/).slice(0, 50).join(' ')} ...`" />
     <Meta name="twitter:image" :content="data?.cover_public_url" />
-    <Meta name="twitter:card" content="summary" />
+    <Meta name="twitter:card" content="summary_large_image" />
     <Meta name="article:author" content="Maulana Aprizqy Sumaryanto" />
     <Meta name="article:published_time" :content="data?.created_at" />
     <Meta name="article:modified_time" :content="data?.updated_at || ''" />

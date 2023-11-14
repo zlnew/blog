@@ -16,6 +16,7 @@ useSeoMeta({
     <VitePwaManifest />
 
     <NuxtLayout>
+      <NuxtLoadingIndicator />
       <NuxtPage />
     </NuxtLayout>
 

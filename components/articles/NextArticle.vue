@@ -26,16 +26,16 @@ const { data: nextArticle } = await useAsyncData(
 </script>
 
 <template>
-  <div v-if="nextArticle?.length" class="p-4 border dark:border-accent-light">
+  <UCard v-if="nextArticle?.length" class="rounded-sm">
     <h5 class="font-bold text-slate-400 dark:text-slate-600">
       Read Next
     </h5>
     <div v-for="item in nextArticle" :key="item.article_id">
-      <a :href="`/${item.slug}`" class="no-underline hover:underline">
+      <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
         <h5 class="font-medium tracking-tighter line-clamp-1">
           {{ item.title }}
         </h5>
-      </a>
+      </NuxtLink>
     </div>
-  </div>
+  </UCard>
 </template>

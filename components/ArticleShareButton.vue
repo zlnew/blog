@@ -1,10 +1,21 @@
 <script setup lang="ts">
 const props = defineProps<{
   url: string
+  webShare: {
+    title: string
+    text: string
+  }
 }>()
 
 const toast = useToast()
 const { copy } = useCopyToClipboard()
+const webShareApiSupported = ref(false)
+
+onMounted(() => {
+  if (navigator) {
+    webShareApiSupported.value = !!navigator.share
+  }
+})
 
 const items = [
   [{
@@ -40,6 +51,14 @@ const copyToClipboardHandler = () => {
       color: 'red'
     })
   }
+}
+
+const shareViaWebShareHandler = () => {
+  navigator.share({
+    title: props.webShare.title,
+    text: props.webShare.text,
+    url: props.url
+  })
 }
 
 const shareOnFacebookHandler = () => {
@@ -92,7 +111,17 @@ const shareOnLinkedInHandler = () => {
       </UTooltip>
     </div>
 
+    <UButton
+      v-if="webShareApiSupported"
+      icon="i-mdi-share"
+      label="Share"
+      color="black"
+      variant="ghost"
+      @click="shareViaWebShareHandler"
+    />
+
     <UDropdown
+      v-else
       :items="items"
       :ui="{ item: { disabled: 'cursor-text select-text' } }"
       :popper="{ placement: 'bottom-end' }"
