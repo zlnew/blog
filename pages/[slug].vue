@@ -46,7 +46,7 @@ const { data: article } = await useAsyncData('article',
         <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
           <span>{{ article?.read_estimation }}</span>
           <span>·</span>
-          <time :datetime="article?.created_at">
+          <time :datetime="dateISO(article?.created_at || '')">
             {{ article?.published_at }}
           </time>
         </div>

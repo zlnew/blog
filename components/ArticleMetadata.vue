@@ -21,8 +21,8 @@ defineProps<{
     <Meta name="twitter:description" :content="`${truncateString(data?.content?.replace(/<[^>]*>/g, '') || '', 150)} ...`" />
     <Meta name="twitter:image:src" :content="data?.cover_public_url" />
     <Meta name="article:author" content="Maulana Aprizqy Sumaryanto" />
-    <Meta name="article:published_time" :content="data?.created_at" />
-    <Meta name="article:modified_time" :content="data?.updated_at || ''" />
+    <Meta name="article:published_time" :content="dateISO(data?.created_at || '')" />
+    <Meta name="article:modified_time" :content="dateISO(data?.updated_at || '')" />
     <Meta name="article:tag" :content="data?.tags?.join(', ')" />
   </Head>
 </template>

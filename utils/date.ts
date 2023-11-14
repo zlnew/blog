@@ -1,4 +1,9 @@
-import { format, formatDistanceToNow } from 'date-fns'
+import { format, formatISO, formatDistanceToNow } from 'date-fns'
+
+const dateISO = (date: string) => {
+  const formattedDate = new Date(date)
+  return formatISO(formattedDate)
+}
 
 const longMonth = (date: string) => {
   const formattedDate = new Date(date)
@@ -16,6 +21,7 @@ const dateAgo = (date: string) => {
 }
 
 export {
+  dateISO,
   longMonth,
   shortMonth,
   dateAgo
