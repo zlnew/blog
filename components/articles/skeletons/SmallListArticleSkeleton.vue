@@ -1,7 +1,7 @@
 <template>
   <div class="animate-pulse">
     <div class="space-y-10 col-span-6">
-      <div class="grid grid-cols-8 gap-4 lg:gap-20">
+      <div class="grid grid-cols-8 gap-4 lg:gap-8">
         <div class="space-y-6 col-span-6">
           <div class="grid grid-cols-3 gap-4">
             <div class="h-4 bg-accent-light rounded-sm col-span-2" />
@@ -26,6 +26,4 @@
       </div>
     </div>
   </div>
-
-  <hr class="hr">
 </template>

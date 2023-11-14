@@ -22,30 +22,38 @@ const socials = [{
 </script>
 
 <template>
-  <section class="space-y-14">
-    <h2 class="page-heading">
-      About Me
-    </h2>
+  <PageSection>
+    <PageHeading text="About Me" />
 
     <div class="space-y-8 xl:flex xl:gap-14 xl:space-y-0">
       <NuxtImg
         src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
-        class="max-h-24 lg:max-h-48"
+        class="max-h-24 lg:max-h-48 rounded-full"
       />
 
-      <div class="prose dark:prose-invert">
-        <h3>Hi, I'm Maulana Aprizqy Sumaryanto</h3>
-        <p>
-          Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer.
-        </p>
-        <p>
-          Through my journey as a Freelance Full-Stack Developer, I have become well-versed in using technologies like Laravel, Vue.js, Typescript, and MySQL. Yet, despite my proficiency across full stack development, my heart lies in front-end development, an area that I am particularly drawn to and enthusiastic about.
-        </p>
-        <p>
-          In my free time, I enjoy dedicating my time to building open-source projects. I find great satisfaction in being able to share my projects with others and contribute to helping people through my websites.
-        </p>
+      <div class="space-y-4">
+        <div class="space-y-2">
+          <h5 class="font-bold text-2xl">
+            Maulana Aprizqy Sumaryanto
+          </h5>
+          <p>Full-Stack Developer</p>
+        </div>
 
-        <hr>
+        <hr class="dark:border-accent-light">
+
+        <div class="opacity-80 space-y-4">
+          <p>
+            Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer.
+          </p>
+          <p>
+            Through my journey as a Freelance Full-Stack Developer, I have become well-versed in using technologies like Laravel, Vue.js, Typescript, and MySQL. Yet, despite my proficiency across full stack development, my heart lies in front-end development, an area that I am particularly drawn to and enthusiastic about.
+          </p>
+          <p>
+            In my free time, I enjoy dedicating my time to building open-source projects. I find great satisfaction in being able to share my projects with others and contribute to helping people through my websites.
+          </p>
+        </div>
+
+        <hr class="dark:border-accent-light">
 
         <div class="flex gap-4">
           <NuxtLink
@@ -65,5 +73,5 @@ const socials = [{
         </div>
       </div>
     </div>
-  </section>
+  </PageSection>
 </template>

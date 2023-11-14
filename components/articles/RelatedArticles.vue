@@ -21,17 +21,12 @@ async function getRelatedArticles () {
   }
 
   return data?.map((item) => {
-    const originalCreatedAt = new Date(item.created_at)
-
-    const published_at = originalCreatedAt.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit'
-    })
+    const read_estimation = `${item.read_estimation} min read`
+    const published_at = shortMonth(item.created_at)
 
     return {
       ...item,
-      read_estimation: `${item.read_estimation} min read`,
+      read_estimation,
       published_at
     }
   })
@@ -43,24 +38,22 @@ const { data: relatedArticles } = await useAsyncData(
 </script>
 
 <template>
-  <hr v-if="relatedArticles?.length">
+  <div v-if="relatedArticles?.length" class="space-y-8">
+    <h5 class="font-black tracking-tighter text-xl md:text-2xl">
+      Related Articles:
+    </h5>
 
-  <div v-if="relatedArticles?.length" class="sticky top-28">
-    <h2>Related articles:</h2>
-
-    <div>
-      <div v-for="item in relatedArticles" :key="item.article_id">
-        <div>
-          <a :href="`/${item.slug}`" class="no-underline hover:underline">
-            <h4 class="line-clamp-2">
-              {{ item.title }}
-            </h4>
-          </a>
-          <div class="flex items-center gap-2">
-            <small>{{ item.read_estimation }}</small>
-            <small>·</small>
-            <small>{{ item.published_at }}</small>
-          </div>
+    <div class="space-y-4">
+      <div v-for="item in relatedArticles" :key="item.article_id" class="space-y-2">
+        <a :href="`/${item.slug}`" class="no-underline hover:underline">
+          <h5 class="font-bold tracking-tighter line-clamp-2">
+            {{ item.title }}
+          </h5>
+        </a>
+        <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
+          <small>{{ item.read_estimation }}</small>
+          <small>·</small>
+          <small>{{ item.published_at }}</small>
         </div>
       </div>
     </div>

@@ -31,11 +31,8 @@ const items = [
 
 const copyToClipboardHandler = () => {
   try {
-    copy(props.url)
-
-    toast.add({
-      title: 'Link copied to clipboard',
-      color: 'green'
+    copy(props.url, {
+      title: 'Link copied to clipboard'
     })
   } catch (e) {
     toast.add({

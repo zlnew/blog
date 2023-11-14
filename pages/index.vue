@@ -1,9 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Latest articles',
-  description: 'Latest articles from Aprizqy Blog',
-  ogDescription: 'Latest articles from Aprizqy Blog',
-  twitterDescription: 'Latest articles from Aprizqy Blog'
+  titleTemplate: 'Aprizqy Blog - Code and Thoughts'
 })
 
 const toast = useToast()
@@ -15,42 +12,45 @@ async function getLatestArticles () {
   if (error) {
     toast.add({
       title: 'Error when getting latest articles',
+      description: error.message,
       color: 'red'
     })
   }
 
   return data?.map((item) => {
-    const originalCreatedAt = new Date(item.created_at)
-
-    const published_at = originalCreatedAt.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit'
-    })
+    const read_estimation = `${item.read_estimation} min read`
+    const published_at = dateAgo(item.created_at)
 
     return {
       ...item,
-      read_estimation: `${item.read_estimation} min read`,
+      read_estimation,
       published_at
     }
   })
 }
 
-const { data: latestArticles } = await useAsyncData(
-  'lastestArticles', () => getLatestArticles()
+const { data: latestArticles } = await useAsyncData('latestArticles',
+  () => getLatestArticles()
 )
 </script>
 
 <template>
-  <section class="space-y-14">
-    <h2 class="page-heading">
-      Latest Articles
-    </h2>
+  <PageSection>
+    <Head>
+      <Meta name="description" content="Aprizqy Blog is sharing platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="og:type" content="website" />
+      <Meta name="og:title" content="Aprizqy Blog - Code and Thoughts" />
+      <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="og:description" content="Aprizqy Blog is sharing platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="og:url" :content="$config.public.APP_URL" />
+      <Meta name="twitter:title" content="Aprizqy Blog - Code and Thoughts" />
+      <Meta name="twitter:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="twitter:description" content="Aprizqy Blog is sharing platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="twitter:card" content="summary" />
+    </Head>
 
-    <div class="grid md:grid-cols-2 gap-14">
-      <BigArticles :items="latestArticles" />
-    </div>
-
+    <PageHeading text="Latest Articles" />
+    <BigListArticles :items="latestArticles" />
     <div class="text-center">
       <UButton
         to="/browse"
@@ -62,5 +62,5 @@ const { data: latestArticles } = await useAsyncData(
         trailing
       />
     </div>
-  </section>
+  </PageSection>
 </template>

@@ -55,7 +55,7 @@ watch(() => props.modelValue, (newValue) => {
       v-if="editor"
       class="
         sticky top-[5.6rem] z-50 p-2 rounded-md
-        bg-white/90 dark:bg-accent-light/90
+        bg-white dark:bg-accent-light
         border dark:border-accent-light
         flex flex-wrap gap-2 prose prose-sm sm:prose dark:prose-invert mx-auto
       "

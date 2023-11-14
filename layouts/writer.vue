@@ -6,7 +6,7 @@
       <slot />
     </main>
 
-    <LazyTheFooter />
+    <LazyDefaultFooter />
 
     <STTButton />
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="animate-pulse space-y-10">
+  <div class="animate-pulse space-y-6">
     <div class="rounded-sm bg-accent-light w-full aspect-cover" />
 
     <div class="space-y-10">

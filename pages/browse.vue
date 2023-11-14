@@ -6,6 +6,12 @@ useSeoMeta({
   twitterDescription: 'Browse for more articles'
 })
 
+interface QueryFilter {
+  search: string
+  order: string
+  tags: string[]
+}
+
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
@@ -21,12 +27,6 @@ const loadMoreVisibility = computed(() => {
   if (limit.value >= (total.value - 1)) { return false }
   return true
 })
-
-interface QueryFilter {
-  search: string
-  order: string
-  tags: string[]
-}
 
 const searchHandler = (event: Event) => {
   if (event.target instanceof HTMLInputElement) {
@@ -45,23 +45,22 @@ const loadMoreHandler = () => {
   limit.value = limit.value + step
 }
 
-const {
-  data: articles,
-  refresh: refreshArticles
-} = await useAsyncData(
-  'articles', () => getArticles(limit.value), {
+const { data: articles, refresh: refreshArticles } = await useAsyncData('articles',
+  () => getArticles(limit.value), {
     watch: [limit]
   }
 )
 
-const { data: tags } = await useAsyncData('tags', () => getTags())
+const { data: tags } = await useAsyncData('tags',
+  () => getTags()
+)
 
 async function getArticles (limit: number) {
   loading.value = true
 
   const queryFilter = route.query as unknown as QueryFilter
 
-  const { data: articles, error: articlesError } = await article.browse({
+  const { data, error } = await article.browse({
     search: queryFilter.search,
     filter: {
       order: queryFilter.order,
@@ -70,27 +69,23 @@ async function getArticles (limit: number) {
     limit
   })
 
-  if (articlesError) {
+  if (error) {
     toast.add({
       title: 'Error when getting articles',
+      description: error.message,
       color: 'red'
     })
   }
 
   loading.value = false
 
-  return articles?.map((item) => {
-    const originalCreatedAt = new Date(item.created_at)
-
-    const published_at = originalCreatedAt.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit'
-    })
+  return data?.map((item) => {
+    const read_estimation = `${item.read_estimation} min read`
+    const published_at = shortMonth(item.created_at)
 
     return {
       ...item,
-      read_estimation: `${item.read_estimation} min read`,
+      read_estimation,
       published_at
     }
   })
@@ -119,16 +114,14 @@ async function getTags () {
 }
 
 watch(() => (route.query), (newRouteQuery) => {
-  if (newRouteQuery) {
-    refreshArticles()
-  }
+  if (newRouteQuery) { refreshArticles() }
 })
 
 onMounted(async () => {
   router.afterEach(() => {
     const navHeight = document.getElementById('nav')?.offsetHeight ?? 0
-    const resultsTop = document.getElementById('results')?.offsetTop ?? 0
-    const top = resultsTop - navHeight - 10
+    const pageHeading = document.getElementById('page-heading')?.offsetTop ?? 0
+    const top = pageHeading - navHeight - 10
     window.scroll(0, top)
   })
 
@@ -152,23 +145,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="space-y-14 min-h-screen">
-    <h2 id="results" class="page-heading capitalize">
-      Browse Articles
-    </h2>
+  <PageSection>
+    <PageHeading id="page-heading" text="Browse Articles" />
 
-    <div class="space-y-4 xl:space-y-0 xl:grid xl:grid-cols-7 xl:gap-20">
+    <div class="space-y-4 xl:space-y-0 xl:grid xl:grid-cols-7 xl:gap-14">
       <div class="col-span-2 hidden xl:block">
         <div class="sticky top-24">
           <FilterAccordion :tags="tags" />
         </div>
       </div>
 
-      <div class="xl:hidden">
-        <ScrollableFilter :tags="tags" />
-      </div>
+      <ScrollableFilter :tags="tags" class="xl:hidden" />
 
-      <hr class="xl:hidden hr">
+      <hr class="xl:hidden dark:border-accent-light">
 
       <div class="space-y-8 col-span-5">
         <UInput
@@ -191,33 +180,21 @@ onMounted(async () => {
           Search results for <strong>"{{ $route.query.search }}"</strong>
         </p>
 
-        <div>
-          <div
-            v-if="articles?.length"
-            class="grid xl:grid-cols-1 gap-8 transition-all"
-            :class="{ 'opacity-50': loading }"
-          >
-            <SmallArticles :items="articles" />
-          </div>
+        <SmallListArticles
+          v-if="articles?.length"
+          :items="articles"
+          :loading="loading"
+        />
 
-          <div v-else-if="!loading" class="flex flex-col justify-center items-center min-h-[200px]">
-            <p class="text-5xl font-black">
-              404
-            </p>
-            <br>
-            <p>
-              No articles found were found
-            </p>
-          </div>
-        </div>
+        <ArticlesNotFound v-else-if="!loading" />
 
-        <div v-if="loading" class="flex flex-col justify-center items-center min-h-[200px]">
+        <div v-if="loading" class="text-center">
           <UButton
             label="Loading ..."
-            :loading="loading"
             size="xl"
             color="gray"
             variant="ghost"
+            :loading="loading"
           />
         </div>
 
@@ -231,5 +208,5 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-  </section>
+  </PageSection>
 </template>

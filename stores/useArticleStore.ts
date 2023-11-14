@@ -16,7 +16,7 @@ export const useArticleStore = defineStore('article', () => {
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item) => {
         return {
           ...item,
           content: JSON.parse(item.content)
@@ -46,7 +46,7 @@ export const useArticleStore = defineStore('article', () => {
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item) => {
         return {
           ...item,
           content: JSON.parse(item.content)
@@ -56,27 +56,20 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
-  async function getNext ({
-    currentId,
-    tags
-  }: {
-    currentId: number
-    tags: string[]
-  }) {
+  async function getNext (currentId: number) {
     processing.value = true
 
     const { data, error } = await supabase
       .from('articles')
       .select('*')
       .gt('article_id', currentId)
-      .containedBy('tags', tags)
       .limit(1)
       .returns<Article[]>()
 
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item) => {
         return {
           ...item,
           content: JSON.parse(item.content)
@@ -99,7 +92,7 @@ export const useArticleStore = defineStore('article', () => {
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item) => {
         return {
           ...item,
           content: JSON.parse(item.content)
@@ -165,7 +158,7 @@ export const useArticleStore = defineStore('article', () => {
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item) => {
         return {
           ...item,
           content: JSON.parse(item.content)
@@ -193,7 +186,7 @@ export const useArticleStore = defineStore('article', () => {
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item: Article) => {
         return {
           ...item,
           content: JSON.parse(item.content)
@@ -240,7 +233,7 @@ export const useArticleStore = defineStore('article', () => {
     processing.value = false
 
     return {
-      data: data?.map((item: any) => {
+      data: data?.map((item: Article) => {
         return {
           ...item,
           content: JSON.parse(item.content)

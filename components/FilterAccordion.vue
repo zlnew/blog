@@ -48,7 +48,7 @@ const browseByTagsHandler = (tag: string) => browse.setTags(tag)
     </template>
 
     <template #orders>
-      <div class="ml-4 space-y-2">
+      <div class="ml-4 mt-2 space-y-2">
         <URadio
           v-for="order of ordering"
           :key="order.name"
@@ -61,7 +61,7 @@ const browseByTagsHandler = (tag: string) => browse.setTags(tag)
     </template>
 
     <template #tags>
-      <div class="ml-4 space-y-2">
+      <div class="ml-4 mt-2 space-y-2">
         <UCheckbox
           v-for="tag of tags"
           :key="tag.name"
