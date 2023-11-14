@@ -71,8 +71,8 @@ export default defineNuxtConfig({
     }
   },
   supabase: {
-    url: 'https://gwhrpqivqlkuttxtthkg.supabase.co',
-    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3aHJwcWl2cWxrdXR0eHR0aGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTg2NTQ5NTIsImV4cCI6MjAxNDIzMDk1Mn0.rlWphzbf6vd2xFG7vqUSQyU0chE_1iUD73ypCerVXrY',
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_KEY,
     redirectOptions: {
       login: '/auth/login',
       callback: '/auth/confirm',
