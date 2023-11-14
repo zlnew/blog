@@ -54,7 +54,7 @@ const { data: article } = await useAsyncData('article',
           :url="`${$config.public.APP_URL}${$route.fullPath}`"
           :web-share="{
             title: article?.title || '',
-            text: `${$config.public.APP_URL}${$route.fullPath}`
+            text: article?.title || ''
           }"
         />
       </div>
