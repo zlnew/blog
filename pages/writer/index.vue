@@ -15,16 +15,12 @@ const { actions: article } = useArticleStore()
 const { processing } = storeToRefs(useArticleStore())
 
 const columns = [{
-  key: 'published_at',
-  label: 'Published at',
+  key: 'created_at',
+  label: 'Created At',
   sortable: true
 }, {
   key: 'title',
   label: 'Title',
-  sortable: true
-}, {
-  key: 'read_estimation',
-  label: 'Read Estimation',
   sortable: true
 }, {
   key: 'tags',
@@ -86,16 +82,7 @@ async function getArticle () {
   }
 
   if (data) {
-    articles.value = data.map((item) => {
-      const read_estimation = `${item.read_estimation} min read`
-      const published_at = longMonth(item.created_at)
-
-      return {
-        ...item,
-        read_estimation,
-        published_at
-      }
-    })
+    articles.value = data
   }
 }
 
@@ -144,6 +131,10 @@ onMounted(async () => await getArticle())
           }"
           :loading="processing"
         >
+          <template #created_at-data="{ row }">
+            {{ shortMonth(row.created_at) }}
+          </template>
+
           <template #title-data="{ row }">
             <div class="font-bold">
               <NuxtLink

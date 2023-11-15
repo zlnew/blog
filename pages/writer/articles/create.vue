@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
-import { type InferType, object, string, number, array, mixed } from 'yup'
+import { type InferType, object, string, array } from 'yup'
 
 definePageMeta({
   middleware: 'auth',
@@ -17,92 +17,54 @@ const { processing } = storeToRefs(useArticleStore())
 
 const form = ref<HTMLFormElement>()
 
-const schema = object({
-  title: string().min(1).max(128).required('Required'),
-  content: string().required('Required'),
-  cover_file: mixed().required('Required'),
-  cover_caption: string().required('Required'),
-  read_estimation: number().min(1).max(20).required('Required'),
-  tags: array().min(1).required('Required')
-})
+const readingTime = ref(0)
 
 const initialState = {
   title: '',
+  description: '',
+  cover: {},
   content: '',
-  cover_file: null,
-  cover_public_url: '',
-  cover_caption: '',
-  read_estimation: 0,
   tags: []
 }
 
 const state = reactive({ ...initialState })
-const coverPreview = ref()
+
+const schema = object({
+  title: string().min(1).max(128).required('Required'),
+  description: string().min(1).max(150).required('Required'),
+  cover: object().shape({
+    attrs: object().shape({
+      alt: string().nullable(),
+      src: string().required('Required'),
+      title: string().nullable()
+    }),
+    content: array().nullable(),
+    type: string().required()
+  }),
+  content: string().required('Required'),
+  tags: array().min(1).required('Required')
+})
 
 type Schema = InferType<typeof schema>
-
-const coverChangeHandler = (event: Event) => {
-  if (event.target instanceof HTMLInputElement && event.target.files) {
-    const reader = new FileReader()
-    const file = event.target.files[0]
-    reader.onload = (e) => { coverPreview.value = e.target?.result }
-    reader.readAsDataURL(file)
-    state.cover_file = file as any
-  }
-}
 
 const submitHandler = async (event: FormSubmitEvent<Schema>) => {
   form.value?.clear()
 
-  const formData = await preparedFormData(event.data)
+  console.log(event.data)
 
-  if (formData) {
-    try {
-      const {
-        data,
-        error: insertError
-      } = await article.store(formData)
-
-      if (insertError) { throw insertError }
-
-      if (data) {
-        toast.add({
-          title: 'Article published successfully',
-          color: 'green'
-        })
-
-        navigateTo('/writer')
-      }
-    } catch (err: any) {
-      toast.add({
-        title: 'Error while submitting form',
-        description: err.message,
-        color: 'red'
-      })
-    }
-  }
-}
-
-const preparedFormData = async (form: Schema) => {
   try {
-    const { data: uploadedCover, error: uploadError } = await article
-      .uploadCover({
-        file: form.cover_file,
-        name: slugify(form.title)
+    const formData = preparedFormData(event.data)
+    const { data, error: insertError } = await article.store(formData)
+
+    if (insertError) { throw insertError }
+
+    if (data) {
+      toast.add({
+        title: 'Article published successfully',
+        color: 'green'
       })
 
-    if (uploadError) { throw uploadError }
-
-    if (uploadedCover) {
-      const { data: cover } = article.getPublicURL(uploadedCover.path)
-
-      return {
-        ...form,
-        cover_caption: JSON.stringify(form.cover_caption),
-        content: JSON.stringify(form.content),
-        cover_public_url: cover.publicUrl,
-        slug: slugify(form.title)
-      }
+      navigateTo('/writer')
     }
   } catch (err: any) {
     toast.add({
@@ -113,9 +75,21 @@ const preparedFormData = async (form: Schema) => {
   }
 }
 
-async function getTags () {
-  const { data } = await article.getTags()
-  return data
+const preparedFormData = (form: Schema) => {
+  return {
+    ...form,
+    cover: JSON.stringify(form.cover),
+    content: JSON.stringify(form.content),
+    slug: slugify(form.title)
+  }
+}
+
+const estimateReadingTimeHandler = (value: string) => {
+  readingTime.value = estimateReadingTime(value)
+}
+
+const coverFigureEmitHandler = (value: unknown | undefined) => {
+  if (value) { state.cover = value }
 }
 
 const { data: tags } = await useAsyncData('tags', () => getTags())
@@ -138,6 +112,11 @@ const tagsState = computed({
     state.tags = await Promise.all(promises || [])
   }
 })
+
+async function getTags () {
+  const { data } = await article.getTags()
+  return data
+}
 </script>
 
 <template>
@@ -160,13 +139,23 @@ const tagsState = computed({
       @submit="submitHandler"
     >
       <div class="space-y-4">
-        <h1>Create A New Article</h1>
+        <h1>
+          {{ state.title || 'Create A New Article' }}
+        </h1>
+
+        <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
+          <span>{{ readingTime }} min read</span>
+          <span>·</span>
+          <span>{{ longMonth(new Date().toString()) }}</span>
+        </div>
+
+        <UDivider />
 
         <UFormGroup label="Title" name="title">
           <UTextarea
             v-model="state.title"
             autoresize
-            placeholder="The title of the article"
+            placeholder="Title"
             spellcheck="false"
             :rows="1"
             size="xl"
@@ -174,45 +163,30 @@ const tagsState = computed({
           />
         </UFormGroup>
 
-        <UFormGroup label="Read Estimation" name="read_estimation">
-          <UInput
-            v-model="state.read_estimation"
-            type="number"
-            placeholder="Read estimation: 1-20"
+        <UFormGroup label="Description" name="description">
+          <UTextarea
+            v-model="state.description"
+            autoresize
+            placeholder="Description"
+            spellcheck="false"
+            :rows="1"
             size="xl"
             :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
-        <UFormGroup label="Cover" name="cover_file">
-          <UInput
-            type="file"
-            size="xl"
-            :ui="{ rounded: 'rounded-sm' }"
-            @change="coverChangeHandler"
-          />
-        </UFormGroup>
+        <UDivider label="Content Section" />
 
-        <img
-          v-if="coverPreview"
-          :src="coverPreview"
-          alt="Article cover preview"
-          class="w-full aspect-cover"
-        >
-
-        <UFormGroup label="Cover Caption" name="cover_caption">
-          <ContentEditor
-            v-model="state.cover_caption"
-            placeholder="Caption for the cover"
-          />
-        </UFormGroup>
-
-        <UFormGroup label="Content" name="content">
+        <UFormGroup name="content">
           <ContentEditor
             v-model="state.content"
-            placeholder="Write article content here ..."
+            placeholder="Write something ..."
+            @update:model-value="estimateReadingTimeHandler"
+            @update:cover-figure="coverFigureEmitHandler"
           />
         </UFormGroup>
+
+        <UDivider label="·" />
 
         <div class="flex justify-between items-end">
           <UFormGroup label="Tags" name="tags">

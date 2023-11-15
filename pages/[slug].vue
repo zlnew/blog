@@ -18,16 +18,7 @@ async function getArticle () {
     })
   }
 
-  const read_estimation = `${data?.read_estimation} min read`
-  const published_at = data?.created_at
-    ? longMonth(data.created_at)
-    : ''
-
-  return {
-    ...data,
-    read_estimation,
-    published_at
-  }
+  return data
 }
 
 const { data: article } = await useAsyncData('article',
@@ -44,10 +35,10 @@ const { data: article } = await useAsyncData('article',
 
       <div class="flex justify-between items-center">
         <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
-          <span>{{ article?.read_estimation }}</span>
+          <span>{{ estimateReadingTime(article?.content) }} min read</span>
           <span>·</span>
           <time :datetime="dateISO(article?.created_at || '')">
-            {{ article?.published_at }}
+            {{ longMonth(article?.created_at) }}
           </time>
         </div>
         <ArticleShareButton
@@ -58,13 +49,6 @@ const { data: article } = await useAsyncData('article',
           }"
         />
       </div>
-
-      <NuxtImg
-        :src="article?.cover_public_url"
-        :alt="article?.title"
-        class="w-full aspect-cover rounded-sm"
-      />
-      <figcaption v-html="article?.cover_caption" />
 
       <div v-html="article?.content" />
 

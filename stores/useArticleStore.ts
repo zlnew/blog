@@ -1,4 +1,4 @@
-import { Article } from '~/types/article'
+import { Article, ArticleCover } from '~/types/article'
 
 export const useArticleStore = defineStore('article', () => {
   const supabase = useSupabaseClient()
@@ -19,7 +19,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
       }),
@@ -50,7 +50,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
       }),
@@ -74,7 +74,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
       }),
@@ -98,7 +98,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
       }),
@@ -165,7 +165,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
       }),
@@ -194,10 +194,10 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: Article) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
-      }).at(0) as Article | null,
+      }).at(0),
       error
     }
   }
@@ -242,10 +242,10 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: Article) => {
         return {
           ...item,
-          cover_caption: JSON.parse(item.cover_caption),
+          cover: JSON.parse(item.cover) as ArticleCover,
           content: JSON.parse(item.content)
         }
-      }).at(0) as Article | null,
+      }).at(0),
       error
     }
   }
@@ -273,32 +273,6 @@ export const useArticleStore = defineStore('article', () => {
 
     return {
       data
-    }
-  }
-
-  async function uploadCover ({
-    file,
-    name
-  }: {
-    file: any,
-    name: string
-  }) {
-    processing.value = true
-
-    const fileName = `${Date.now()}_${name}`
-
-    const { data, error } = await supabase.storage
-      .from('article_assets')
-      .upload(`covers/${fileName}`, file, {
-        cacheControl: '3600',
-        upsert: false
-      })
-
-    processing.value = false
-
-    return {
-      data,
-      error
     }
   }
 
@@ -337,7 +311,6 @@ export const useArticleStore = defineStore('article', () => {
       update,
       destroy,
       getPublicURL,
-      uploadCover,
       uploadImage
     }
   }
