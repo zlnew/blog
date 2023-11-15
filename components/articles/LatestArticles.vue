@@ -12,16 +12,7 @@ async function getLatestArticles () {
     })
   }
 
-  return data?.map((item) => {
-    const read_estimation = `${item.read_estimation} min read`
-    const published_at = dateAgo(item.created_at)
-
-    return {
-      ...item,
-      read_estimation,
-      published_at
-    }
-  })
+  return data
 }
 
 const { data: latestArticles } = await useAsyncData(
@@ -42,10 +33,13 @@ const { data: latestArticles } = await useAsyncData(
             {{ item.title }}
           </h5>
         </NuxtLink>
+        <p class="text-sm line-clamp-1">
+          {{ item.description }}
+        </p>
         <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
-          <small>{{ item.read_estimation }}</small>
+          <small>{{ estimateReadingTime(item.content) }} min read</small>
           <small>·</small>
-          <small>{{ item.published_at }}</small>
+          <small>{{ dateAgo(item.created_at) }}</small>
         </div>
       </div>
     </div>

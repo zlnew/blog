@@ -25,9 +25,21 @@ function truncateString (str: string, maxLength: number) {
   }
 }
 
+function estimateReadingTime (text: string | undefined) {
+  if (text) {
+    const wpm = 225
+    const words = text.trim().split(/\s+/).length
+    const time = Math.ceil(words / wpm)
+    return time
+  }
+
+  return 0
+}
+
 export {
   ignoreSpecialChar,
   slugify,
   capitalize,
-  truncateString
+  truncateString,
+  estimateReadingTime
 }

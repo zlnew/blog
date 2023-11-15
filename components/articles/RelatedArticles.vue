@@ -20,16 +20,7 @@ async function getRelatedArticles () {
     })
   }
 
-  return data?.map((item) => {
-    const read_estimation = `${item.read_estimation} min read`
-    const published_at = shortMonth(item.created_at)
-
-    return {
-      ...item,
-      read_estimation,
-      published_at
-    }
-  })
+  return data
 }
 
 const { data: relatedArticles } = await useAsyncData(
@@ -50,10 +41,13 @@ const { data: relatedArticles } = await useAsyncData(
             {{ item.title }}
           </h5>
         </NuxtLink>
+        <p class="text-sm line-clamp-1">
+          {{ item.description }}
+        </p>
         <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
-          <small>{{ item.read_estimation }}</small>
+          <small>{{ estimateReadingTime(item.content) }} min read</small>
           <small>·</small>
-          <small>{{ item.published_at }}</small>
+          <small>{{ shortMonth(item.created_at) }}</small>
         </div>
       </div>
     </div>

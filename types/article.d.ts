@@ -1,13 +1,21 @@
 export interface Article {
   article_id: number
   title: string
+  description: string
+  cover: ArticleCover
   content: string
-  cover_public_url: string
-  cover_caption: string
-  read_estimation: number | string
   tags: string[]
+  slug: string
   created_at: string
   updated_at: string | null
-  published_at?: string
-  slug: string
+}
+
+export interface ArticleCover {
+  attrs: {
+    alt: string,
+    title: string,
+    src: string,
+  }
+  content: unknown[] | undefined
+  type: string
 }

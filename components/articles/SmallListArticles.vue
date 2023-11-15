@@ -22,12 +22,14 @@ defineProps<Props>()
             </NuxtLink>
 
             <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
-              <span>{{ item.read_estimation }}</span>
-              <span>·</span>
-              <span>{{ item.published_at }}</span>
+              <small>{{ estimateReadingTime(item.content) }} min read</small>
+              <small>·</small>
+              <small>{{ shortMonth(item.created_at) }}</small>
             </div>
 
-            <div class="text-slate-700 dark:text-slate-200 line-clamp-2" v-html="item.content" />
+            <div class="text-slate-700 dark:text-slate-200 line-clamp-2">
+              {{ item.description }}
+            </div>
 
             <div class="flex items-center gap-4">
               <UButton
@@ -47,8 +49,9 @@ defineProps<Props>()
         <div class="col-span-2">
           <NuxtLink :to="`/${item.slug}`">
             <NuxtImg
-              :src="item.cover_public_url"
-              :alt="item.title"
+              :src="item.cover.attrs.src"
+              :alt="item.cover.attrs.alt"
+              :title="item.cover.attrs.title"
               loading="lazy"
               class="w-full aspect-cover rounded-sm"
             />

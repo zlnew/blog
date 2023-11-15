@@ -2,41 +2,76 @@
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Image } from '@tiptap/extension-image'
 import { Link } from '@tiptap/extension-link'
+import { BubbleMenu as BubbleMenuExt } from '@tiptap/extension-bubble-menu'
+import { FloatingMenu as FloatingMenuExt } from '@tiptap/extension-floating-menu'
 import { StarterKit } from '@tiptap/starter-kit'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+import { Figure } from '~/utils/figure'
 
 const props = defineProps<{
   modelValue: string
   placeholder?: string
 }>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits([
+  'update:modelValue',
+  'update:coverFigure'
+])
 
 const editor = useEditor({
   editorProps: {
     attributes: {
-      class: 'prose dark:prose-invert prose-headings:tracking-tighter prose-img:mb-0 prose-hr:dark:border-accent-light mx-auto px-2 p-2 bg-white border focus:outline-none dark:bg-transparent dark:border-accent-light'
+      class: 'prose dark:prose-invert prose-headings:tracking-tighter prose-img:mb-0 prose-img:focus:outline prose-img:focus:outline-offset-2 prose-img:focus:outline-green-600 prose-hr:dark:border-accent-light mx-auto focus:outline-none dark:bg-transparent dark:border-accent-light'
     }
   },
   extensions: [
     StarterKit,
     Image,
+    Figure,
     Link,
+    BubbleMenuExt,
+    FloatingMenuExt,
     Placeholder.configure({
       placeholder: props.placeholder
     })
   ],
   onUpdate: () => {
     emit('update:modelValue', editor.value?.getHTML())
+    emitCoverFigure()
   }
 })
 
-const isImageUploaderOpen = ref(false)
+const isFigureModalOpen = ref(false)
 
-function insertImage (url: string) {
-  editor.value?.chain().focus().setImage({
-    src: url
-  }).run()
+function emitCoverFigure () {
+  const content = editor.value?.getJSON().content?.[0]
+  if (content?.type === 'figure') {
+    emit('update:coverFigure', content)
+  }
+}
+
+function insertFigure (attrs?: {
+  title: string | undefined,
+  alt: string | undefined,
+  src: string,
+  caption: string | undefined,
+}) {
+  try {
+    if (attrs) {
+      editor.value?.chain().focus().setFigure({
+        title: attrs.title,
+        alt: attrs.alt,
+        src: attrs.src,
+        caption: attrs.caption
+      }).run()
+    }
+  } catch (e: any) {
+    useToast().add({
+      title: 'Error while inserting figure',
+      description: e.message,
+      color: 'red'
+    })
+  }
 }
 
 function setLink () {
@@ -77,253 +112,20 @@ watch(() => props.modelValue, (newValue) => {
 
 <template>
   <div class="space-y-4">
-    <div
-      v-if="editor"
-      class="
-        sticky top-[5.6rem] z-50 p-2 rounded-md
-        bg-white dark:bg-accent-light
-        border dark:border-accent-light
-        flex flex-wrap gap-2
-      "
-    >
-      <UTooltip text="Bold">
-        <UButton
-          icon="i-material-symbols-format-bold"
-          color="black"
-          :variant="editor.isActive('bold') ? 'solid' : 'outline'"
-          :disabled="!editor.can().chain().focus().toggleBold().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleBold().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Italic">
-        <UButton
-          icon="i-material-symbols-format-italic"
-          color="black"
-          :variant="editor.isActive('italic') ? 'solid' : 'outline'"
-          :disabled="!editor.can().chain().focus().toggleItalic().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleItalic().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Strike">
-        <UButton
-          icon="i-material-symbols-format-strikethrough"
-          color="black"
-          :variant="editor.isActive('strike') ? 'solid' : 'outline'"
-          :disabled="!editor.can().chain().focus().toggleStrike().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleStrike().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Code">
-        <UButton
-          icon="i-material-symbols-code"
-          color="black"
-          :variant="editor.isActive('code') ? 'solid' : 'outline'"
-          :disabled="!editor.can().chain().focus().toggleCode().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleCode().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Paragraph">
-        <UButton
-          icon="i-material-symbols-format-paragraph"
-          color="black"
-          :variant="editor.isActive('paragraph') ? 'solid' : 'outline'"
-          :disabled="!editor.can().chain().focus().setParagraph().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().setParagraph().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Heading 1">
-        <UButton
-          icon="i-material-symbols-format-h1"
-          color="black"
-          :variant="editor.isActive('heading', { level: 1 }) ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Heading 2">
-        <UButton
-          icon="i-material-symbols-format-h2"
-          color="black"
-          :variant="editor.isActive('heading', { level: 2 }) ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Heading 3">
-        <UButton
-          icon="i-material-symbols-format-h3"
-          color="black"
-          :variant="editor.isActive('heading', { level: 3 }) ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Heading 4">
-        <UButton
-          icon="i-material-symbols-format-h4"
-          color="black"
-          :variant="editor.isActive('heading', { level: 4 }) ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Heading 5">
-        <UButton
-          icon="i-material-symbols-format-h5"
-          color="black"
-          :variant="editor.isActive('heading', { level: 5 }) ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Heading 6">
-        <UButton
-          icon="i-material-symbols-format-h6"
-          color="black"
-          :variant="editor.isActive('heading', { level: 6 }) ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Bulleted list">
-        <UButton
-          icon="i-material-symbols-format-list-bulleted"
-          color="black"
-          :variant="editor.isActive('bulletList') ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleBulletList().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Numbered list">
-        <UButton
-          icon="i-material-symbols-format-list-numbered"
-          color="black"
-          :variant="editor.isActive('orderedList') ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleOrderedList().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Code blocks">
-        <UButton
-          icon="i-material-symbols-code-blocks"
-          color="black"
-          :variant="editor.isActive('codeBlock') ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleCodeBlock().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Quote">
-        <UButton
-          icon="i-material-symbols-format-quote"
-          color="black"
-          :variant="editor.isActive('blockquote') ? 'solid' : 'outline'"
-          class="rounded-sm"
-          @click="editor.chain().focus().toggleBlockquote().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Horizontal rule">
-        <UButton
-          icon="i-material-symbols-horizontal-rule"
-          color="black"
-          variant="outline"
-          class="rounded-sm"
-          @click="editor.chain().focus().setHorizontalRule().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Page break">
-        <UButton
-          icon="i-material-symbols-insert-page-break"
-          color="black"
-          variant="outline"
-          class="rounded-sm"
-          @click="editor.chain().focus().setHardBreak().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Set link">
-        <UButton
-          icon="i-material-symbols-add-link"
-          color="black"
-          variant="outline"
-          class="rounded-sm"
-          @click="setLink"
-        />
-      </UTooltip>
-
-      <UTooltip text="Unset link">
-        <UButton
-          icon="i-material-symbols-link-off"
-          color="black"
-          variant="outline"
-          class="rounded-sm"
-          :disabled="!editor.isActive('link')"
-          @click="editor.chain().focus().unsetLink().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Insert image">
-        <UButton
-          icon="i-material-symbols-imagesmode-outline"
-          color="black"
-          variant="outline"
-          class="rounded-sm"
-          @click="isImageUploaderOpen = true"
-        />
-      </UTooltip>
-
-      <UTooltip text="Undo">
-        <UButton
-          icon="i-material-symbols-undo"
-          color="black"
-          variant="outline"
-          :disabled="!editor.can().chain().focus().undo().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().undo().run()"
-        />
-      </UTooltip>
-
-      <UTooltip text="Redo">
-        <UButton
-          icon="i-material-symbols-redo"
-          color="black"
-          variant="outline"
-          :disabled="!editor.can().chain().focus().redo().run()"
-          class="rounded-sm"
-          @click="editor.chain().focus().redo().run()"
-        />
-      </UTooltip>
-    </div>
-
-    <EditorContent
+    <ContentFloatingMenu
       :editor="editor"
-      spellcheck="false"
+      @open-figure-modal="isFigureModalOpen = true"
     />
+    <LazyContentBubbleMenu
+      :editor="editor"
+      @set-link="setLink"
+    />
+    <EditorContent :editor="editor" spellcheck="false" />
   </div>
 
-  <LazyContentImageUploaderModal
-    v-model="isImageUploaderOpen"
-    @update:url="insertImage"
+  <LazyContentFigureModal
+    v-model="isFigureModalOpen"
+    @update:attrs="insertFigure"
   />
 </template>
 
