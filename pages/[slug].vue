@@ -30,8 +30,10 @@ const { data: article } = await useAsyncData('article',
   <PageSection>
     <ArticleMetadata :data="article" />
 
-    <article class="mx-auto prose prose-headings:tracking-tighter prose-img:mb-0 prose-hr:dark:border-accent-light dark:prose-invert">
-      <h1>{{ article?.title }}</h1>
+    <article class="mx-auto prose lg:prose-lg dark:prose-invert">
+      <h1 class="tracking-tighter">
+        {{ article?.title }}
+      </h1>
 
       <div class="flex justify-between items-center">
         <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
@@ -51,7 +53,9 @@ const { data: article } = await useAsyncData('article',
       </div>
 
       <div v-html="article?.content" />
+    </article>
 
+    <div class="mx-auto max-w-[41.25rem] space-y-8">
       <div class="flex items-center gap-4">
         <NuxtLink
           v-for="tag in article?.tags"
@@ -61,33 +65,27 @@ const { data: article } = await useAsyncData('article',
           {{ `#${tag}` }}
         </NuxtLink>
       </div>
-    </article>
 
-    <LazyNextArticle :current-id="article?.article_id" />
+      <UDivider />
 
-    <UDivider label="Comments" />
+      <LazyPrevNextArticle :current-id="article?.article_id" />
 
-    <div>
-      <Giscus
-        repo="zlnew/blog"
-        repo-id="R_kgDOKakDvg"
-        category="Announcements"
-        category-id="DIC_kwDOKakDvs4Ca3x3"
-        mapping="title"
-        reactions-enabled="1"
-        emit-metadata="0"
-        :theme="$colorMode.value"
-        lang="en"
-        loading="lazy"
-      />
-    </div>
+      <UDivider />
 
-    <UDivider />
-
-    <div class="grid xl:grid-cols-2 gap-8">
-      <LazyLatestArticles />
-
-      <UDivider class="xl:hidden" />
+      <div>
+        <Giscus
+          repo="zlnew/blog"
+          repo-id="R_kgDOKakDvg"
+          category="Announcements"
+          category-id="DIC_kwDOKakDvs4Ca3x3"
+          mapping="title"
+          reactions-enabled="1"
+          emit-metadata="0"
+          :theme="$colorMode.value"
+          lang="en"
+          loading="lazy"
+        />
+      </div>
 
       <LazyRelatedArticles
         :excluded-id="article?.article_id"
@@ -96,3 +94,10 @@ const { data: article } = await useAsyncData('article',
     </div>
   </PageSection>
 </template>
+
+<style>
+.iframe-wrapper iframe {
+  height: 300px;
+  width: 100%;
+}
+</style>

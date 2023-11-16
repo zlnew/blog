@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   },
   components: [
     {
-      path: '~/components/articles',
+      path: '~/components/article-list',
       pathPrefix: false
     },
     '~/components'

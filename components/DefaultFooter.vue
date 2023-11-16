@@ -39,7 +39,7 @@ const socials = [{
           </div>
 
           <p class="text-sm text-slate-300 max-w-xs">
-            Transforming ideas into amazing websites.
+            I love building useful websites for others.
           </p>
 
           <div class="flex gap-2">

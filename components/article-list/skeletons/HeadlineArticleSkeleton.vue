@@ -1,6 +1,12 @@
+<script setup lang="ts">
+defineProps<{
+  noCover?: boolean
+}>()
+</script>
+
 <template>
-  <div class="animate-pulse space-y-6">
-    <div class="rounded-sm bg-accent-light w-full aspect-cover" />
+  <div class="animate-pulse space-y-6 pb-4 border-b dark:border-b-accent-light">
+    <div v-if="!noCover" class="rounded-sm bg-accent-light w-full aspect-cover" />
 
     <div class="space-y-10">
       <div class="space-y-8">

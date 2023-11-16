@@ -21,15 +21,15 @@ const socials = [{
 <template>
   <PageSection>
     <Head>
-      <Meta name="description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
-      <Meta name="og:type" content="profile" />
-      <Meta name="og:title" content="About Me - Aprizqy Blog" />
-      <Meta name="og:description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
+      <Meta name="description" content="I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
+      <Meta name="og:type" content="website" />
+      <Meta name="og:title" content="About Me - Aprizqy's Blog" />
+      <Meta name="og:description" content="I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
       <Meta name="og:image" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
       <Meta name="og:url" :content="`${$config.public.APP_URL}/about-me`" />
       <Meta name="twitter:card" content="summary" />
-      <Meta name="twitter:title" content="About Me - Aprizqy Blog" />
-      <Meta name="twitter:description" content="Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
+      <Meta name="twitter:title" content="About Me - Aprizqy's Blog" />
+      <Meta name="twitter:description" content="I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
       <Meta name="twitter:image:src" content="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf" />
     </Head>
 
@@ -55,7 +55,7 @@ const socials = [{
 
         <div class="opacity-80 space-y-4">
           <p>
-            Graduated from Software Engineering at Bina Sarana Informatika University. I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer.
+            I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer.
           </p>
           <p>
             Through my journey as a Freelance Full-Stack Developer, I have become well-versed in using technologies like Laravel, Vue.js, Typescript, and MySQL. Yet, despite my proficiency across full stack development, my heart lies in front-end development, an area that I am particularly drawn to and enthusiastic about.

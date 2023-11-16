@@ -108,10 +108,11 @@ onMounted(async () => await getArticle())
 
     <ClientOnly>
       <div>
-        <div class="flex justify-between border-b pb-4 border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between gap-4 border-b pb-4 border-gray-200 dark:border-gray-700">
           <UInput
             v-model="search"
             placeholder="Search article..."
+            :ui="{ rounded: 'rounded-sm' }"
           />
 
           <UButton
