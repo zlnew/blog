@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  titleTemplate: 'Aprizqy Blog - Code and Thoughts'
+  titleTemplate: "Aprizqy's Blog - Code and Thoughts"
 })
 
 const toast = useToast()
@@ -17,16 +17,7 @@ async function getLatestArticles () {
     })
   }
 
-  return data?.map((item) => {
-    const read_estimation = `${item.read_estimation} min read`
-    const published_at = dateAgo(item.created_at)
-
-    return {
-      ...item,
-      read_estimation,
-      published_at
-    }
-  })
+  return data
 }
 
 const { data: latestArticles } = await useAsyncData('latestArticles',
@@ -37,30 +28,33 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
 <template>
   <PageSection>
     <Head>
-      <Meta name="description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="description" content="Welcome to my blog! I love building useful websites and sharing insights on code and web development from my learning journey." />
       <Meta name="og:type" content="website" />
-      <Meta name="og:title" content="Aprizqy Blog - Code and Thoughts" />
-      <Meta name="og:description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="og:title" content="Aprizqy's Blog - Code and Thoughts" />
+      <Meta name="og:description" content="Welcome to my blog! I love building useful websites and sharing insights on code and web development from my learning journey." />
       <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
       <Meta name="og:url" :content="$config.public.APP_URL" />
       <Meta name="twitter:card" content="summary" />
-      <Meta name="twitter:title" content="Aprizqy Blog - Code and Thoughts" />
-      <Meta name="twitter:description" content="Aprizqy Blog is a platform for my personal thoughts and experiences about code and web development." />
+      <Meta name="twitter:title" content="Aprizqy's Blog - Code and Thoughts" />
+      <Meta name="twitter:description" content="Welcome to my blog! I love building useful websites and sharing insights on code and web development from my learning journey." />
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
     </Head>
 
-    <PageHeading text="Latest Articles" />
-    <BigListArticles :items="latestArticles" />
-    <div class="text-center">
+    <div class="flex justify-between items-center gap-8">
+      <PageHeading text="Latest Articles" />
       <UButton
         to="/browse"
-        label="Browse more"
+        label="More"
         icon="i-heroicons-arrow-small-right"
         color="black"
-        size="lg"
+        size="xl"
         variant="link"
         trailing
       />
     </div>
+
+    <UDivider />
+
+    <ArticleList with-headline :items="latestArticles" />
   </PageSection>
 </template>

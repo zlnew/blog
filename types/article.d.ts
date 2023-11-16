@@ -2,7 +2,7 @@ export interface Article {
   article_id: number
   title: string
   description: string
-  cover: ArticleCover
+  cover: ArticleCover | null
   content: string
   tags: string[]
   slug: string

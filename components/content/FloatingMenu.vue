@@ -5,7 +5,10 @@ defineProps<{
   editor: Editor | undefined
 }>()
 
-defineEmits(['openFigureModal'])
+defineEmits([
+  'openFigureModal',
+  'setIframe'
+])
 </script>
 
 <template>
@@ -187,6 +190,15 @@ defineEmits(['openFigureModal'])
           variant="soft"
           class="rounded-sm"
           @click="$emit('openFigureModal')"
+        />
+
+        <UButton
+          icon="i-material-symbols-imagesmode-outline"
+          label="Add IFrame"
+          color="black"
+          variant="soft"
+          class="rounded-sm"
+          @click="$emit('setIframe')"
         />
       </div>
     </UContextMenu>

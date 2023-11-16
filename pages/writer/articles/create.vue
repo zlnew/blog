@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 import { type InferType, object, string, array } from 'yup'
+import { ArticleCover } from '~/types/article'
 
 definePageMeta({
   middleware: 'auth',
@@ -16,18 +17,7 @@ const { actions: article } = useArticleStore()
 const { processing } = storeToRefs(useArticleStore())
 
 const form = ref<HTMLFormElement>()
-
 const readingTime = ref(0)
-
-const initialState = {
-  title: '',
-  description: '',
-  cover: {},
-  content: '',
-  tags: []
-}
-
-const state = reactive({ ...initialState })
 
 const schema = object({
   title: string().min(1).max(128).required('Required'),
@@ -40,12 +30,22 @@ const schema = object({
     }),
     content: array().nullable(),
     type: string().required()
-  }),
+  }).nullable(),
   content: string().required('Required'),
   tags: array().min(1).required('Required')
 })
 
 type Schema = InferType<typeof schema>
+
+const initialState = {
+  title: '',
+  description: '',
+  cover: null,
+  content: '',
+  tags: []
+}
+
+const state = reactive<Schema>({ ...initialState })
 
 const submitHandler = async (event: FormSubmitEvent<Schema>) => {
   form.value?.clear()
@@ -78,7 +78,7 @@ const submitHandler = async (event: FormSubmitEvent<Schema>) => {
 const preparedFormData = (form: Schema) => {
   return {
     ...form,
-    cover: JSON.stringify(form.cover),
+    cover: form.cover ? JSON.stringify(form.cover) : null,
     content: JSON.stringify(form.content),
     slug: slugify(form.title)
   }
@@ -88,8 +88,8 @@ const estimateReadingTimeHandler = (value: string) => {
   readingTime.value = estimateReadingTime(value)
 }
 
-const coverFigureEmitHandler = (value: unknown | undefined) => {
-  if (value) { state.cover = value }
+const coverFigureEmitHandler = (value: ArticleCover | null) => {
+  state.cover = value
 }
 
 const { data: tags } = await useAsyncData('tags', () => getTags())
@@ -135,11 +135,11 @@ async function getTags () {
       ref="form"
       :schema="schema"
       :state="state"
-      class="mx-auto prose prose-headings:tracking-tighter prose-img:mb-0 prose-hr:dark:border-accent-light dark:prose-invert"
+      class="mx-auto prose lg:prose-lg dark:prose-invert"
       @submit="submitHandler"
     >
       <div class="space-y-4">
-        <h1>
+        <h1 class="tracking-tighter">
           {{ state.title || 'Create A New Article' }}
         </h1>
 

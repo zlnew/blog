@@ -19,7 +19,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }),
@@ -42,6 +42,7 @@ export const useArticleStore = defineStore('article', () => {
       .select('*')
       .neq('article_id', excludedId)
       .containedBy('tags', tags)
+      .limit(4)
       .returns<Article[]>()
 
     processing.value = false
@@ -50,7 +51,31 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
+          content: JSON.parse(item.content)
+        }
+      }),
+      error
+    }
+  }
+
+  async function getPrev (currentId: number) {
+    processing.value = true
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .lt('article_id', currentId)
+      .limit(1)
+      .returns<Article[]>()
+
+    processing.value = false
+
+    return {
+      data: data?.map((item) => {
+        return {
+          ...item,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }),
@@ -74,7 +99,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }),
@@ -98,7 +123,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }),
@@ -165,7 +190,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }),
@@ -194,7 +219,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: Article) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }).at(0),
@@ -242,7 +267,7 @@ export const useArticleStore = defineStore('article', () => {
       data: data?.map((item: Article) => {
         return {
           ...item,
-          cover: JSON.parse(item.cover) as ArticleCover,
+          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
           content: JSON.parse(item.content)
         }
       }).at(0),
@@ -302,6 +327,7 @@ export const useArticleStore = defineStore('article', () => {
     actions: {
       get,
       getRelated,
+      getPrev,
       getNext,
       getByLimit,
       getTags,

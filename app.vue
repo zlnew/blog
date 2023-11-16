@@ -5,9 +5,9 @@ useHead({
   }
 })
 useSeoMeta({
-  titleTemplate: '%s - Aprizqy Blog',
+  titleTemplate: "%s - Aprizqy's Blog",
   author: 'Maulana Aprizqy Sumaryanto',
-  ogSiteName: 'Aprizqy Blog'
+  ogSiteName: "Aprizqy's Blog"
 })
 </script>
 

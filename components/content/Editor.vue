@@ -7,6 +7,7 @@ import { FloatingMenu as FloatingMenuExt } from '@tiptap/extension-floating-menu
 import { StarterKit } from '@tiptap/starter-kit'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import { Figure } from '~/utils/figure'
+import Iframe from '~/utils/iframe'
 
 const props = defineProps<{
   modelValue: string
@@ -21,13 +22,30 @@ const emit = defineEmits([
 const editor = useEditor({
   editorProps: {
     attributes: {
-      class: 'prose dark:prose-invert prose-headings:tracking-tighter prose-img:mb-0 prose-img:focus:outline prose-img:focus:outline-offset-2 prose-img:focus:outline-green-600 prose-hr:dark:border-accent-light mx-auto focus:outline-none dark:bg-transparent dark:border-accent-light'
+      class: 'mx-auto focus:outline-none prose lg:prose-lg dark:prose-invert'
     }
   },
   extensions: [
-    StarterKit,
+    StarterKit.configure({
+      heading: {
+        HTMLAttributes: {
+          class: 'tracking-tighter'
+        }
+      },
+      codeBlock: {
+        HTMLAttributes: {
+          class: 'bg-accent-light'
+        }
+      },
+      horizontalRule: {
+        HTMLAttributes: {
+          class: 'dark:border-accent-light'
+        }
+      }
+    }),
     Image,
     Figure,
+    Iframe,
     Link,
     BubbleMenuExt,
     FloatingMenuExt,
@@ -47,6 +65,8 @@ function emitCoverFigure () {
   const content = editor.value?.getJSON().content?.[0]
   if (content?.type === 'figure') {
     emit('update:coverFigure', content)
+  } else {
+    emit('update:coverFigure', null)
   }
 }
 
@@ -71,6 +91,14 @@ function insertFigure (attrs?: {
       description: e.message,
       color: 'red'
     })
+  }
+}
+
+function addIframe () {
+  const url = window.prompt('URL')
+
+  if (url) {
+    editor.value?.chain().focus().setIframe({ src: url }).run()
   }
 }
 
@@ -115,6 +143,7 @@ watch(() => props.modelValue, (newValue) => {
     <ContentFloatingMenu
       :editor="editor"
       @open-figure-modal="isFigureModalOpen = true"
+      @set-iframe="addIframe"
     />
     <LazyContentBubbleMenu
       :editor="editor"
@@ -136,5 +165,10 @@ watch(() => props.modelValue, (newValue) => {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+.iframe-wrapper iframe {
+  height: 300px;
+  width: 100%;
 }
 </style>

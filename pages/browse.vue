@@ -72,16 +72,7 @@ async function getArticles (limit: number) {
 
   loading.value = false
 
-  return data?.map((item) => {
-    const read_estimation = `${item.read_estimation} min read`
-    const published_at = shortMonth(item.created_at)
-
-    return {
-      ...item,
-      read_estimation,
-      published_at
-    }
-  })
+  return data
 }
 
 watch(() => (route.query), (newRouteQuery) => {
@@ -118,15 +109,15 @@ onMounted(async () => {
 <template>
   <PageSection>
     <Head>
-      <Meta name="description" content="Discover any articles on Aprizqy Blog." />
+      <Meta name="description" content="Discover any articles on Aprizqy's Blog." />
       <Meta name="og:type" content="website" />
-      <Meta name="og:title" content="Browse Articles - Aprizqy Blog" />
-      <Meta name="og:description" content="Discover any articles on Aprizqy Blog." />
+      <Meta name="og:title" content="Browse Articles - Aprizqy's Blog" />
+      <Meta name="og:description" content="Discover any articles on Aprizqy's Blog." />
       <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
       <Meta name="og:url" :content="`${$config.public.APP_URL}/browse`" />
       <Meta name="twitter:card" content="summary" />
-      <Meta name="twitter:title" content="Browse Articles - Aprizqy Blog" />
-      <Meta name="twitter:description" content="Discover any articles on Aprizqy Blog." />
+      <Meta name="twitter:title" content="Browse Articles - Aprizqy's Blog" />
+      <Meta name="twitter:description" content="Discover any articles on Aprizqy's Blog." />
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
     </Head>
 
@@ -160,10 +151,9 @@ onMounted(async () => {
         </p>
       </div>
 
-      <SmallListArticles
+      <ArticleList
         v-if="articles?.length"
         :items="articles"
-        :loading="loading"
       />
 
       <ArticlesNotFound v-else-if="!loading" />
