@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { common, createLowlight } from 'lowlight'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Image } from '@tiptap/extension-image'
 import { Link } from '@tiptap/extension-link'
 import { BubbleMenu as BubbleMenuExt } from '@tiptap/extension-bubble-menu'
 import { FloatingMenu as FloatingMenuExt } from '@tiptap/extension-floating-menu'
+import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
 import { StarterKit } from '@tiptap/starter-kit'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import { Figure } from '~/utils/figure'
@@ -19,6 +21,8 @@ const emit = defineEmits([
   'update:coverFigure'
 ])
 
+const lowlight = createLowlight(common)
+
 const editor = useEditor({
   editorProps: {
     attributes: {
@@ -27,14 +31,10 @@ const editor = useEditor({
   },
   extensions: [
     StarterKit.configure({
+      codeBlock: false,
       heading: {
         HTMLAttributes: {
           class: 'tracking-tighter'
-        }
-      },
-      codeBlock: {
-        HTMLAttributes: {
-          class: 'bg-accent-light'
         }
       },
       horizontalRule: {
@@ -49,6 +49,12 @@ const editor = useEditor({
     Link,
     BubbleMenuExt,
     FloatingMenuExt,
+    CodeBlockLowlight.configure({
+      lowlight,
+      HTMLAttributes: {
+        class: 'bg-accent-light'
+      }
+    }),
     Placeholder.configure({
       placeholder: props.placeholder
     })
