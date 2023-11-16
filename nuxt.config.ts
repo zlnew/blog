@@ -41,8 +41,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Aprizqy Blog',
-      short_name: 'ABlog',
+      name: "Aprizqy's Blog",
+      short_name: "Aprizqy's Blog",
       theme_color: '#030712',
       icons: [{
         src: 'pwa-192x192.png',
@@ -87,7 +87,7 @@ export default defineNuxtConfig({
     ]
   },
   colorMode: {
-    preference: 'system'
+    preference: 'light'
   },
   googleFonts: {
     families: {

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import 'highlight.js/styles/tokyo-night-dark.css'
+import hljs from 'highlight.js'
 import Giscus from '@giscus/vue'
 const route = useRoute()
 const toast = useToast()
@@ -24,13 +26,15 @@ async function getArticle () {
 const { data: article } = await useAsyncData('article',
   () => getArticle()
 )
+
+onMounted(() => hljs.highlightAll())
 </script>
 
 <template>
   <PageSection>
     <ArticleMetadata :data="article" />
 
-    <article class="mx-auto prose lg:prose-lg dark:prose-invert">
+    <article class="mx-auto prose lg:prose-lg prose-pre:p-0 dark:prose-invert">
       <h1 class="tracking-tighter">
         {{ article?.title }}
       </h1>
