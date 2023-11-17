@@ -46,9 +46,12 @@ const { data: nextArticle } = await useAsyncData(
 <template>
   <div class="grid gap-8">
     <div v-if="prevArticle?.length" class="rounded-sm space-y-4">
-      <h5 class="font-bold text-slate-400 dark:text-slate-600">
-        Previous
-      </h5>
+      <div class="flex items-center justify-start gap-2">
+        <UIcon name="i-heroicons-arrow-small-left" />
+        <h5 class="font-bold text-slate-400 dark:text-slate-600">
+          Previous
+        </h5>
+      </div>
       <div v-for="item in prevArticle" :key="item.article_id">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
           <h5 class="font-medium tracking-tighter line-clamp-1">
@@ -62,9 +65,13 @@ const { data: nextArticle } = await useAsyncData(
     </div>
 
     <div v-if="nextArticle?.length" class="rounded-sm space-y-4 text-right">
-      <h5 class="font-bold text-slate-400 dark:text-slate-600">
-        Next
-      </h5>
+      <div class="flex items-center justify-end gap-2">
+        <h5 class="font-bold text-slate-400 dark:text-slate-600">
+          Next
+        </h5>
+        <UIcon name="i-heroicons-arrow-small-right" />
+      </div>
+
       <div v-for="item in nextArticle" :key="item.article_id">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
           <h5 class="font-medium tracking-tighter line-clamp-1">

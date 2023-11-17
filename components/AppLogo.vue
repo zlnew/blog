@@ -8,7 +8,7 @@ defineProps<{
   <div>
     <NuxtLink :to="writer ? '/writer' : '/'">
       <img
-        :src="$colorMode.value === 'dark' ? '/logo-white.jpg' : '/logo-black.jpg'"
+        src="/android-chrome-512x512.png"
         alt="Aprizqy Blog Logo"
         width="512"
         height="512"

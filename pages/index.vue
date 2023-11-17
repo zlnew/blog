@@ -32,12 +32,12 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
       <Meta name="og:type" content="website" />
       <Meta name="og:title" content="Aprizqy's Blog - Code and Thoughts" />
       <Meta name="og:description" content="Welcome to my blog! I love building useful websites and sharing insights on code and web development from my learning journey." />
-      <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="og:image" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
       <Meta name="og:url" :content="$config.public.APP_URL" />
       <Meta name="twitter:card" content="summary" />
       <Meta name="twitter:title" content="Aprizqy's Blog - Code and Thoughts" />
       <Meta name="twitter:description" content="Welcome to my blog! I love building useful websites and sharing insights on code and web development from my learning journey." />
-      <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
     </Head>
 
     <div class="flex justify-between items-center gap-8">

@@ -39,7 +39,7 @@ onMounted(() => hljs.highlightAll())
         {{ article?.title }}
       </h1>
 
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center pb-4 border-b dark:border-b-accent-light">
         <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
           <span>{{ estimateReadingTime(article?.content) }} min read</span>
           <span>·</span>
@@ -61,13 +61,16 @@ onMounted(() => hljs.highlightAll())
 
     <div class="mx-auto max-w-[41.25rem] space-y-8">
       <div class="flex items-center gap-4">
-        <NuxtLink
+        <UButton
           v-for="tag in article?.tags"
           :key="tag"
           :to="{ path: '/browse', query: { tags: [tag] } }"
-        >
-          {{ `#${tag}` }}
-        </NuxtLink>
+          :label="`#${tag}`"
+          :padded="false"
+          color="black"
+          variant="link"
+          class="rounded-sm"
+        />
       </div>
 
       <UDivider />
