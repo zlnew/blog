@@ -113,12 +113,12 @@ onMounted(async () => {
       <Meta name="og:type" content="website" />
       <Meta name="og:title" content="Browse Articles - Aprizqy's Blog" />
       <Meta name="og:description" content="Discover any articles on Aprizqy's Blog." />
-      <Meta name="og:image" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="og:image" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
       <Meta name="og:url" :content="`${$config.public.APP_URL}/browse`" />
       <Meta name="twitter:card" content="summary" />
       <Meta name="twitter:title" content="Browse Articles - Aprizqy's Blog" />
       <Meta name="twitter:description" content="Discover any articles on Aprizqy's Blog." />
-      <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/logo-black.jpg`" />
+      <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
     </Head>
 
     <PageHeading id="page-heading" text="Browse Articles" />
