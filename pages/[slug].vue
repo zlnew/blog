@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import 'highlight.js/styles/tokyo-night-dark.css'
+import 'highlight.js/styles/tokyo-night-dark.min.css'
 import hljs from 'highlight.js'
 import Giscus from '@giscus/vue'
+
+definePageMeta({
+  middleware: 'article'
+})
+
 const route = useRoute()
 const toast = useToast()
 const { actions } = useArticleStore()
@@ -32,72 +37,91 @@ onMounted(() => hljs.highlightAll())
 
 <template>
   <PageSection>
-    <ArticleMetadata :data="article" />
+    <Head>
+      <Link rel="canonical" :href="`${$config.public.APP_URL}${$route.fullPath}`" />
+      <Title>{{ article?.title }}</Title>
+      <Meta name="description" :content="article?.description" />
+      <Meta name="og:type" content="article" />
+      <Meta name="og:title" :content="article?.title" />
+      <Meta name="og:description" :content="article?.description" />
+      <Meta name="og:image" :content="article?.cover?.attrs.src || `${$config.public.APP_URL}/android-chrome-512x512.png`" />
+      <Meta name="og:url" :content="`${$config.public.APP_URL}${$route.fullPath}`" />
+      <Meta name="twitter:card" :content="article?.cover?.attrs.src ? 'summary_large_image' : 'summary'" />
+      <Meta name="twitter:title" :content="article?.title" />
+      <Meta name="twitter:description" :content="article?.description" />
+      <Meta name="twitter:image:src" :content="article?.cover?.attrs.src || `${$config.public.APP_URL}/android-chrome-512x512.png`" />
+      <Meta name="article:author" content="Maulana Aprizqy Sumaryanto" />
+      <Meta name="article:published_time" :content="dateISO(article?.created_at)" />
+      <Meta name="article:modified_time" :content="dateISO(article?.updated_at || '')" />
+      <Meta name="article:tag" :content="article?.tags?.join(', ')" />
+    </Head>
 
-    <article class="mx-auto prose lg:prose-lg prose-pre:p-0 dark:prose-invert">
-      <h1 class="tracking-tighter">
-        {{ article?.title }}
-      </h1>
+    <div class="mx-auto prose lg:prose-lg prose-pre:p-0 dark:prose-invert">
+      <article>
+        <h1 class="tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent dark:from-light dark:to-green-300">
+          {{ article?.title }}
+        </h1>
 
-      <div class="flex justify-between items-center pb-4 border-b dark:border-b-accent-light">
-        <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
-          <span>{{ estimateReadingTime(article?.content) }} min read</span>
-          <span>·</span>
-          <time :datetime="dateISO(article?.created_at || '')">
-            {{ longMonth(article?.created_at) }}
-          </time>
+        <div class="flex justify-between items-center pb-4 border-b dark:border-b-accent-light">
+          <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
+            <span>{{ estimateReadingTime(article?.content) }} min read</span>
+            <span>·</span>
+            <time :datetime="dateISO(article?.created_at || '')">
+              {{ longMonth(article?.created_at) }}
+            </time>
+          </div>
+          <ArticleShareButton
+            :url="`${$config.public.APP_URL}${$route.fullPath}`"
+            :web-share="{
+              title: article?.title || '',
+              text: article?.title || ''
+            }"
+          />
         </div>
-        <ArticleShareButton
-          :url="`${$config.public.APP_URL}${$route.fullPath}`"
-          :web-share="{
-            title: article?.title || '',
-            text: article?.title || ''
-          }"
+
+        <div v-html="article?.content" />
+      </article>
+
+      <div class="not-prose space-y-8">
+        <div class="flex items-center gap-4">
+          <UButton
+            v-for="tag in article?.tags"
+            :key="tag"
+            :to="{ path: '/browse', query: { tags: [tag] } }"
+            :label="`#${tag}`"
+            :padded="false"
+            color="black"
+            variant="link"
+            class="rounded-sm"
+          />
+        </div>
+
+        <UDivider />
+
+        <LazyPrevNextArticle :current-id="article?.article_id" />
+
+        <UDivider />
+
+        <div>
+          <Giscus
+            repo="zlnew/blog"
+            repo-id="R_kgDOKakDvg"
+            category="Announcements"
+            category-id="DIC_kwDOKakDvs4Ca3x3"
+            mapping="title"
+            reactions-enabled="1"
+            emit-metadata="0"
+            :theme="$colorMode.value"
+            lang="en"
+            loading="lazy"
+          />
+        </div>
+
+        <LazyRelatedArticles
+          :excluded-id="article?.article_id"
+          :tags="article?.tags"
         />
       </div>
-
-      <div v-html="article?.content" />
-    </article>
-
-    <div class="mx-auto max-w-[41.25rem] space-y-8">
-      <div class="flex items-center gap-4">
-        <UButton
-          v-for="tag in article?.tags"
-          :key="tag"
-          :to="{ path: '/browse', query: { tags: [tag] } }"
-          :label="`#${tag}`"
-          :padded="false"
-          color="black"
-          variant="link"
-          class="rounded-sm"
-        />
-      </div>
-
-      <UDivider />
-
-      <LazyPrevNextArticle :current-id="article?.article_id" />
-
-      <UDivider />
-
-      <div>
-        <Giscus
-          repo="zlnew/blog"
-          repo-id="R_kgDOKakDvg"
-          category="Announcements"
-          category-id="DIC_kwDOKakDvs4Ca3x3"
-          mapping="title"
-          reactions-enabled="1"
-          emit-metadata="0"
-          :theme="$colorMode.value"
-          lang="en"
-          loading="lazy"
-        />
-      </div>
-
-      <LazyRelatedArticles
-        :excluded-id="article?.article_id"
-        :tags="article?.tags"
-      />
     </div>
   </PageSection>
 </template>

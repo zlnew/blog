@@ -48,7 +48,7 @@ defineProps<{
           :alt="item.cover.attrs.alt"
           :title="item.cover.attrs.title"
           loading="lazy"
-          class="w-full aspect-cover rounded-sm"
+          class="w-full aspect-cover bg-cover bg-center rounded-sm"
         />
       </NuxtLink>
     </div>

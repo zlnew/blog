@@ -76,7 +76,7 @@ const shareOnLinkedInHandler = () => {
 
 <template>
   <div>
-    <div class="hidden md:block">
+    <div v-if="!webShareApiSupported" class="hidden md:block">
       <UTooltip text="Copy link">
         <UButton
           icon="i-mdi-link-circle"

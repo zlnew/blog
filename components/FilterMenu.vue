@@ -53,7 +53,7 @@ onMounted(() => {
       :options="['newest', 'oldest']"
       placeholder="Sort"
       color="gray"
-      size="xl"
+      size="lg"
       :ui="{ rounded: 'rounded-sm'}"
       class="capitalize"
       select-class="capitalize"
@@ -70,7 +70,7 @@ onMounted(() => {
       multiple
       placeholder="Tags"
       color="gray"
-      size="xl"
+      size="lg"
       :options="tags || []"
       :ui="{ rounded: 'rounded-sm'}"
       @update:model-value="browseByTagsHandler"

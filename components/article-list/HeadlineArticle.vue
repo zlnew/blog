@@ -14,13 +14,13 @@ defineProps<{
         :alt="item.cover.attrs.alt"
         :title="item.cover.attrs.title"
         loading="lazy"
-        class="w-full aspect-cover rounded-sm"
+        class="w-full aspect-cover bg-cover bg-center rounded-sm"
       />
     </NuxtLink>
 
     <div class="space-y-4">
       <NuxtLink :to="`/${item.slug}`" class="no-uderline hover:underline">
-        <h5 class="font-black text-2xl sm:text-xl lg:text-xl xl:text-2xl tracking-tighter line-clamp-2">
+        <h5 class="font-black text-2xl md:text-3xl tracking-tighter line-clamp-2">
           {{ item.title }}
         </h5>
       </NuxtLink>

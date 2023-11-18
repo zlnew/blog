@@ -1,9 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center items-center">
-    <p class="text-5xl font-black">
-      404
-    </p>
-    <br>
+  <div class="p-8 flex flex-col justify-center items-center">
     <p>No articles found were found</p>
   </div>
 </template>

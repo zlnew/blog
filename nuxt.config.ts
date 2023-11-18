@@ -63,7 +63,7 @@ export default defineNuxtConfig({
       'material-symbols'
     ]
   },
-  colorMode: { preference: 'light' },
+  colorMode: { preference: 'dark' },
   googleFonts: { families: { Lato: true } },
   eslint: { lintOnStart: false },
   tailwindcss: {
