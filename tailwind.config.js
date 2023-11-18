@@ -20,6 +20,9 @@ export default {
           DEFAULT: '#030712',
           light: '#1f2937'
         }
+      },
+      aspectRatio: {
+        cover: '16 / 10'
       }
     }
   },

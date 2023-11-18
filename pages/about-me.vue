@@ -1,8 +1,4 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: 'About Me'
-})
-
 const socials = [{
   href: 'https://aprizqy.com',
   icon: 'i-mdi-web'
@@ -21,6 +17,7 @@ const socials = [{
 <template>
   <PageSection>
     <Head>
+      <Title>About Me</Title>
       <Meta name="description" content="I currently work as a Freelance Full-Stack Developer. Web development is my true passion, and I find immense joy in creating websites that are not only innovative but also user-friendly. Over time, I've had wonderful opportunities to contribute to a variety of freelance projects as a Full Stack Developer." />
       <Meta name="og:type" content="website" />
       <Meta name="og:title" content="About Me - Aprizqy's Blog" />

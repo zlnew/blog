@@ -1,8 +1,4 @@
 <script setup lang="ts">
-useSeoMeta({
-  title: 'Browse Articles'
-})
-
 interface QueryFilter {
   search: string
   order: string
@@ -109,6 +105,7 @@ onMounted(async () => {
 <template>
   <PageSection>
     <Head>
+      <Title>Browse Articles</Title>
       <Meta name="description" content="Discover any articles on Aprizqy's Blog." />
       <Meta name="og:type" content="website" />
       <Meta name="og:title" content="Browse Articles - Aprizqy's Blog" />
@@ -131,7 +128,7 @@ onMounted(async () => {
           <UInput
             v-model="search"
             placeholder="Search ..."
-            size="xl"
+            size="lg"
             color="gray"
             :ui="{ rounded: 'rounded-sm'}"
             @keyup.enter.prevent="searchHandler"
@@ -151,7 +148,7 @@ onMounted(async () => {
         </p>
       </div>
 
-      <ArticleList
+      <LazyArticleList
         v-if="articles?.length"
         :items="articles"
       />

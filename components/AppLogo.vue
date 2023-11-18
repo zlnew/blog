@@ -8,10 +8,11 @@ defineProps<{
   <div>
     <NuxtLink :to="writer ? '/writer' : '/'">
       <img
-        src="/android-chrome-512x512.png"
-        alt="Aprizqy Blog Logo"
-        width="512"
-        height="512"
+        src="/android-chrome-192x192.png"
+        title="Aprizqy's Blog"
+        alt="Aprizqy's Blog Logo"
+        width="192"
+        height="192"
         class="w-10 h-10"
       >
     </NuxtLink>
