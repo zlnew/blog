@@ -31,6 +31,11 @@ export default defineNuxtConfig({
         src: 'android-chrome-512x512.png',
         sizes: '512x512',
         type: 'image/png'
+      }, {
+        src: 'android-chrome-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any maskable'
       }],
       theme_color: '#030712',
       background_color: '#f8fafc',

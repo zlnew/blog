@@ -7,14 +7,15 @@ defineProps<{
 <template>
   <div>
     <NuxtLink :to="writer ? '/writer' : '/'">
-      <img
+      <NuxtImg
         src="/android-chrome-192x192.png"
         title="Aprizqy's Blog"
         alt="Aprizqy's Blog Logo"
         width="192"
         height="192"
+        placeholder
         class="w-10 h-10"
-      >
+      />
     </NuxtLink>
   </div>
 </template>

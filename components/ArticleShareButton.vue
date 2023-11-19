@@ -24,18 +24,18 @@ const items = [
     click: () => copyToClipboardHandler()
   }],
   [{
-    label: 'Facebook',
-    icon: 'i-heroicons-arrow-top-right-on-square',
+    label: 'Share on Facebook',
+    icon: 'i-mdi-facebook',
     click: () => shareOnFacebookHandler()
   }],
   [{
-    label: 'X/Twitter',
-    icon: 'i-heroicons-arrow-top-right-on-square',
+    slot: 'twitter',
+    label: 'Share on X',
     click: () => shareOnTwitterHandler()
   }],
   [{
-    label: 'LinkedIn',
-    icon: 'i-heroicons-arrow-top-right-on-square',
+    label: 'Share on LinkedIn',
+    icon: 'i-mdi-linkedin',
     click: () => shareOnLinkedInHandler()
   }]
 ]
@@ -82,6 +82,7 @@ const shareOnLinkedInHandler = () => {
           icon="i-mdi-link-circle"
           color="gray"
           variant="ghost"
+          aria-label="Copy link"
           @click="copyToClipboardHandler"
         />
       </UTooltip>
@@ -90,22 +91,29 @@ const shareOnLinkedInHandler = () => {
           icon="i-mdi-facebook"
           color="gray"
           variant="ghost"
+          aria-label="Share on Facebook"
           @click="shareOnFacebookHandler"
         />
       </UTooltip>
-      <UTooltip text="Share on Twitter">
+      <UTooltip text="Share on X">
         <UButton
-          icon="i-mdi-twitter"
           color="gray"
           variant="ghost"
+          aria-label="Share on X"
+          class="p-1.5"
           @click="shareOnTwitterHandler"
-        />
+        >
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M18.205 2.25h3.308l-7.227 8.26l8.502 11.24H16.13l-5.214-6.817L4.95 21.75H1.64l7.73-8.835L1.215 2.25H8.04l4.713 6.231l5.45-6.231Zm-1.161 17.52h1.833L7.045 4.126H5.078L17.044 19.77Z" />
+          </svg>
+        </UButton>
       </UTooltip>
       <UTooltip text="Share on LinkedIn">
         <UButton
           icon="i-mdi-linkedin"
           color="gray"
           variant="ghost"
+          aria-label="Share on LinkedIn"
           @click="shareOnLinkedInHandler"
         />
       </UTooltip>
@@ -116,6 +124,7 @@ const shareOnLinkedInHandler = () => {
       icon="i-mdi-share-variant"
       color="black"
       variant="ghost"
+      aria-label="Share this article"
       @click="shareViaWebShareHandler"
     />
 
@@ -134,6 +143,13 @@ const shareOnLinkedInHandler = () => {
       <template #item="{ item }">
         <span class="truncate">{{ item.label }}</span>
         <UIcon :name="item.icon" class="flex-shrink-0 h-4 w-4 text-accent dark:text-gray-500 ms-auto" />
+      </template>
+
+      <template #twitter="{ item }">
+        <span class="truncate">{{ item.label }}</span>
+        <svg class="flex-shrink-0 h-4 w-4 text-accent dark:text-gray-500 ms-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M18.205 2.25h3.308l-7.227 8.26l8.502 11.24H16.13l-5.214-6.817L4.95 21.75H1.64l7.73-8.835L1.215 2.25H8.04l4.713 6.231l5.45-6.231Zm-1.161 17.52h1.833L7.045 4.126H5.078L17.044 19.77Z" />
+        </svg>
       </template>
     </UDropdown>
   </div>

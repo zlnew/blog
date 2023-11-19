@@ -1,14 +1,18 @@
 <script setup lang="ts">
 const socials = [{
+  name: 'Portfolio Website',
   href: 'https://aprizqy.com',
   icon: 'i-mdi-web'
 }, {
+  name: 'Github Profile',
   href: 'https://github.com/zlnew',
   icon: 'i-mdi-github'
 }, {
+  name: 'LinkedIn Profile',
   href: 'https://www.linkedin.com/in/maulana-aprizqy-sumaryanto-920a0b243/',
   icon: 'i-mdi-linkedin'
 }, {
+  name: 'Instagram Profile',
   href: 'https://www.instagram.com/maulanaapz',
   icon: 'i-mdi-instagram'
 }]
@@ -19,9 +23,9 @@ const socials = [{
     <div class="container py-8 space-y-8">
       <div class="space-y-8 xl:grid xl:grid-cols-3 xl:gap-8 xl:space-y-0">
         <div class="col-span-2 space-y-4">
-          <h5 class="font-bold">
+          <h3 class="font-bold">
             Author
-          </h5>
+          </h3>
 
           <div class="flex items-center gap-3">
             <UAvatar
@@ -47,11 +51,13 @@ const socials = [{
               v-for="social in socials"
               :key="social.href"
               :href="social.href"
+              :aria-label="social.name"
               target="_blank"
             >
               <UButton
                 :icon="social.icon"
                 :padded="false"
+                :aria-label="social.name"
                 color="black"
                 variant="ghost"
               />
@@ -62,9 +68,9 @@ const socials = [{
         <hr class="xl:hidden border-light">
 
         <div class="space-y-4">
-          <h5 class="font-bold">
+          <h3 class="font-bold">
             Quick Links
-          </h5>
+          </h3>
           <ul class="text-sm">
             <li>
               <NuxtLink to="/browse" class="no-underline hover:underline">

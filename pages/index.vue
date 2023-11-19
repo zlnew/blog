@@ -40,21 +40,18 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
     </Head>
 
-    <div class="flex justify-between items-center gap-8">
-      <PageHeading text="Latest Articles" />
-      <UButton
-        to="/browse"
-        label="More"
-        icon="i-heroicons-arrow-small-right"
-        color="black"
-        size="xl"
-        variant="link"
-        trailing
-      />
-    </div>
+    <PageHeading text="Latest Articles" />
 
     <UDivider />
 
     <ArticleList with-headline :items="latestArticles" />
+
+    <UDivider />
+
+    <p class="text-center">
+      Discover all of our <a href="/browse" class="underline">
+        <strong>articles</strong>
+      </a>.
+    </p>
   </PageSection>
 </template>

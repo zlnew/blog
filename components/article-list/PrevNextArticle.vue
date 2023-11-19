@@ -48,15 +48,15 @@ const { data: nextArticle } = await useAsyncData(
     <div v-if="prevArticle?.length" class="rounded-sm space-y-4">
       <div class="flex items-center justify-start gap-2">
         <UIcon name="i-heroicons-arrow-small-left" />
-        <h5 class="font-bold text-slate-400 dark:text-slate-600">
+        <h3 class="font-bold text-slate-600 dark:text-slate-400">
           Previous
-        </h5>
+        </h3>
       </div>
       <div v-for="item in prevArticle" :key="item.article_id">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
-          <h5 class="font-medium tracking-tighter line-clamp-1">
+          <h4 class="font-medium tracking-tighter line-clamp-1">
             {{ item.title }}
-          </h5>
+          </h4>
         </NuxtLink>
         <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-1">
           {{ item.description }}
@@ -66,17 +66,17 @@ const { data: nextArticle } = await useAsyncData(
 
     <div v-if="nextArticle?.length" class="rounded-sm space-y-4 text-right">
       <div class="flex items-center justify-end gap-2">
-        <h5 class="font-bold text-slate-400 dark:text-slate-600">
+        <h3 class="font-bold text-slate-600 dark:text-slate-400">
           Next
-        </h5>
+        </h3>
         <UIcon name="i-heroicons-arrow-small-right" />
       </div>
 
       <div v-for="item in nextArticle" :key="item.article_id">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
-          <h5 class="font-medium tracking-tighter line-clamp-1">
+          <h4 class="font-medium tracking-tighter line-clamp-1">
             {{ item.title }}
-          </h5>
+          </h4>
         </NuxtLink>
         <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-1">
           {{ item.description }}

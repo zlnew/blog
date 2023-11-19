@@ -1,14 +1,18 @@
 <script setup lang="ts">
 const socials = [{
+  name: 'Portfolio Website',
   href: 'https://aprizqy.com',
   icon: 'i-mdi-web'
 }, {
+  name: 'Github Profile',
   href: 'https://github.com/zlnew',
   icon: 'i-mdi-github'
 }, {
+  name: 'LinkedIn Profile',
   href: 'https://www.linkedin.com/in/maulana-aprizqy-sumaryanto-920a0b243/',
   icon: 'i-mdi-linkedin'
 }, {
+  name: 'Instagram Profile',
   href: 'https://www.instagram.com/maulanaapz',
   icon: 'i-mdi-instagram'
 }]
@@ -32,20 +36,20 @@ const socials = [{
 
     <PageHeading text="About Me" />
 
-    <div class="space-y-8 xl:flex xl:gap-14 xl:space-y-0">
-      <NuxtImg
-        src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
-        alt="Maulana Aprizqy Sumaryanto's Avatar"
-        loading="lazy"
-        class="max-h-24 lg:max-h-48 rounded-full"
-      />
-
+    <div class="space-y-8">
       <div class="space-y-4">
-        <div class="space-y-2">
-          <h5 class="font-bold text-2xl">
-            Maulana Aprizqy Sumaryanto
-          </h5>
-          <p>Full-Stack Developer</p>
+        <div class="flex items-center gap-4">
+          <UAvatar
+            src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
+            alt="Maulana Aprizqy Sumaryanto's Avatar"
+            size="xl"
+          />
+          <div class="space-y-2">
+            <h2 class="font-bold text-xl">
+              Maulana Aprizqy Sumaryanto
+            </h2>
+            <p>Full-Stack Developer</p>
+          </div>
         </div>
 
         <hr class="dark:border-accent-light">
@@ -69,12 +73,13 @@ const socials = [{
             v-for="social in socials"
             :key="social.href"
             :href="social.href"
+            :aria-label="social.name"
             target="_blank"
           >
             <UButton
               :icon="social.icon"
               :padded="false"
-              size="xl"
+              :aria-label="social.name"
               color="black"
               variant="ghost"
             />

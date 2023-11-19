@@ -11,9 +11,9 @@ defineProps<{
     <div :class="item.cover ? 'col-span-6' : 'col-span-8'">
       <div class="space-y-4">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
-          <h5 class="font-black tracking-tighter text-xl md:text-2xl line-clamp-2">
+          <h2 class="font-black tracking-tighter text-xl md:text-2xl line-clamp-2">
             {{ item.title }}
-          </h5>
+          </h2>
         </NuxtLink>
 
         <div class=" text-slate-600 dark:text-slate-300 flex items-center space-x-2">
@@ -47,8 +47,13 @@ defineProps<{
           :src="item.cover.attrs.src"
           :alt="item.cover.attrs.alt"
           :title="item.cover.attrs.title"
+          :modifiers="{ roundedCorner: '0:100' }"
+          width="1200"
+          height="675"
+          format="webp"
+          fit="cover"
           loading="lazy"
-          class="w-full aspect-cover bg-cover bg-center rounded-sm"
+          placeholder
         />
       </NuxtLink>
     </div>
