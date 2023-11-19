@@ -8,7 +8,7 @@ defineProps<{
   <div>
     <NuxtLink :to="writer ? '/writer' : '/'">
       <NuxtImg
-        src="/android-chrome-192x192.png"
+        src="https://gwhrpqivqlkuttxtthkg.supabase.co/storage/v1/object/public/app/logo.png?t=2023-11-19T08%3A09%3A09.444Z"
         title="Aprizqy's Blog"
         alt="Aprizqy's Blog Logo"
         width="192"
