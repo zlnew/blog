@@ -26,7 +26,7 @@ const lowlight = createLowlight(common)
 const editor = useEditor({
   editorProps: {
     attributes: {
-      class: 'mx-auto focus:outline-none prose lg:prose-lg dark:prose-invert'
+      class: 'mx-auto focus:outline-none prose lg:prose-lg prose-code:before:content-none prose-code:after:content-none dark:prose-invert'
     }
   },
   extensions: [

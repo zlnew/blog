@@ -193,8 +193,8 @@ defineEmits([
         />
 
         <UButton
-          icon="i-material-symbols-imagesmode-outline"
-          label="Add IFrame"
+          icon="i-material-symbols-iframe"
+          label="Iframe"
           color="black"
           variant="soft"
           class="rounded-sm"

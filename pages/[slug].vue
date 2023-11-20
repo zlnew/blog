@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import 'highlight.js/styles/tokyo-night-dark.min.css'
+import 'highlight.js/styles/github-dark-dimmed.min.css'
 import hljs from 'highlight.js'
 import Giscus from '@giscus/vue'
 
@@ -56,7 +56,16 @@ onMounted(() => hljs.highlightAll())
       <Meta name="article:tag" :content="article?.tags?.join(', ')" />
     </Head>
 
-    <div class="mx-auto prose lg:prose-lg prose-pre:p-0 dark:prose-invert">
+    <div
+      :class="[
+        'mx-auto prose',
+        'lg:prose-lg',
+        'prose-pre:p-0',
+        'prose-code:before:content-none',
+        'prose-code:after:content-none',
+        'dark:prose-invert'
+      ]"
+    >
       <article>
         <h1 class="tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent dark:from-light dark:to-green-300">
           {{ article?.title }}

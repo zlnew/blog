@@ -66,6 +66,7 @@ export const useArticleStore = defineStore('article', () => {
       .from('articles')
       .select('*')
       .lt('article_id', currentId)
+      .order('created_at', { ascending: false })
       .limit(1)
       .returns<Article[]>()
 
@@ -90,6 +91,7 @@ export const useArticleStore = defineStore('article', () => {
       .from('articles')
       .select('*')
       .gt('article_id', currentId)
+      .order('created_at', { ascending: false })
       .limit(1)
       .returns<Article[]>()
 
