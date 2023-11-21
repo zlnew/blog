@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const socials = [{
   name: 'Portfolio Website',
-  href: 'https://aprizqy.com',
+  href: 'https://dev.aprizqy.com',
   icon: 'i-mdi-web'
 }, {
   name: 'Github Profile',
