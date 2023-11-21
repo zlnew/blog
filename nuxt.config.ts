@@ -1,6 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  app: { head: { htmlAttrs: { lang: 'en' } } },
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en'
+      },
+      script: [{
+        async: true,
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6360316091582539',
+        crossorigin: 'anonymous'
+      }]
+    }
+  },
   devtools: { enabled: true },
   runtimeConfig: { public: { APP_URL: process.env.APP_URL } },
   imports: { dirs: ['stores'] },

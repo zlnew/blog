@@ -38,7 +38,6 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
       <Meta name="twitter:title" content="Aprizqy's Blog - Code and Thoughts" />
       <Meta name="twitter:description" content="Welcome to my blog! I love building useful websites and sharing insights on code and web development from my learning journey." />
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
-      <Meta name="google-adsense-account" content="ca-pub-6360316091582539" />
     </Head>
 
     <PageHeading text="Latest Articles" />

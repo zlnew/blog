@@ -116,7 +116,6 @@ onMounted(async () => {
       <Meta name="twitter:title" content="Browse Articles - Aprizqy's Blog" />
       <Meta name="twitter:description" content="Discover any articles on Aprizqy's Blog." />
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
-      <Meta name="google-adsense-account" content="ca-pub-6360316091582539" />
     </Head>
 
     <PageHeading id="page-heading" text="Browse Articles" />
