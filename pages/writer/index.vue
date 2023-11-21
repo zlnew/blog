@@ -15,8 +15,8 @@ const { actions: article } = useArticleStore()
 const { processing } = storeToRefs(useArticleStore())
 
 const columns = [{
-  key: 'created_at',
-  label: 'Created At',
+  key: 'published_at',
+  label: 'Published At',
   sortable: true
 }, {
   key: 'title',
@@ -25,6 +25,10 @@ const columns = [{
 }, {
   key: 'tags',
   label: 'Tags',
+  sortable: true
+}, {
+  key: 'status',
+  label: 'Status',
   sortable: true
 }, {
   key: 'actions',
@@ -39,7 +43,9 @@ const actionItems = (row: Article) => [
     label: 'Edit',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => navigateTo({
-      path: `/writer/articles/edit/${row.slug}`
+      path: row.published_at !== 'N/A'
+        ? `/writer/articles/edit/${row.slug}`
+        : `/writer/articles/draft/${row.slug}`
     })
   }], [{
     label: 'Delete',
@@ -71,7 +77,9 @@ const deleteArticleHandler = async (articleId: number) => {
 }
 
 async function getArticle () {
-  const { data, error } = await article.get()
+  const { data, error } = await article.get({
+    withDraft: true
+  })
 
   if (error) {
     toast.add({
@@ -82,7 +90,13 @@ async function getArticle () {
   }
 
   if (data) {
-    articles.value = data
+    articles.value = data.map((item) => {
+      return {
+        ...item,
+        published_at: item.published_at ? shortMonth(item.published_at) : 'N/A',
+        status: item.published_at ? 'published' : 'draft'
+      }
+    })
   }
 }
 
@@ -98,7 +112,9 @@ const filteredArticles = computed(() => {
   })
 })
 
-onMounted(async () => await getArticle())
+onMounted(async () => {
+  await getArticle()
+})
 
 </script>
 
@@ -127,21 +143,21 @@ onMounted(async () => await getArticle())
           :columns="columns"
           :rows="filteredArticles"
           :sort="{
-            column: 'created_at',
+            column: 'published_at',
             direction: 'desc'
           }"
           :loading="processing"
         >
-          <template #created_at-data="{ row }">
-            {{ shortMonth(row.created_at) }}
+          <template #published_at-data="{ row }">
+            {{ row.published_at }}
           </template>
 
           <template #title-data="{ row }">
-            <div class="font-bold">
+            <div class="text-accent dark:text-light font-bold">
               <NuxtLink
                 :to="`/${row.slug}`"
                 target="_blank"
-                class="link accent"
+                class="hover:underline"
               >
                 {{ row.title }}
               </NuxtLink>
@@ -158,6 +174,17 @@ onMounted(async () => await getArticle())
                 class="rounded-sm"
               >
                 {{ tag }}
+              </UBadge>
+            </div>
+          </template>
+
+          <template #status-data="{ row }">
+            <div class="space-x-2">
+              <UBadge
+                :color="row.status === 'published' ? 'black' : 'gray'"
+                class="rounded-sm capitalize"
+              >
+                {{ row.status }}
               </UBadge>
             </div>
           </template>

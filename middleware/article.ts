@@ -3,7 +3,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   const { data } = await actions.where({
     column: 'slug',
-    value: to.params.slug as string
+    value: to.params.slug as string,
+    withDraft: false
   })
 
   if (!data) {

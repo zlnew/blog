@@ -5,13 +5,18 @@ export const useArticleStore = defineStore('article', () => {
   const processing = ref(false)
   const uploading = ref(false)
 
-  async function get () {
+  async function get ({ withDraft }: { withDraft: boolean } = { withDraft: false }) {
     processing.value = true
 
-    const { data, error } = await supabase
+    const query = supabase
       .from('articles')
       .select('*')
-      .returns<Article[]>()
+
+    if (withDraft === false) {
+      query.not('published_at', 'is', null)
+    }
+
+    const { data, error } = await query.returns<Article[]>()
 
     processing.value = false
 
@@ -40,6 +45,7 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
+      .not('published_at', 'is', null)
       .neq('article_id', excludedId)
       .containedBy('tags', tags)
       .limit(4)
@@ -65,6 +71,7 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
+      .not('published_at', 'is', null)
       .lt('article_id', currentId)
       .order('created_at', { ascending: false })
       .limit(1)
@@ -90,6 +97,7 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
+      .not('published_at', 'is', null)
       .gt('article_id', currentId)
       .order('created_at', { ascending: false })
       .limit(1)
@@ -115,6 +123,7 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('*')
+      .not('published_at', 'is', null)
       .order('created_at', { ascending: false })
       .limit(limit)
       .returns<Article[]>()
@@ -139,6 +148,7 @@ export const useArticleStore = defineStore('article', () => {
     const { data, error } = await supabase
       .from('articles')
       .select('tags')
+      .not('published_at', 'is', null)
 
     processing.value = false
 
@@ -167,6 +177,7 @@ export const useArticleStore = defineStore('article', () => {
     const query = supabase
       .from('articles')
       .select('*')
+      .not('published_at', 'is', null)
       .range(0, limit)
       .order('created_at', {
         ascending: filter?.order === 'oldest'
@@ -202,29 +213,34 @@ export const useArticleStore = defineStore('article', () => {
 
   async function where ({
     column,
-    value
+    value,
+    withDraft = true
   }: {
     column: 'article_id' | 'slug'
     value: number | string
+    withDraft?: boolean
   }) {
     processing.value = true
 
-    const { data, error } = await supabase
+    const query = supabase
       .from('articles')
       .select('*')
       .eq(column, value)
-      .limit(1)
+
+    if (withDraft === false) {
+      query.not('published_at', 'is', null)
+    }
+
+    const { data, error } = await query.single<Article>()
 
     processing.value = false
 
     return {
-      data: data?.map((item: Article) => {
-        return {
-          ...item,
-          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
-          content: JSON.parse(item.content)
-        }
-      }).at(0),
+      data: data && {
+        ...data,
+        cover: data?.cover ? JSON.parse(data.cover as unknown as string) as ArticleCover : null,
+        content: data?.content ? JSON.parse(data.content) : ''
+      },
       error
     }
   }
@@ -236,11 +252,16 @@ export const useArticleStore = defineStore('article', () => {
       .from('articles')
       .insert(formData)
       .select()
+      .single<Article>()
 
     processing.value = false
 
     return {
-      data,
+      data: data && {
+        ...data,
+        cover: data?.cover ? JSON.parse(data.cover as unknown as string) as ArticleCover : null,
+        content: data?.content ? JSON.parse(data.content) : ''
+      },
       error
     }
   }
@@ -262,17 +283,16 @@ export const useArticleStore = defineStore('article', () => {
       .update(formData)
       .eq(where.column, where.value)
       .select('*')
+      .single<Article>()
 
     processing.value = false
 
     return {
-      data: data?.map((item: Article) => {
-        return {
-          ...item,
-          cover: item.cover ? JSON.parse(item.cover as unknown as string) as ArticleCover : null,
-          content: JSON.parse(item.content)
-        }
-      }).at(0),
+      data: data && {
+        ...data,
+        cover: data?.cover ? JSON.parse(data.cover as unknown as string) as ArticleCover : null,
+        content: data?.content ? JSON.parse(data.content) : ''
+      },
       error
     }
   }

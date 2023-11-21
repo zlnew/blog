@@ -16,8 +16,12 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/supabase',
     '@pinia/nuxt',
-    '@nuxt/image'
+    '@nuxt/image',
+    'nuxt-gtag'
   ],
+  gtag: {
+    id: process.env.GTAG_ID
+  },
   pwa: {
     registerType: 'autoUpdate',
     manifest: {

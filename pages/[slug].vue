@@ -7,6 +7,7 @@ definePageMeta({
   middleware: 'article'
 })
 
+const { gtag } = useGtag()
 const route = useRoute()
 const toast = useToast()
 const { actions } = useArticleStore()
@@ -32,7 +33,10 @@ const { data: article } = await useAsyncData('article',
   () => getArticle()
 )
 
-onMounted(() => hljs.highlightAll())
+onMounted(() => {
+  hljs.highlightAll()
+  gtag('event', 'page_view')
+})
 </script>
 
 <template>
@@ -51,7 +55,7 @@ onMounted(() => hljs.highlightAll())
       <Meta name="twitter:description" :content="article?.description" />
       <Meta name="twitter:image:src" :content="article?.cover?.attrs.src || `${$config.public.APP_URL}/android-chrome-512x512.png`" />
       <Meta name="article:author" content="Maulana Aprizqy Sumaryanto" />
-      <Meta name="article:published_time" :content="dateISO(article?.created_at)" />
+      <Meta name="article:published_time" :content="dateISO(article?.published_at)" />
       <Meta name="article:modified_time" :content="dateISO(article?.updated_at || '')" />
       <Meta name="article:tag" :content="article?.tags?.join(', ')" />
     </Head>
@@ -75,8 +79,8 @@ onMounted(() => hljs.highlightAll())
           <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
             <span>{{ estimateReadingTime(article?.content) }} min read</span>
             <span>·</span>
-            <time :datetime="dateISO(article?.created_at || '')">
-              {{ longMonth(article?.created_at) }}
+            <time :datetime="dateISO(article?.published_at || '')">
+              {{ longMonth(article?.published_at) }}
             </time>
           </div>
           <ArticleShareButton

@@ -8,17 +8,19 @@ definePageMeta({
   layout: 'writer'
 })
 
-useSeoMeta({
-  title: 'Edit Article'
+useHead({
+  title: 'Edit Draft Article'
 })
 
 const route = useRoute()
 const toast = useToast()
 const { actions } = useArticleStore()
-const { processing } = storeToRefs(useArticleStore())
 
 const form = ref<HTMLFormElement>()
+const publish = ref(false)
 const readingTime = ref(0)
+const saving = ref(false)
+const publishing = ref(false)
 
 const schema = object({
   title: string().min(1).max(128).required('Required'),
@@ -48,25 +50,85 @@ const initialState = {
 
 const state = reactive<Schema>({ ...initialState })
 
-const updateHandler = async (event: FormSubmitEvent<Schema>) => {
+const submitHandler = (event: FormSubmitEvent<Schema>) => {
   form.value?.clear()
 
+  if (publish.value === true) {
+    const confirmation = confirm('Are you sure you want to publish this article?')
+
+    if (confirmation) {
+      publishArticle(event.data)
+    }
+  } else {
+    saveChanges(event.data)
+  }
+}
+
+async function saveChanges (form: Schema) {
   try {
-    const formData = preparedFormData(event.data)
-    const { data, error: updateError } = await actions
-      .update({
-        formData: formData as never,
-        where: {
-          column: 'slug',
-          value: article.value?.slug || ''
-        }
-      })
+    saving.value = true
+
+    const formData = {
+      ...form,
+      cover: form.cover ? JSON.stringify(form.cover) : null,
+      content: JSON.stringify(form.content),
+      slug: slugify(form.title)
+    } as never
+
+    const { data, error: updateError } = await actions.update({
+      formData,
+      where: {
+        column: 'slug',
+        value: article.value?.slug || ''
+      }
+    })
 
     if (updateError) { throw updateError }
 
     if (data) {
       toast.add({
-        title: 'Article updated successfully',
+        title: 'Changes saved successfully',
+        color: 'accent'
+      })
+
+      navigateTo(`/writer/articles/draft/${data.slug}`)
+    }
+  } catch (err: any) {
+    toast.add({
+      title: 'Error while saving article',
+      description: err.message,
+      color: 'red'
+    })
+  } finally {
+    saving.value = false
+  }
+}
+
+async function publishArticle (form: Schema) {
+  try {
+    publishing.value = true
+
+    const formData = {
+      ...form,
+      cover: form.cover ? JSON.stringify(form.cover) : null,
+      content: JSON.stringify(form.content),
+      slug: slugify(form.title),
+      published_at: new Date()
+    } as never
+
+    const { data, error: updateError } = await actions.update({
+      formData,
+      where: {
+        column: 'slug',
+        value: article.value?.slug || ''
+      }
+    })
+
+    if (updateError) { throw updateError }
+
+    if (data) {
+      toast.add({
+        title: 'Article published successfully',
         color: 'green'
       })
 
@@ -74,20 +136,12 @@ const updateHandler = async (event: FormSubmitEvent<Schema>) => {
     }
   } catch (err: any) {
     toast.add({
-      title: 'Error while updating article',
+      title: 'Error while publishing article',
       description: err.message,
       color: 'red'
     })
-  }
-}
-
-const preparedFormData = (form: Schema) => {
-  return {
-    ...form,
-    cover: form.cover ? JSON.stringify(form.cover) : null,
-    content: JSON.stringify(form.content),
-    slug: slugify(form.title),
-    updated_at: new Date()
+  } finally {
+    publishing.value = false
   }
 }
 
@@ -97,6 +151,14 @@ const estimateReadingTimeHandler = (value: string) => {
 
 const coverFigureEmitHandler = (value: ArticleCover | null) => {
   state.cover = value
+}
+
+const handleCtrlS = async (e: KeyboardEvent) => {
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault()
+    await form.value?.validate()
+    await saveChanges(state)
+  }
 }
 
 const { data: article, execute } = await useAsyncData('article', () => getArticle(), { immediate: false })
@@ -161,6 +223,11 @@ async function getTags () {
 onMounted(async () => {
   await execute()
   readingTime.value = estimateReadingTime(article.value?.content)
+  document.addEventListener('keydown', handleCtrlS)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleCtrlS)
 })
 </script>
 
@@ -181,17 +248,17 @@ onMounted(async () => {
       :schema="schema"
       :state="state"
       class="mx-auto prose lg:prose-lg dark:prose-invert"
-      @submit="updateHandler"
+      @submit="submitHandler"
     >
       <div class="space-y-4">
         <h1 class="tracking-tighter">
-          {{ state.title || 'Edit Article' }}
+          {{ state.title || 'Edit Draft Article' }}
         </h1>
 
         <div class="text-sm text-slate-600 dark:text-slate-300 flex items-center space-x-2">
           <span>{{ readingTime }} min read</span>
           <span>·</span>
-          <span>{{ longMonth(article?.published_at) }}</span>
+          <span>{{ longMonth(article?.created_at) }}</span>
         </div>
 
         <UDivider />
@@ -250,13 +317,24 @@ onMounted(async () => {
             </USelectMenu>
           </UFormGroup>
 
-          <UButton
-            type="submit"
-            label="Update"
-            color="black"
-            :loading="processing"
-            class="rounded-sm"
-          />
+          <div class="flex items-center gap-2">
+            <UButton
+              type="submit"
+              label="Save Changes"
+              color="black"
+              :loading="saving"
+              class="rounded-sm"
+              @click="publish = false"
+            />
+            <UButton
+              type="submit"
+              label="Publish"
+              color="gray"
+              :loading="publishing"
+              class="rounded-sm"
+              @click="publish = true"
+            />
+          </div>
         </div>
       </div>
     </UForm>

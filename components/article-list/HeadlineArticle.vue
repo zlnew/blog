@@ -33,7 +33,7 @@ defineProps<{
       <div class="text-slate-600 dark:text-slate-300 flex items-center space-x-2">
         <small>{{ estimateReadingTime(item.content) }} min read</small>
         <small>·</small>
-        <small>{{ dateAgo(item.created_at) }}</small>
+        <small>{{ dateAgo(item.published_at) }}</small>
       </div>
 
       <div class="text-slate-700 dark:text-slate-200 line-clamp-3">

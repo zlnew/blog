@@ -14,10 +14,12 @@ useSeoMeta({
 
 const toast = useToast()
 const { actions: article } = useArticleStore()
-const { processing } = storeToRefs(useArticleStore())
 
 const form = ref<HTMLFormElement>()
+const publish = ref(false)
 const readingTime = ref(0)
+const saving = ref(false)
+const publishing = ref(false)
 
 const schema = object({
   title: string().min(1).max(128).required('Required'),
@@ -47,13 +49,66 @@ const initialState = {
 
 const state = reactive<Schema>({ ...initialState })
 
-const submitHandler = async (event: FormSubmitEvent<Schema>) => {
+const submitHandler = (event: FormSubmitEvent<Schema>) => {
   form.value?.clear()
 
-  console.log(event.data)
+  if (publish.value === true) {
+    const confirmation = confirm('Are you sure you want to publish this article?')
 
+    if (confirmation) {
+      publishArticle(event.data)
+    }
+  } else {
+    draftArticle(event.data)
+  }
+}
+
+async function draftArticle (form: Schema) {
   try {
-    const formData = preparedFormData(event.data)
+    saving.value = true
+
+    const formData = {
+      ...form,
+      cover: form.cover ? JSON.stringify(form.cover) : null,
+      content: JSON.stringify(form.content),
+      slug: slugify(form.title)
+    }
+
+    const { data, error: insertError } = await article.store(formData)
+
+    if (insertError) { throw insertError }
+
+    if (data) {
+      toast.add({
+        title: 'Article saved successfully',
+        color: 'accent'
+      })
+
+      navigateTo(`/writer/articles/draft/${data.slug}`)
+    }
+  } catch (err: any) {
+    toast.add({
+      title: 'Error while submitting form',
+      description: err.message,
+      color: 'red'
+    })
+  } finally {
+    saving.value = false
+  }
+}
+
+async function publishArticle (form: Schema) {
+  try {
+    publishing.value = true
+
+    const formData = {
+      ...form,
+      cover: form.cover ? JSON.stringify(form.cover) : null,
+      content: JSON.stringify(form.content),
+      slug: slugify(form.title),
+      published_at: new Date()
+    }
+
     const { data, error: insertError } = await article.store(formData)
 
     if (insertError) { throw insertError }
@@ -72,15 +127,8 @@ const submitHandler = async (event: FormSubmitEvent<Schema>) => {
       description: err.message,
       color: 'red'
     })
-  }
-}
-
-const preparedFormData = (form: Schema) => {
-  return {
-    ...form,
-    cover: form.cover ? JSON.stringify(form.cover) : null,
-    content: JSON.stringify(form.content),
-    slug: slugify(form.title)
+  } finally {
+    publishing.value = false
   }
 }
 
@@ -92,15 +140,21 @@ const coverFigureEmitHandler = (value: ArticleCover | null) => {
   state.cover = value
 }
 
+const handleCtrlS = async (e: KeyboardEvent) => {
+  if (e.ctrlKey && e.key === 's') {
+    e.preventDefault()
+    await form.value?.validate()
+    await draftArticle(state)
+  }
+}
+
 const { data: tags } = await useAsyncData('tags', () => getTags())
 
 const tagsState = computed({
   get: () => state.tags,
   set: async (states) => {
     const promises = states?.map((state) => {
-      if (tags.value?.includes(state)) {
-        return state
-      }
+      if (tags.value?.includes(state)) { return state }
 
       const tag = (state as any).label
 
@@ -117,6 +171,14 @@ async function getTags () {
   const { data } = await article.getTags()
   return data
 }
+
+onMounted(() => {
+  document.addEventListener('keydown', handleCtrlS)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleCtrlS)
+})
 </script>
 
 <template>
@@ -205,13 +267,24 @@ async function getTags () {
             </USelectMenu>
           </UFormGroup>
 
-          <UButton
-            type="submit"
-            label="Publish"
-            color="black"
-            :loading="processing"
-            class="rounded-sm"
-          />
+          <div class="space-x-2">
+            <UButton
+              type="submit"
+              label="Save to draft"
+              color="black"
+              :loading="saving"
+              class="rounded-sm"
+              @click="publish = false"
+            />
+            <UButton
+              type="submit"
+              label="Publish"
+              color="gray"
+              :loading="publishing"
+              class="rounded-sm"
+              @click="publish = true"
+            />
+          </div>
         </div>
       </div>
     </UForm>
