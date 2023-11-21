@@ -5,6 +5,10 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en'
       },
+      meta: [{
+        name: 'google-adsense-account',
+        content: 'ca-pub-6360316091582539'
+      }],
       script: [{
         async: true,
         src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6360316091582539',
