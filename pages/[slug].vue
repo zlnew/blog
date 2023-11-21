@@ -7,7 +7,6 @@ definePageMeta({
   middleware: 'article'
 })
 
-const { gtag } = useGtag()
 const route = useRoute()
 const toast = useToast()
 const { actions } = useArticleStore()
@@ -35,7 +34,6 @@ const { data: article } = await useAsyncData('article',
 
 onMounted(() => {
   hljs.highlightAll()
-  gtag('event', 'page_view')
 })
 </script>
 
