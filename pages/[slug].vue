@@ -56,6 +56,7 @@ onMounted(() => {
       <Meta name="article:published_time" :content="dateISO(article?.published_at)" />
       <Meta name="article:modified_time" :content="dateISO(article?.updated_at || '')" />
       <Meta name="article:tag" :content="article?.tags?.join(', ')" />
+      <Meta name="google-adsense-account" content="ca-pub-6360316091582539" />
     </Head>
 
     <div
