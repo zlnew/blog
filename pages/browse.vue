@@ -120,17 +120,16 @@ onMounted(async () => {
 
     <PageHeading id="page-heading" text="Browse Articles" />
 
-    <div class="space-y-4">
-      <div class="space-y-2">
+    <div class="space-y-3">
+      <div class="space-y-2 md:space-y-0 md:flex justify-between items-center gap-2">
         <FilterMenu />
 
-        <div class="col-span-2">
+        <div>
           <UInput
             v-model="search"
             placeholder="Search ..."
             size="lg"
             color="gray"
-            :ui="{ rounded: 'rounded-sm'}"
             @keyup.enter.prevent="searchHandler"
           >
             <template #leading>
@@ -140,9 +139,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <UDivider />
-
-      <div>
+      <div class="pt-4">
         <p v-if="$route.query.search">
           Search results for <strong>"{{ $route.query.search }}"</strong>
         </p>
@@ -153,10 +150,10 @@ onMounted(async () => {
         :items="articles"
       />
 
-      <ArticlesNotFound v-else-if="!loading" />
+      <LazyArticlesNotFound v-else-if="!loading" />
 
       <div v-if="loading" class="text-center">
-        <UButton
+        <LazyUButton
           label="Loading ..."
           size="xl"
           color="gray"
@@ -166,7 +163,7 @@ onMounted(async () => {
       </div>
 
       <div v-if="loadMoreVisibility" class="text-center">
-        <UButton
+        <LazyUButton
           label="Load more"
           color="black"
           variant="ghost"

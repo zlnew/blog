@@ -69,7 +69,7 @@ onMounted(() => {
       ]"
     >
       <article>
-        <h1 class="tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent dark:from-light dark:to-green-300">
+        <h1 class="tracking-tighter">
           {{ article?.title }}
         </h1>
 

@@ -8,10 +8,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const lastArticle = (index: number) => {
-  return index !== (props.items ? props.items.length - 1 : 0)
-}
-
 const headlineArticle = (index: number) => {
   return index === 0 && props.withHeadline
 }
@@ -20,15 +16,38 @@ const noCoverArticle = (cover: ArticleCover | null) => !cover
 </script>
 
 <template>
-  <ClientOnly v-for="(item, index) in items" :key="item.article_id">
-    <HeadlineArticle v-if="index === 0 && withHeadline" :item="item" />
-    <BasicArticle v-else :item="item" />
-    <UDivider v-if="lastArticle(index)" />
+  <div class="space-y-3">
+    <ClientOnly v-for="(item, index) in items" :key="item.article_id">
+      <Transition mode="in-out">
+        <LazyHeadlineArticle
+          v-if="index === 0 && withHeadline"
+          :item="item"
+        />
+        <LazyBasicArticle v-else :item="item" />
+      </Transition>
 
-    <template #fallback>
-      <HeadlineArticleSkeleton v-if="headlineArticle(index)" :no-cover="noCoverArticle(item.cover)" />
-      <BasicArticleSkeleton v-else :no-cover="noCoverArticle(item.cover)" />
-      <UDivider v-if="lastArticle(index)" />
-    </template>
-  </ClientOnly>
+      <template #fallback>
+        <HeadlineArticleSkeleton
+          v-if="headlineArticle(index)"
+          :no-cover="noCoverArticle(item.cover)"
+        />
+        <BasicArticleSkeleton
+          v-else
+          :no-cover="noCoverArticle(item.cover)"
+        />
+      </template>
+    </ClientOnly>
+  </div>
 </template>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

@@ -54,7 +54,6 @@ onMounted(() => {
       placeholder="Sort"
       color="gray"
       size="lg"
-      :ui="{ rounded: 'rounded-sm'}"
       class="capitalize"
       select-class="capitalize"
       @update:model-value="browseByOrderHandler"
@@ -72,7 +71,6 @@ onMounted(() => {
       color="gray"
       size="lg"
       :options="tags || []"
-      :ui="{ rounded: 'rounded-sm'}"
       @update:model-value="browseByTagsHandler"
     >
       <template #label>
