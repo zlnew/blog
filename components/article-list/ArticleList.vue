@@ -16,7 +16,7 @@ const noCoverArticle = (cover: ArticleCover | null) => !cover
 </script>
 
 <template>
-  <div class="space-y-3">
+  <div class="grid xl:grid-cols-2 gap-3">
     <ClientOnly v-for="(item, index) in items" :key="item.article_id">
       <Transition mode="in-out">
         <LazyHeadlineArticle

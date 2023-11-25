@@ -26,33 +26,33 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
       border-b dark:border-b-accent-light
       transition-transform
     "
-    :class="{
-      'navbar--hidden': !showNavbar
-    }"
+    :class="{ 'navbar--hidden': !showNavbar }"
   >
-    <AppLogo />
+    <div class="col-span-2 flex items-center gap-4">
+      <AppLogo />
+      <div class="border-l-2 dark:border-accent-light">
+        <UButton
+          to="/about-me"
+          label="About Me"
+          color="gray"
+          size="lg"
+          variant="link"
+          class="rounded-l-full"
+        />
+      </div>
+    </div>
 
-    <div class="col-span-2 flex items-center justify-end gap-4">
+    <div class="flex items-center justify-end gap-4">
       <UButton
         to="/browse"
+        icon="i-heroicons-magnifying-glass"
         label="Browse"
         color="gray"
         size="lg"
         variant="link"
-        :padded="false"
         :class="{ hidden: $route.name === 'browse'}"
         class="rounded-sm"
       />
-      <UButton
-        to="/about-me"
-        label="About Me"
-        color="gray"
-        size="lg"
-        variant="link"
-        :padded="false"
-        class="rounded-l-full"
-      />
-      <ColorModeButton />
     </div>
   </nav>
 </template>

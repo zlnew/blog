@@ -12,7 +12,6 @@
 
     <div class="col-span-2 flex items-center justify-end gap-2">
       <ProfileDropdown />
-      <ColorModeButton />
     </div>
   </nav>
 </template>

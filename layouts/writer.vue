@@ -2,9 +2,11 @@
   <div>
     <WriterNavbar />
 
-    <main class="my-8 md:my-14 container min-h-screen">
+    <main class="my-8 md:my-14 container">
       <slot />
     </main>
+
+    <UDivider />
 
     <LazyDefaultFooter />
 

@@ -40,14 +40,18 @@ const { data: latestArticles } = await useAsyncData('latestArticles',
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
     </Head>
 
-    <div class="flex justify-between items-center gap-4">
-      <PageHeading text="Latest Articles" />
+    <div class="flex items-center gap-4">
+      <PageHeading text="Latest" />
 
-      <p>
-        Browse all <NuxtLink to="/browse" class="underline">
-          <strong>Articles</strong>
-        </NuxtLink>
-      </p>
+      <UButton
+        to="/browse"
+        icon="i-mdi-arrow-right"
+        label="View all"
+        color="gray"
+        variant="ghost"
+        size="lg"
+        trailing
+      />
     </div>
 
     <LazyArticleList :items="latestArticles" />

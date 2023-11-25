@@ -17,7 +17,7 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
       icon="i-heroicons-arrow-small-up"
       color="gray"
       size="lg"
-      class="rounded-sm"
+      aria-label="Scroll to Top"
       @click="scrollToTopHandler"
     />
   </div>

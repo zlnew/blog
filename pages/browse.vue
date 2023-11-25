@@ -139,8 +139,8 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="pt-4">
-        <p v-if="$route.query.search">
+      <div v-if="$route.query.search" class="pt-4">
+        <p>
           Search results for <strong>"{{ $route.query.search }}"</strong>
         </p>
       </div>

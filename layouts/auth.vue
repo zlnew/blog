@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div class="relative top-10">
-      <div class="flex justify-center">
-        <AppLogo />
-      </div>
+    <div class="my-14 flex justify-center">
+      <AppLogo />
     </div>
 
-    <main class="container flex flex-col justify-center items-center min-h-screen">
+    <UDivider />
+
+    <main class="my-14 container flex flex-col justify-center items-center">
       <slot />
     </main>
+
+    <UDivider />
 
     <LazyDefaultFooter />
   </div>

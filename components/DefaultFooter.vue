@@ -1,84 +1,33 @@
-<script setup lang="ts">
-const socials = [{
-  name: 'Portfolio Website',
-  href: 'https://dev.aprizqy.com',
-  icon: 'i-mdi-web'
-}, {
-  name: 'Github Profile',
-  href: 'https://github.com/zlnew',
-  icon: 'i-mdi-github'
-}, {
-  name: 'LinkedIn Profile',
-  href: 'https://www.linkedin.com/in/maulana-aprizqy-sumaryanto-920a0b243/',
-  icon: 'i-mdi-linkedin'
-}, {
-  name: 'Instagram Profile',
-  href: 'https://www.instagram.com/maulanaapz',
-  icon: 'i-mdi-instagram'
-}]
-</script>
-
 <template>
-  <footer class="bg-accent-light text-light">
+  <footer class="">
     <div class="container py-8 space-y-8">
-      <div class="space-y-8 xl:grid xl:grid-cols-3 xl:gap-8 xl:space-y-0">
-        <div class="col-span-2 space-y-4">
-          <h3 class="font-bold">
-            Author
-          </h3>
-
+      <div class="space-y-8 xl:grid xl:grid-cols-6 xl:gap-8 xl:space-y-0">
+        <div class="col-span-5 space-y-4">
           <div class="flex items-center gap-3">
-            <UAvatar
-              src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
-              alt="Maulana Aprizqy Sumaryanto's Avatar"
-              size="lg"
-            />
-            <div>
-              <NuxtLink to="/about-me" class="font-bold">
-                Maulana Aprizqy Sumaryanto
-              </NuxtLink>
-              <br>
-              <small>Full-Stack Developer</small>
+            <AppLogo />
+            <div class="flex flex-col space-y-0">
+              <h3 class="font-bold tracking-tighter text-lg">
+                Aprizqy's Blog
+              </h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300">
+                Code and Thoughts
+              </p>
             </div>
-          </div>
-
-          <p class="text-sm text-slate-300 max-w-xs">
-            I love building useful websites for others.
-          </p>
-
-          <div class="flex gap-2">
-            <NuxtLink
-              v-for="social in socials"
-              :key="social.href"
-              :href="social.href"
-              :aria-label="social.name"
-              target="_blank"
-            >
-              <UButton
-                :icon="social.icon"
-                :padded="false"
-                :aria-label="social.name"
-                color="black"
-                variant="ghost"
-              />
-            </NuxtLink>
           </div>
         </div>
 
-        <hr class="xl:hidden border-light">
-
-        <div class="space-y-4">
-          <h3 class="font-bold">
-            Quick Links
+        <div class="space-y-2">
+          <h3 class="font-bold tracking-tighter text-lg">
+            Navigation
           </h3>
-          <ul class="text-sm">
+          <ul class="text-slate-600 dark:text-slate-300">
             <li>
-              <NuxtLink to="/browse" class="no-underline hover:underline">
+              <NuxtLink to="/browse" class="hover:underline">
                 Browse
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/about-me" class="no-underline hover:underline">
+              <NuxtLink to="/about-me" class="hover:underline">
                 About Me
               </NuxtLink>
             </li>
@@ -86,11 +35,17 @@ const socials = [{
         </div>
       </div>
 
-      <hr class="border-light">
+      <UDivider />
 
-      <p class="text-sm">
-        Copyright © {{ new Date().getFullYear() }} <strong>Maulana Aprizqy Sumaryanto</strong>
-      </p>
+      <div class="grid md:grid-cols-2 justify-between items-end gap-8">
+        <p class="text-slate-600 dark:text-slate-300">
+          © {{ new Date().getFullYear() }} Maulana Aprizqy Sumaryanto. All rights reserved.
+        </p>
+
+        <div class="text-center md:text-right">
+          <ColorModeButton />
+        </div>
+      </div>
     </div>
   </footer>
 </template>
