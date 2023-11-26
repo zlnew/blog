@@ -16,6 +16,16 @@ export default defineNuxtConfig({
       }]
     }
   },
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+      cssnano:
+       process.env.NODE_ENV === 'production'
+         ? { preset: ['default', { discardComments: { removeAll: true } }] }
+         : false
+    }
+  },
   devtools: { enabled: true },
   runtimeConfig: { public: { APP_URL: process.env.APP_URL } },
   imports: { dirs: ['stores'] },
