@@ -16,11 +16,6 @@ const step = 10
 const limit = ref(step - 1)
 const loading = ref(false)
 
-const loadMoreVisibility = computed(() => {
-  if (limit.value >= (total.value - 1)) { return false }
-  return true
-})
-
 const searchHandler = (event: Event) => {
   if (event.target instanceof HTMLInputElement) {
     router.replace({
@@ -32,10 +27,6 @@ const searchHandler = (event: Event) => {
     refreshArticles()
     event.target.blur()
   }
-}
-
-const loadMoreHandler = () => {
-  limit.value = limit.value + step
 }
 
 const { data: articles, refresh: refreshArticles } = await useAsyncData('articles',
@@ -139,37 +130,8 @@ onMounted(async () => {
     </div>
 
     <div class="space-y-3">
-      <div v-if="$route.query.search" class="pt-4">
-        <p>
-          Search results for <strong>"{{ $route.query.search }}"</strong>
-        </p>
-      </div>
-
-      <LazyArticleList
-        v-if="articles?.length"
-        :items="articles"
-      />
-
-      <LazyArticlesNotFound v-else-if="!loading" />
-
-      <div v-if="loading" class="text-center">
-        <LazyUButton
-          label="Loading ..."
-          size="xl"
-          color="gray"
-          variant="ghost"
-          :loading="loading"
-        />
-      </div>
-
-      <div v-if="loadMoreVisibility" class="text-center">
-        <LazyUButton
-          label="Load more"
-          color="black"
-          variant="ghost"
-          @click="loadMoreHandler"
-        />
-      </div>
+      <LazyArticleList v-if="articles?.length" :items="articles" />
+      <LazyArticlesNotFound v-else />
     </div>
   </PageSection>
 </template>

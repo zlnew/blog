@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { Article, ArticleCover } from '~/types/article'
+import { Article } from '~/types/article'
 
 interface Props {
   items: Article[] | null | undefined
 }
 
 defineProps<Props>()
-
-const noCoverArticle = (cover: ArticleCover | null) => !cover
 </script>
 
 <template>
@@ -18,7 +16,7 @@ const noCoverArticle = (cover: ArticleCover | null) => !cover
       </Transition>
 
       <template #fallback>
-        <ArticleCardSkeleton :no-cover="noCoverArticle(item.cover)" />
+        <ArticleCardSkeleton :no-cover="!item.cover" />
       </template>
     </ClientOnly>
   </div>
