@@ -9,7 +9,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div class="grid xl:grid-cols-2 gap-3">
+  <div class="grid xl:grid-cols-3 md:grid-cols-2 gap-3">
     <ClientOnly v-for="item in items" :key="item.article_id">
       <Transition mode="in-out">
         <LazyArticleCard :item="item" />

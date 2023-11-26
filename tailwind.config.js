@@ -6,10 +6,10 @@ export default {
       center: true,
       padding: {
         DEFAULT: '1rem',
-        sm: '6rem',
-        lg: '13rem',
-        xl: '14rem',
-        '2xl': '15rem'
+        lg: '2rem'
+        // lg: '13rem',
+        // xl: '14rem',
+        // '2xl': '15rem'
       }
     },
     extend: {

@@ -43,7 +43,7 @@ defineProps<{
       </div>
 
       <div class="space-y-2">
-        <div class="text-sm text-slate-700 dark:text-slate-200 line-clamp-2">
+        <div class=" text-slate-700 dark:text-slate-200 line-clamp-2">
           {{ item.description }}
         </div>
 

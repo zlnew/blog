@@ -20,37 +20,44 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
   <nav
     id="nav"
     class="
-      container sticky top-0 z-50 py-4 space-x-4
-      grid grid-cols-3 justify-center items-center
+      sticky top-0 z-50 py-4 space-x-4
       bg-light dark:bg-accent
       border-b dark:border-b-accent-light
       transition-transform
     "
     :class="{ 'navbar--hidden': !showNavbar }"
   >
-    <div class="col-span-2 flex items-center gap-4">
-      <AppLogo />
-      <div class="border-l-2 dark:border-accent-light">
+    <div class="container grid grid-cols-3 justify-center items-center">
+      <div class="col-span-2 flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <AppLogo />
+          <p class="hidden md:block font-['Roboto_slab'] font-bold text-xl">
+            Aprizqy's Blog
+          </p>
+        </div>
+
+        <div class="border-l-2 dark:border-accent-light">
+          <UButton
+            to="/about-me"
+            label="About Me"
+            color="gray"
+            size="lg"
+            variant="ghost"
+            class="rounded-l-none"
+          />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-4">
         <UButton
-          to="/about-me"
-          label="About Me"
+          to="/browse"
+          icon="i-heroicons-magnifying-glass"
+          label="Browse"
           color="gray"
           size="lg"
-          variant="ghost"
-          class="rounded-l-none"
+          :class="{ hidden: $route.name === 'browse'}"
         />
       </div>
-    </div>
-
-    <div class="flex items-center justify-end gap-4">
-      <UButton
-        to="/browse"
-        icon="i-heroicons-magnifying-glass"
-        label="Browse"
-        color="gray"
-        size="lg"
-        :class="{ hidden: $route.name === 'browse'}"
-      />
     </div>
   </nav>
 </template>

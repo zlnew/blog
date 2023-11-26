@@ -7,7 +7,7 @@ const toast = useToast()
 const { actions: article } = useArticleStore()
 
 async function getLatestArticles () {
-  const { data, error } = await article.getByLimit(4)
+  const { data, error } = await article.getByLimit(6)
 
   if (error) {
     toast.add({
