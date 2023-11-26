@@ -32,11 +32,6 @@ const editor = useEditor({
   extensions: [
     StarterKit.configure({
       codeBlock: false,
-      heading: {
-        HTMLAttributes: {
-          class: 'tracking-tighter'
-        }
-      },
       horizontalRule: {
         HTMLAttributes: {
           class: 'dark:border-accent-light'

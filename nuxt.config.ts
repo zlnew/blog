@@ -88,7 +88,7 @@ export default defineNuxtConfig({
     ]
   },
   colorMode: { preference: 'dark' },
-  googleFonts: { families: { Lato: true } },
+  googleFonts: { families: { Poppins: true } },
   eslint: { lintOnStart: false },
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',

@@ -54,7 +54,7 @@ const { data: nextArticle } = await useAsyncData(
       </div>
       <div v-for="item in prevArticle" :key="item.article_id">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
-          <h4 class="font-medium tracking-tighter line-clamp-1">
+          <h4 class="font-bold line-clamp-1">
             {{ item.title }}
           </h4>
         </NuxtLink>
@@ -74,7 +74,7 @@ const { data: nextArticle } = await useAsyncData(
 
       <div v-for="item in nextArticle" :key="item.article_id">
         <NuxtLink :to="`/${item.slug}`" class="no-underline hover:underline">
-          <h4 class="font-medium tracking-tighter line-clamp-1">
+          <h4 class="font-bold line-clamp-1">
             {{ item.title }}
           </h4>
         </NuxtLink>

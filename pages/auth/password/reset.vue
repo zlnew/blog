@@ -49,9 +49,7 @@ const resetPasswordHandler = async (event: FormSubmitEvent<Schema>) => {
 
 <template>
   <div class="space-y-8">
-    <h1 class="text-4xl font-black tracking-tighter">
-      Reset Password
-    </h1>
+    <PageHeading text="Reset Password" />
 
     <div class="max-w-xs md:max-w-md w-screen">
       <UForm
@@ -68,7 +66,6 @@ const resetPasswordHandler = async (event: FormSubmitEvent<Schema>) => {
               placeholder="New Password"
               size="xl"
               :disabled="processing"
-              :ui="{ rounded: 'rounded-sm' }"
             />
           </UFormGroup>
 
@@ -79,7 +76,6 @@ const resetPasswordHandler = async (event: FormSubmitEvent<Schema>) => {
               placeholder="Confirm the new password"
               size="xl"
               :disabled="processing"
-              :ui="{ rounded: 'rounded-sm' }"
             />
           </UFormGroup>
 
@@ -89,7 +85,6 @@ const resetPasswordHandler = async (event: FormSubmitEvent<Schema>) => {
             label="Reset Password"
             color="black"
             size="lg"
-            class="rounded-sm"
             :loading="processing"
           />
         </div>

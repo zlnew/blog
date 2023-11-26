@@ -50,9 +50,7 @@ const signInHandler = async (event: FormSubmitEvent<Schema>) => {
 
 <template>
   <div class="space-y-8">
-    <h1 class="text-4xl font-black tracking-tighter">
-      Sign in to your account
-    </h1>
+    <PageHeading text="Sign In to your account" />
 
     <div class="max-w-xs md:max-w-md w-screen">
       <UForm
@@ -68,7 +66,6 @@ const signInHandler = async (event: FormSubmitEvent<Schema>) => {
               placeholder="Enter your email address"
               size="xl"
               :disabled="processing"
-              :ui="{ rounded: 'rounded-sm' }"
             />
           </UFormGroup>
 
@@ -79,7 +76,6 @@ const signInHandler = async (event: FormSubmitEvent<Schema>) => {
               placeholder="Enter your password"
               size="xl"
               :disabled="processing"
-              :ui="{ rounded: 'rounded-sm' }"
             />
           </UFormGroup>
 
@@ -90,7 +86,6 @@ const signInHandler = async (event: FormSubmitEvent<Schema>) => {
             color="black"
             size="lg"
             variant="link"
-            class="rounded-sm"
           />
 
           <UButton
@@ -99,7 +94,6 @@ const signInHandler = async (event: FormSubmitEvent<Schema>) => {
             label="Sign In"
             color="black"
             size="lg"
-            class="rounded-sm"
             :loading="processing"
           />
         </div>

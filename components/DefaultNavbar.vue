@@ -36,8 +36,8 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
           label="About Me"
           color="gray"
           size="lg"
-          variant="link"
-          class="rounded-l-full"
+          variant="ghost"
+          class="rounded-l-none"
         />
       </div>
     </div>
@@ -49,9 +49,7 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
         label="Browse"
         color="gray"
         size="lg"
-        variant="link"
         :class="{ hidden: $route.name === 'browse'}"
-        class="rounded-sm"
       />
     </div>
   </nav>

@@ -69,9 +69,7 @@ onMounted(() => {
       ]"
     >
       <article>
-        <h1 class="tracking-tighter">
-          {{ article?.title }}
-        </h1>
+        <h1>{{ article?.title }}</h1>
 
         <div class="flex justify-between items-center">
           <div class="text-base text-slate-600 dark:text-slate-300 flex items-center space-x-2">
@@ -100,10 +98,8 @@ onMounted(() => {
             :key="tag"
             :to="{ path: '/browse', query: { tags: [tag] } }"
             :label="`#${tag}`"
-            :padded="false"
-            color="black"
-            variant="link"
-            class="rounded-sm"
+            color="gray"
+            size="xs"
           />
         </div>
 

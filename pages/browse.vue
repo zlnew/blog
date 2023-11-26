@@ -118,27 +118,27 @@ onMounted(async () => {
       <Meta name="twitter:image:src" :content="`${$config.public.APP_URL}/android-chrome-512x512.png`" />
     </Head>
 
-    <PageHeading id="page-heading" text="Browse Articles" />
-
-    <div class="space-y-3">
-      <div class="space-y-2 md:space-y-0 md:flex justify-between items-center gap-2">
+    <div class="space-y-2 md:space-y-0 md:flex items-center justify-between gap-4">
+      <div class="space-y-2 md:space-y-0 md:flex items-center gap-4">
+        <PageHeading id="page-heading" text="Browse" />
         <FilterMenu />
-
-        <div>
-          <UInput
-            v-model="search"
-            placeholder="Search ..."
-            size="lg"
-            color="gray"
-            @keyup.enter.prevent="searchHandler"
-          >
-            <template #leading>
-              <UIcon name="i-heroicons-magnifying-glass" />
-            </template>
-          </UInput>
-        </div>
       </div>
 
+      <div>
+        <UInput
+          v-model="search"
+          placeholder="Search ..."
+          color="gray"
+          @keyup.enter.prevent="searchHandler"
+        >
+          <template #leading>
+            <UIcon name="i-heroicons-magnifying-glass" />
+          </template>
+        </UInput>
+      </div>
+    </div>
+
+    <div class="space-y-3">
       <div v-if="$route.query.search" class="pt-4">
         <p>
           Search results for <strong>"{{ $route.query.search }}"</strong>

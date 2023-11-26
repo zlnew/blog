@@ -6,7 +6,7 @@
           <div class="flex items-center gap-3">
             <AppLogo />
             <div class="flex flex-col space-y-0">
-              <h3 class="font-bold tracking-tighter text-lg">
+              <h3 class="font-bold text-lg">
                 Aprizqy's Blog
               </h3>
               <p class="text-sm text-slate-600 dark:text-slate-300">
@@ -17,7 +17,7 @@
         </div>
 
         <div class="space-y-2">
-          <h3 class="font-bold tracking-tighter text-lg">
+          <h3 class="font-bold text-lg">
             Navigation
           </h3>
           <ul class="text-slate-600 dark:text-slate-300">

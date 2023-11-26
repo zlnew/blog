@@ -184,7 +184,7 @@ onMounted(async () => {
       @submit="updateHandler"
     >
       <div class="space-y-4">
-        <h1 class="tracking-tighter">
+        <h1>
           {{ state.title || 'Edit Article' }}
         </h1>
 
@@ -204,7 +204,6 @@ onMounted(async () => {
             spellcheck="false"
             :rows="1"
             size="xl"
-            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
@@ -216,7 +215,6 @@ onMounted(async () => {
             spellcheck="false"
             :rows="1"
             size="xl"
-            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
@@ -242,7 +240,6 @@ onMounted(async () => {
               searchable
               placeholder="Choose tags"
               :options="tags || []"
-              :ui="{ rounded: 'rounded-sm' }"
             >
               <template #leading>
                 <UIcon name="i-heroicons-tag" />
@@ -255,7 +252,6 @@ onMounted(async () => {
             label="Update"
             color="black"
             :loading="processing"
-            class="rounded-sm"
           />
         </div>
       </div>

@@ -128,14 +128,12 @@ onMounted(async () => {
           <UInput
             v-model="search"
             placeholder="Search article..."
-            :ui="{ rounded: 'rounded-sm' }"
           />
 
           <UButton
             to="/writer/articles/create"
             label="Create a new article"
             color="black"
-            class="rounded-sm"
           />
         </div>
 
@@ -170,10 +168,8 @@ onMounted(async () => {
                 v-for="(tag, index) in row.tags"
                 :key="index"
                 color="gray"
-                variant="solid"
-                class="rounded-sm"
               >
-                {{ tag }}
+                {{ `#${tag}` }}
               </UBadge>
             </div>
           </template>
@@ -182,7 +178,7 @@ onMounted(async () => {
             <div class="space-x-2">
               <UBadge
                 :color="row.status === 'published' ? 'black' : 'gray'"
-                class="rounded-sm capitalize"
+                class="capitalize"
               >
                 {{ row.status }}
               </UBadge>

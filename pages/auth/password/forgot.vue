@@ -50,9 +50,7 @@ const resetState = () => Object.assign(state, initialState)
 
 <template>
   <div class="space-y-8">
-    <h1 class="text-4xl font-black tracking-tighter">
-      Forgot Password?
-    </h1>
+    <PageHeading text="Forgot your password?" />
 
     <div class="max-w-xs md:max-w-md w-screen">
       <UAlert
@@ -78,7 +76,6 @@ const resetState = () => Object.assign(state, initialState)
               placeholder="Enter your email address"
               size="xl"
               :disabled="processing"
-              :ui="{ rounded: 'rounded-sm' }"
             />
           </UFormGroup>
 
@@ -88,7 +85,6 @@ const resetState = () => Object.assign(state, initialState)
             label="Get link to reset password"
             color="black"
             size="lg"
-            class="rounded-sm"
             :loading="processing"
           />
 

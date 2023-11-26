@@ -53,7 +53,6 @@ onMounted(() => {
       :options="['newest', 'oldest']"
       placeholder="Sort"
       color="gray"
-      size="lg"
       class="capitalize"
       select-class="capitalize"
       @update:model-value="browseByOrderHandler"
@@ -69,7 +68,6 @@ onMounted(() => {
       multiple
       placeholder="Tags"
       color="gray"
-      size="lg"
       :options="tags || []"
       @update:model-value="browseByTagsHandler"
     >

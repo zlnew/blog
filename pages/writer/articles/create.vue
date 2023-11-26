@@ -201,7 +201,7 @@ onBeforeUnmount(() => {
       @submit="submitHandler"
     >
       <div class="space-y-4">
-        <h1 class="tracking-tighter">
+        <h1>
           {{ state.title || 'Create A New Article' }}
         </h1>
 
@@ -221,7 +221,6 @@ onBeforeUnmount(() => {
             spellcheck="false"
             :rows="1"
             size="xl"
-            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
@@ -233,7 +232,6 @@ onBeforeUnmount(() => {
             spellcheck="false"
             :rows="1"
             size="xl"
-            :ui="{ rounded: 'rounded-sm' }"
           />
         </UFormGroup>
 
@@ -259,7 +257,6 @@ onBeforeUnmount(() => {
               searchable
               placeholder="Choose tags"
               :options="tags || []"
-              :ui="{ rounded: 'rounded-sm' }"
             >
               <template #leading>
                 <UIcon name="i-heroicons-tag" />
@@ -273,7 +270,6 @@ onBeforeUnmount(() => {
               label="Save to draft"
               color="black"
               :loading="saving"
-              class="rounded-sm"
               @click="publish = false"
             />
             <UButton
@@ -281,7 +277,6 @@ onBeforeUnmount(() => {
               label="Publish"
               color="gray"
               :loading="publishing"
-              class="rounded-sm"
               @click="publish = true"
             />
           </div>
