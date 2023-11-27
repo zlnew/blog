@@ -16,6 +16,24 @@ const socials = [{
   href: 'https://www.instagram.com/maulanaapz',
   icon: 'i-mdi-instagram'
 }]
+
+const toast = useToast()
+const clickCount = ref(0)
+
+const sevenTimesClickedHandler = () => {
+  clickCount.value++
+
+  if (clickCount.value === 6) {
+    toast.add({
+      title: 'Only 1 step away from redirecting to the login page.',
+      color: 'accent'
+    })
+  }
+
+  if (clickCount.value === 7) {
+    navigateTo('/auth/login')
+  }
+}
 </script>
 
 <template>
@@ -37,7 +55,7 @@ const socials = [{
     <PageHeading text="About Me" />
 
     <div class="space-y-8">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4 cursor-pointer" @click="sevenTimesClickedHandler">
         <UAvatar
           src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=ffdfbf"
           alt="Maulana Aprizqy Sumaryanto's Avatar"
