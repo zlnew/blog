@@ -44,9 +44,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-gtag'
   ],
-  gtag: {
-    id: process.env.GTAG_ID
-  },
+  gtag: { id: process.env.GTAG_ID },
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
@@ -98,7 +96,7 @@ export default defineNuxtConfig({
     ]
   },
   colorMode: { preference: 'dark' },
-  googleFonts: { families: { Poppins: true, 'Roboto Slab': true } },
+  googleFonts: { families: { Roboto: true, 'Roboto Slab': true } },
   eslint: { lintOnStart: false },
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',

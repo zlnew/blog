@@ -13,7 +13,7 @@
           </p>
         </div>
 
-        <ul class="text-sm flex justify-center gap-2 text-slate-600 dark:text-slate-300">
+        <ul class="font-['Roboto_slab'] text-sm flex justify-center gap-2 text-slate-600 dark:text-slate-300">
           <li>
             <NuxtLink to="/browse" class="hover:underline">
               Browse
@@ -30,7 +30,7 @@
       <UDivider />
 
       <div class="space-y-8 md:space-y-0 md:flex justify-center items-center gap-4">
-        <p class="text-slate-600 dark:text-slate-300">
+        <p class="font-['Roboto_slab'] text-slate-600 dark:text-slate-300">
           © {{ new Date().getFullYear() }} Maulana Aprizqy Sumaryanto. All rights reserved.
         </p>
 

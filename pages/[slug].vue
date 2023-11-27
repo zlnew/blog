@@ -92,7 +92,7 @@ onMounted(() => {
       </article>
 
       <div class="not-prose space-y-8">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
           <UButton
             v-for="tag in article?.tags"
             :key="tag"

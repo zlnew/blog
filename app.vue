@@ -1,7 +1,7 @@
 <script setup lang="ts">
 useHead({
   bodyAttrs: {
-    class: 'bg-light dark:bg-accent text-accent-light dark:text-light'
+    class: 'bg-light text-accent-light dark:bg-accent dark:text-light'
   }
 })
 useSeoMeta({
@@ -16,7 +16,7 @@ useSeoMeta({
     <VitePwaManifest />
 
     <NuxtLayout>
-      <NuxtLoadingIndicator color="green" />
+      <NuxtLoadingIndicator />
       <NuxtPage />
     </NuxtLayout>
 

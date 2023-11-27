@@ -29,12 +29,7 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
   >
     <div class="container grid grid-cols-3 justify-center items-center">
       <div class="col-span-2 flex items-center gap-4">
-        <div class="flex items-center gap-2">
-          <AppLogo />
-          <p class="hidden md:block font-['Roboto_slab'] font-bold text-xl">
-            Aprizqy's Blog
-          </p>
-        </div>
+        <AppLogo with-text />
 
         <div class="border-l-2 dark:border-accent-light">
           <UButton
@@ -43,7 +38,7 @@ onBeforeUnmount(() => document.removeEventListener('scroll', onScrollHandler))
             color="gray"
             size="lg"
             variant="ghost"
-            class="rounded-l-none"
+            class="font-['Roboto_slab'] rounded-l-none"
           />
         </div>
       </div>

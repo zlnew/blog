@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="my-14 flex justify-center">
-      <AppLogo />
+      <AppLogo with-text />
     </div>
 
     <UDivider />
